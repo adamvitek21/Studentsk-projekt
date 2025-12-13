@@ -1,0 +1,16 @@
+# v backend/ (aktivovat venv pokud existuje)
+source .venv/bin/activate
+python mock_feed.py           # vytvoří /tmp/feed.pb
+export GTFS_RT_URL="/tmp/feed.pb"
+uvicorn main:app --host 0.0.0.0 --port 8000
+
+# alternativně spustit test parseru
+python test_gtfs.py
+
+# frontend
+cd studentsk-signage-frontend
+npm install
+npm start   # live-server servíruje src/ - použije port z výstupu (pokud 5000 obsazen, najde jiný)
+
+# pokud chcete vynutit jiný port
+npx live-server src --port=5001 --host=0.0.0.0 --quiet

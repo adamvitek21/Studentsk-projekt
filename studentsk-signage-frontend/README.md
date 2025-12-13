@@ -1,47 +1,28 @@
-# Studentsk Signage Project
+# Studentské Signage — frontend
 
-This project is a signage prototype that displays real-time departure information using WebSocket connections. It includes a fallback mechanism to show local data when offline.
+Spuštění (lokálně):
 
-## Project Structure
-
-```
-studentsk-signage-frontend
-├── src
-│   ├── index.html        # Main HTML document for the application
-│   ├── js
-│   │   └── app.js       # JavaScript code for WebSocket handling and data display
-│   └── css
-│       └── styles.css    # CSS styles for the application
-├── package.json          # npm configuration file
-├── .gitignore            # Files and directories to be ignored by Git
-└── README.md             # Documentation for the project
-```
-
-## Setup Instructions
-
-1. Clone the repository:
-   ```
-   git clone <repository-url>
-   ```
-
-2. Navigate to the project directory:
-   ```
+1) Nainstalovat závislosti:
    cd studentsk-signage-frontend
-   ```
-
-3. Install the dependencies:
-   ```
    npm install
-   ```
 
-4. Open `src/index.html` in a web browser to view the application.
+2) Spustit dev server:
+   npm start
+   nebo bez instalace:
+   npx live-server src --port=5000 --host=0.0.0.0 --quiet
 
-## Usage Guidelines
+Konfigurace:
+- Pro připojení na jiný backend přidej query param `?backend=HOST:PORT`, např.:
+  http://localhost:5000?backend=192.168.1.10:8000
 
-- The application connects to a WebSocket server to receive real-time updates on departures.
-- If the connection is lost, it will display fallback data from a local API.
-- The status of the connection is displayed at the top of the page.
+# studentsk-signage-frontend
 
-## Contributing
+Lightweight static frontend. Dev setup avoids npm dev dependencies to remove vulnerable packages.
 
-Feel free to submit issues or pull requests for improvements or bug fixes.
+Quick start (no node deps required)
+1. Serve static files with Python (recommended):
+```bash
+cd /Users/adamvitek/Documents/GitHub/Studentsk-projekt/studentsk-signage-frontend
+npm run start
+# opens static server on http://localhost:5000 (serves files from src/)
+```

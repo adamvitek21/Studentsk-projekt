@@ -2,11 +2,10 @@ version: "3.8"
 services:
   backend:
     build:
-      context: .
-      dockerfile: backend/Dockerfile
+      context: ./backend
+      dockerfile: Dockerfile
     volumes:
-      - ./backend:/app:ro   # mount readonly for debugging; container runs installed code
-      - /tmp:/tmp
+      - ./backend:/app:ro
     ports:
       - "8000:8000"
     environment:
@@ -19,8 +18,9 @@ services:
       retries: 3
 
   frontend:
-    image: node:18-alpine
-    working_dir: /app
+    build:
+      context: ./studentsk-signage-frontend
+      dockerfile: Dockerfile
     volumes:
       - ./studentsk-signage-frontend/src:/app:ro
     ports:

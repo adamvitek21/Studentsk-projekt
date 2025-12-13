@@ -12,35 +12,32 @@
 </head>
 <body>
   <svg aria-hidden="true" style="display:none">
-    <symbol id="icon-train" viewBox="0 0 24 24"><path d="M7 17c-.55 0-1 .45-1 1v1h12v-1c0-.55-.45-1-1-1H7zm11-9H6v6h12V8zm0-2c1.1 0 2 .9 2 2v6c0 1.1-.9 2-2 2h-1l1.5 1.5v.5H6v-.5L7.5 16H6c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2h12z"/></symbol>
-    <symbol id="icon-plane" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9L2 14v2l8-1.5V20l-2 .5v1l4-.5 4 .5v-1l-2-.5v-5.5L21 16z"/></symbol>
+    <symbol id="icon-train" viewBox="0 0 24 24">
+      <path d="M7 17c-.55 0-1 .45-1 1v1h12v-1c0-.55-.45-1-1-1H7zm11-9H6v6h12V8zm0-2c1.1 0 2 .9 2 2v6c0 1.1-.9 2-2 2h-1l1.5 1.5v.5H6v-.5L7.5 16H6c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2h12z" />
+    </symbol>
+    <symbol id="icon-plane" viewBox="0 0 24 24">
+      <path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9L2 14v2l8-1.5V20l-2 .5v1l4-.5 4 .5v-1l-2-.5v-5.5L21 16z"/>
+    </symbol>
   </svg>
 
   <div id="app">
     <header class="header">
       <div class="brand">
-        <img src="./assets/frame5.svg" alt="" class="bg-frame" aria-hidden="true">
-        <div class="brand-inner">
-          <img src="./assets/logo.svg" alt="logo" class="logo" />
-          <div class="station-name" id="station-name">Název stanice</div>
-        </div>
+        <img src="./assets/logo.svg" alt="logo" class="logo" />
+        <div class="station-name" id="station-name">Název stanice</div>
       </div>
       <div class="head-right">
         <div id="clock" class="clock">--:--</div>
         <div id="status" class="status">Načítám…</div>
       </div>
     </header>
-
     <div class="track-wrap" aria-hidden="true">
       <div id="track" class="moving-track track-green"></div>
     </div>
-
     <main class="main">
       <ul id="departures" aria-live="polite"></ul>
     </main>
   </div>
-
   <script src="./js/app.js"></script>
 </body>
 </html>
-
