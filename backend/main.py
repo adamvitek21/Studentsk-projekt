@@ -5,6 +5,7 @@ import os
 import pathlib
 import random
 import logging
+import base64
 
 import httpx
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
@@ -32,6 +33,10 @@ if frontend_path.exists():
 # Shared state filled by background poller
 LATEST_DEPARTURES = []
 POLL_TASK = None
+
+# track last raw bytes and last error for debugging (/api/raw)
+LAST_RAW_BYTES = None
+LAST_ERROR = None
 
 GTFS_URL = os.getenv("GTFS_RT_URL")  # e.g. "https://.../gtfs-rt.pb"
 POLL_INTERVAL = int(os.getenv("GTFS_POLL_INTERVAL", "5"))  # seconds (use larger in prod)
@@ -66,8 +71,11 @@ async def api_latest():
 async def fetch_gtfs_rt(url: str):
     """Download and parse GTFS-RT feed -> list[dict] or None on error.
     Supports http(s) URLs or local file paths / file:// URIs.
+    Implements simple retry/backoff for HTTP fetches.
     """
     import os
+    import asyncio
+    global LAST_RAW_BYTES, LAST_ERROR
     logging.debug("Fetching GTFS-RT from %s", url)
     if not url:
         logging.debug("No GTFS URL provided")
@@ -76,20 +84,39 @@ async def fetch_gtfs_rt(url: str):
     try:
         content = None
 
+        # local file handling (no network)
         if url.startswith("file://"):
             path = url[7:]
             path = os.path.expanduser(path)
             if not os.path.exists(path):
                 logging.error("Local GTFS file not found: %s", path)
+                LAST_ERROR = f"Local file not found: {path}"
                 return None
             logging.debug("Reading GTFS-RT local file (file://): %s", path)
             with open(path, "rb") as fh:
                 content = fh.read()
         elif url.lower().startswith("http://") or url.lower().startswith("https://"):
-            async with httpx.AsyncClient(timeout=10, follow_redirects=True) as client:
-                r = await client.get(url, headers=GTFS_HEADERS)
-                r.raise_for_status()
-                content = r.content
+            # HTTP with retries + exponential backoff
+            retries = 3
+            delay = 0.5
+            last_exc = None
+            for attempt in range(1, retries + 1):
+                try:
+                    async with httpx.AsyncClient(timeout=10, follow_redirects=True) as client:
+                        r = await client.get(url, headers=GTFS_HEADERS)
+                        r.raise_for_status()
+                        content = r.content
+                        break
+                except Exception as e:
+                    last_exc = e
+                    logging.warning("HTTP fetch attempt %d failed: %s", attempt, e)
+                    if attempt < retries:
+                        await asyncio.sleep(delay)
+                        delay *= 2
+            if content is None:
+                LAST_ERROR = f"HTTP fetch error: {last_exc}"
+                logging.error("All HTTP fetch attempts failed")
+                return None
         else:
             path = os.path.expanduser(url)
             if os.path.exists(path):
@@ -98,17 +125,22 @@ async def fetch_gtfs_rt(url: str):
                     content = fh.read()
             else:
                 logging.error("GTFS_RT_URL does not look like HTTP(s) and file does not exist: %s", url)
+                LAST_ERROR = f"Invalid GTFS_RT_URL or file not found: {url}"
                 logging.debug("Not attempting HTTP fetch for non-HTTP value")
                 return None
 
+        # parse feed
         feed = gtfs_realtime_pb2.FeedMessage()
         feed.ParseFromString(content)
+        # store raw bytes for debug
+        LAST_RAW_BYTES = content
+        LAST_ERROR = None
+
         departures = []
         now_ts = int(datetime.datetime.utcnow().timestamp())
         for entity in feed.entity:
             if entity.HasField("trip_update"):
                 tu = entity.trip_update
-                # safe access to trip fields (some bindings raise on missing attributes)
                 route_id = getattr(tu.trip, "route_id", "") or ""
                 route_id = route_id[:10]
                 trip_headsign = getattr(tu.trip, "trip_headsign", None)
@@ -122,7 +154,8 @@ async def fetch_gtfs_rt(url: str):
         departures = sorted(departures, key=lambda x: x["in_min"])[:50]
         logging.debug("Parsed %d departures", len(departures))
         return departures
-    except Exception:
+    except Exception as exc:
+        LAST_ERROR = str(exc)
         logging.exception("GTFS fetch/parse failed")
         return None
 
@@ -196,3 +229,15 @@ async def websocket_endpoint(websocket: WebSocket):
             await websocket.close()
         except Exception:
             pass
+
+
+@app.get("/api/raw")
+async def api_raw(raw: bool = False):
+    """Return last raw fetch metadata. If raw=true, return base64 of last bytes (beware size)."""
+    global LAST_RAW_BYTES, LAST_ERROR
+    if LAST_RAW_BYTES is None and LAST_ERROR is None:
+        return {"ok": False, "msg": "no data yet"}
+    resp = {"ok": True, "last_error": LAST_ERROR, "last_raw_len": len(LAST_RAW_BYTES) if LAST_RAW_BYTES else 0}
+    if raw:
+        resp["last_raw_base64"] = base64.b64encode(LAST_RAW_BYTES or b"").decode("ascii")
+    return resp

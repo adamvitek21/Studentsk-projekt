@@ -1,10 +1,6 @@
-# Jak aktivovat virtuální prostředí (.venv) na macOS (zsh / bash):
-# 1) otevři terminál ve složce backend:
-#    cd /Users/adamvitek/Documents/GitHub/Studentsk-projekt/backend
-# 2) aktivuj venv:
-#    source .venv/bin/activate
-# 3) po práci deaktivuj:
-#    deactivate
+# How to activate venv:
+# cd /Users/adamvitek/Documents/GitHub/Studentsk-projekt/backend
+# source .venv/bin/activate
 import os
 import asyncio
 import datetime
@@ -45,10 +41,10 @@ def parse_feed_bytes(content):
                     departures.append({"line": route_id or "?", "dest": dest, "in_min": in_min})
                     break
                 except Exception:
-                    logging.debug("Skipping stop_time_update due to parse error", exc_info=True)
+                    logging.debug("Skipping invalid stop_time_update", exc_info=True)
                     continue
         except Exception:
-            logging.debug("Skipping entity due to parse error", exc_info=True)
+            logging.debug("Skipping invalid entity", exc_info=True)
             continue
 
     return sorted(departures, key=lambda x: x["in_min"])
