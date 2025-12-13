@@ -1,0 +1,14 @@
+version: "3.8"
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    volumes:
+      - ./backend:/app
+      - /tmp:/tmp
+    ports:
+      - "8000:8000"
+    environment:
+      - GTFS_RT_URL=/tmp/feed.pb
+      - GTFS_POLL_INTERVAL=10

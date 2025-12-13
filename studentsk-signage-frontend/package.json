@@ -4,9 +4,7 @@
   "description": "A signage prototype application that displays real-time departure information and fallback data.",
   "main": "src/js/app.js",
   "scripts": {
-    "start": "live-server src --port=5000 --host=0.0.0.0 --quiet",
-    "build": "echo 'Build step not defined'",
-    "test": "echo 'No tests defined'"
+    "start": "live-server src --port=5000 --host=0.0.0.0 --quiet"
   },
   "keywords": [
     "signage",

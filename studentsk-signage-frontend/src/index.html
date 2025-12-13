@@ -3,15 +3,27 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Studentsk Signage — Prototype</title>
-  <link rel="stylesheet" href="./css/styles.css">
+  <link rel="stylesheet" href="./css/styles.css" />
+  <title>Studentské Tabule</title>
+  <script>
+    // allow overriding backend host via ?backend=host:port
+    (function(){
+      const params = new URLSearchParams(location.search);
+      const backend = params.get('backend');
+      if(backend){
+        window.BACKEND = backend;
+      } else {
+        // default to same host on port 8000
+        window.BACKEND = location.hostname + ':8000';
+      }
+    })();
+  </script>
 </head>
 <body>
   <div id="app">
-    <header id="status">Connecting…</header>
-    <main id="departures" aria-live="polite"></main>
+    <div id="status">Načítám...</div>
+    <ul id="departures"></ul>
   </div>
-
-  <script src="./js/app.js" type="module"></script>
+  <script src="./js/app.js"></script>
 </body>
 </html>
