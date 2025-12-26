@@ -88460,3 +88460,570 @@ INFO:     connection closed
 2025-12-26 10:05:39,501 DEBUG Fetching GTFS-RT from /tmp/feed.pb
 2025-12-26 10:05:39,501 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
 2025-12-26 10:05:39,501 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:05:44,503 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:05:44,503 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:05:44,504 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:05:49,505 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:05:49,506 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:05:49,506 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:05:54,507 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:05:54,507 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:05:54,507 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:05:59,508 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:05:59,508 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:05:59,508 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:06:04,509 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:06:04,510 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:06:04,510 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:06:09,510 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:06:09,511 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:06:09,511 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:06:14,512 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:06:14,512 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:06:14,512 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:06:19,514 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:06:19,515 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:06:19,515 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:06:24,516 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:06:24,516 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:06:24,516 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:06:29,517 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:06:29,518 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:06:29,518 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:06:34,518 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:06:34,519 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:06:34,519 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:06:39,520 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:06:39,521 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:06:39,521 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:06:44,522 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:06:44,522 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:06:44,522 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:06:49,524 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:06:49,525 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:06:49,525 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:06:54,525 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:06:54,526 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:06:54,526 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:06:59,527 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:06:59,527 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:06:59,527 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:07:04,528 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:07:04,528 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:07:04,528 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:07:09,528 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:07:09,529 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:07:09,529 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:07:14,530 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:07:14,531 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:07:14,531 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:07:19,533 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:07:19,533 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:07:19,533 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:07:24,533 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:07:24,534 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:07:24,534 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:07:29,535 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:07:29,536 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:07:29,536 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:07:34,537 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:07:34,537 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:07:34,537 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:07:39,538 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:07:39,538 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:07:39,539 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:07:44,540 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:07:44,541 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:07:44,541 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:07:49,542 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:07:49,542 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:07:49,542 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:07:54,543 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:07:54,543 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:07:54,543 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:07:59,544 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:07:59,544 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:07:59,545 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:08:04,547 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:08:04,547 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:08:04,547 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:08:09,548 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:08:09,548 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:08:09,548 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:08:14,550 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:08:14,550 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:08:14,550 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:08:19,552 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:08:19,552 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:08:19,552 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:08:24,553 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:08:24,553 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:08:24,553 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:08:29,554 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:08:29,554 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:08:29,554 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:08:34,555 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:08:34,556 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:08:34,556 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:08:39,557 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:08:39,558 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:08:39,558 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:08:44,560 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:08:44,560 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:08:44,560 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:08:49,561 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:08:49,561 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:08:49,562 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:08:54,562 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:08:54,563 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:08:54,563 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:08:59,565 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:08:59,565 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:08:59,565 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:09:04,566 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:09:04,567 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:09:04,567 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:09:09,568 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:09:09,568 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:09:09,569 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:09:14,569 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:09:14,570 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:09:14,570 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:09:19,571 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:09:19,572 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:09:19,572 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:09:24,572 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:09:24,573 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:09:24,573 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:09:29,574 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:09:29,575 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:09:29,575 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:09:34,576 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:09:34,577 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:09:34,577 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:09:39,578 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:09:39,579 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:09:39,579 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:09:44,580 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:09:44,580 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:09:44,581 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:09:49,582 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:09:49,582 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:09:49,582 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:09:54,583 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:09:54,584 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:09:54,584 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:09:59,584 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:09:59,585 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:09:59,585 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:10:04,585 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:10:04,585 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:10:04,585 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:10:09,587 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:10:09,587 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:10:09,588 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:10:14,588 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:10:14,589 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:10:14,589 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:10:19,590 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:10:19,591 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:10:19,591 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:10:24,593 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:10:24,593 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:10:24,593 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:10:29,594 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:10:29,595 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:10:29,595 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:10:34,595 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:10:34,596 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:10:34,596 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:10:39,597 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:10:39,597 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:10:39,597 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:10:44,598 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:10:44,599 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:10:44,599 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:10:49,599 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:10:49,599 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:10:49,599 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:10:54,601 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:10:54,601 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:10:54,601 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:10:59,603 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:10:59,604 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:10:59,604 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:11:04,605 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:11:04,605 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:11:04,606 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:11:09,607 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:11:09,607 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:11:09,607 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:11:14,608 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:11:14,609 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:11:14,609 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:11:19,609 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:11:19,609 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:11:19,610 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:11:24,610 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:11:24,611 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:11:24,611 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:11:29,612 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:11:29,612 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:11:29,612 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:11:34,614 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:11:34,615 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:11:34,615 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:11:39,616 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:11:39,616 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:11:39,616 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:11:44,618 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:11:44,619 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:11:44,619 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:11:49,619 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:11:49,619 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:11:49,619 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:11:54,621 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:11:54,621 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:11:54,621 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:11:59,623 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:11:59,623 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:11:59,623 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:12:04,625 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:12:04,626 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:12:04,626 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:12:09,626 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:12:09,627 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:12:09,627 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:12:14,628 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:12:14,628 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:12:14,628 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:12:19,630 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:12:19,630 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:12:19,630 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:12:24,631 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:12:24,632 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:12:24,632 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:12:29,632 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:12:29,633 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:12:29,633 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:12:34,634 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:12:34,634 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:12:34,635 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:12:39,636 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:12:39,636 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:12:39,636 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:12:44,638 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:12:44,638 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:12:44,638 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:12:49,640 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:12:49,640 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:12:49,640 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:12:54,641 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:12:54,641 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:12:54,642 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:12:59,642 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:12:59,642 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:12:59,642 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:13:04,644 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:13:04,645 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:13:04,645 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:13:09,647 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:13:09,647 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:13:09,647 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:13:14,648 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:13:14,648 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:13:14,648 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:13:19,650 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:13:19,650 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:13:19,650 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:13:24,651 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:13:24,652 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:13:24,652 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:13:29,653 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:13:29,653 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:13:29,653 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:13:34,655 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:13:34,656 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:13:34,656 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:13:39,657 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:13:39,658 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:13:39,658 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:13:44,659 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:13:44,660 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:13:44,660 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:13:49,661 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:13:49,661 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:13:49,661 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:13:54,663 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:13:54,663 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:13:54,663 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:13:59,663 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:13:59,664 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:13:59,664 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:14:04,665 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:14:04,665 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:14:04,665 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:14:09,666 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:14:09,667 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:14:09,667 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:14:14,668 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:14:14,669 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:14:14,669 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:14:19,669 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:14:19,670 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:14:19,670 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:14:24,670 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:14:24,671 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:14:24,671 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:14:29,672 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:14:29,672 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:14:29,672 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:14:34,675 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:14:34,677 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:14:34,677 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:14:39,680 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:14:39,680 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:14:39,680 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:14:44,682 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:14:44,683 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:14:44,683 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:14:49,685 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:14:49,686 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:14:49,686 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:14:54,687 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:14:54,688 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:14:54,688 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:14:59,689 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:14:59,689 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:14:59,689 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:15:04,691 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:15:04,692 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:15:04,692 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:15:09,695 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:15:09,695 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:15:09,695 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:15:14,696 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:15:14,696 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:15:14,696 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:15:19,699 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:15:19,699 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:15:19,699 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:15:24,702 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:15:24,702 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:15:24,702 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:15:29,705 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:15:29,705 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:15:29,705 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:15:34,706 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:15:34,706 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:15:34,706 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:15:39,708 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:15:39,708 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:15:39,708 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:15:44,710 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:15:44,711 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:15:44,711 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:15:49,713 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:15:49,714 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:15:49,714 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:15:54,715 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:15:54,716 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:15:54,716 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:15:59,718 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:15:59,719 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:15:59,719 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:16:04,721 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:16:04,721 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:16:04,721 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:16:09,723 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:16:09,724 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:16:09,724 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:16:14,727 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:16:14,727 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:16:14,728 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:16:19,728 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:16:19,728 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:16:19,728 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:16:24,730 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:16:24,731 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:16:24,731 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:16:29,733 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:16:29,734 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:16:29,734 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:16:34,736 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:16:34,737 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:16:34,737 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:16:39,738 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:16:39,739 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:16:39,739 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:16:44,740 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:16:44,740 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:16:44,741 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:16:49,741 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:16:49,742 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:16:49,742 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:16:54,744 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:16:54,745 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:16:54,745 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:16:59,747 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:16:59,748 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:16:59,748 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:17:04,749 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:17:04,750 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:17:04,750 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:17:09,751 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:17:09,752 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:17:09,752 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:17:14,753 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:17:14,754 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:17:14,754 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:17:19,756 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:17:19,757 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:17:19,757 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:17:24,757 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:17:24,758 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:17:24,758 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:17:29,759 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:17:29,760 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:17:29,760 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:17:34,761 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:17:34,761 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:17:34,761 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:17:39,763 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:17:39,763 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:17:39,763 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:17:44,765 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:17:44,766 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:17:44,766 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:17:49,766 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:17:49,767 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:17:49,767 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:17:54,767 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:17:54,768 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:17:54,768 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:17:59,768 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:17:59,768 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:17:59,768 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:18:04,770 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:18:04,772 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:18:04,772 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:18:09,773 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:18:09,773 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:18:09,773 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:18:14,775 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:18:14,776 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:18:14,776 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:18:19,777 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:18:19,778 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:18:19,778 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:18:24,779 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:18:24,780 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:18:24,780 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:18:29,781 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:18:29,781 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:18:29,781 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:18:34,783 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:18:34,783 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:18:34,783 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:18:39,785 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:18:39,786 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:18:39,786 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:18:44,786 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:18:44,787 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:18:44,787 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:18:49,787 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:18:49,787 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:18:49,788 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:18:54,789 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:18:54,791 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:18:54,791 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:18:59,791 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:18:59,792 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:18:59,792 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:19:04,793 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:19:04,793 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:19:04,793 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:19:09,795 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:19:09,796 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:19:09,796 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:19:14,798 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:19:14,799 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:19:14,799 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:19:19,800 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:19:19,800 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:19:19,800 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:19:24,803 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:19:24,804 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:19:24,805 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:19:29,806 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:19:29,807 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:19:29,807 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:19:34,807 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:19:34,808 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:19:34,808 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:19:39,810 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:19:39,811 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:19:39,811 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:19:44,812 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:19:44,812 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:19:44,812 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:19:49,815 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:19:49,815 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:19:49,815 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:19:54,817 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:19:54,817 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:19:54,817 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:19:59,818 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:19:59,819 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:19:59,819 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:20:04,820 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:20:04,820 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:20:04,820 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:20:09,821 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:20:09,821 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:20:09,821 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:20:14,822 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:20:14,823 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:20:14,823 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:20:19,824 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:20:19,825 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:20:19,825 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:20:24,826 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:20:24,826 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:20:24,826 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:20:29,828 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:20:29,828 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:20:29,828 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:20:34,829 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:20:34,829 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:20:34,829 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:20:39,830 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:20:39,831 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:20:39,831 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:20:44,833 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:20:44,833 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:20:44,833 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:20:49,835 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:20:49,835 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:20:49,835 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:20:54,837 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:20:54,837 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:20:54,837 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:20:59,838 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:20:59,839 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:20:59,839 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:21:04,840 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:21:04,842 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:21:04,842 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:21:09,843 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:21:09,843 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:21:09,844 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:21:14,845 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:21:14,846 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:21:14,846 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:21:19,847 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:21:19,848 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:21:19,848 DEBUG Not attempting HTTP fetch for non-HTTP value
+2025-12-26 10:21:24,849 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:21:24,850 ERROR GTFS_RT_URL does not look like HTTP(s) and file does not exist: /tmp/feed.pb
+2025-12-26 10:21:24,850 DEBUG Not attempting HTTP fetch for non-HTTP value
