@@ -1,0 +1,171 @@
+:root {
+  --bg: #0b0b0f;
+  --fg: #e6eef8;
+  --accent: #6cc;
+  --muted: #98a6b3;
+  --card-bg: rgba(255, 255, 255, 0.02);
+  --radius: 10px;
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  fill: var(--fg);
+  display: inline-block;
+}
+.icon.small {
+  width: 16px;
+  height: 16px;
+}
+
+.station-train {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 8px;
+  opacity: 0.95;
+}
+
+.line-badge.bus-airport {
+  background: linear-gradient(90deg, #ffd89b 0%, #ffb199 100%);
+  color: #111;
+}
+.line-badge.train {
+  background: linear-gradient(90deg, #9be7ff 0%, #6cc 100%);
+  color: #082;
+}
+
+.airport-tag {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--fg);
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  margin-left: 8px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.airport-tag .icon {
+  width: 14px;
+  height: 14px;
+  fill: var(--fg);
+  opacity: 0.95;
+}
+
+.dest-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.meta {
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+#departures {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.departure {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 18px;
+  border-radius: var(--radius);
+  background: linear-gradient(90deg, var(--card-bg), transparent);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+}
+.line-badge {
+  min-width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  background: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  color: var(--bg);
+  font-size: 1.25rem;
+}
+.departure-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.dest {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+.meta {
+  font-size: 1rem;
+  color: var(--muted);
+}
+.eta {
+  font-weight: 900;
+  font-size: 1.6rem;
+  color: var(--accent);
+}
+
+.track-wrap {
+  position: relative;
+  width: 100%;
+  height: 14px;
+  margin: 8px 0 18px 0;
+  overflow: hidden;
+  border-radius: 8px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.01), transparent);
+}
+
+.moving-track {
+  position: absolute;
+  left: -40%;
+  top: 0;
+  height: 100%;
+  width: 40%;
+  border-radius: 6px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45), inset 0 -4px 12px rgba(255, 255, 255, 0.02);
+  transform: translateX(0);
+  animation: track-slide 6s linear infinite;
+  transition: background-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.track-green {
+  background: linear-gradient(90deg, #59d68a, #2fb86a);
+}
+.track-yellow {
+  background: linear-gradient(90deg, #ffd54f, #ffb74d);
+}
+.track-red {
+  background: linear-gradient(90deg, #ff6b6b, #ff3b3b);
+}
+
+.track-green {
+  box-shadow: 0 8px 30px rgba(47, 184, 106, 0.14);
+}
+.track-yellow {
+  box-shadow: 0 8px 30px rgba(255, 181, 56, 0.14);
+}
+.track-red {
+  box-shadow: 0 8px 30px rgba(255, 59, 59, 0.14);
+}
+
+@keyframes track-slide {
+  0% {
+    transform: translateX(-120%);
+  }
+  50% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(120%);
+  }
+}

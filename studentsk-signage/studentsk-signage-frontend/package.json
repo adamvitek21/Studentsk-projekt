@@ -1,0 +1,31 @@
+{
+  "name": "studentsk-signage-frontend",
+  "version": "0.1.0",
+  "description": "A signage prototype application that displays real-time departure information and fallback data.",
+  "main": "src/js/app.js",
+  "scripts": {
+    "start": "live-server src --port=5000 --host=0.0.0.0 --quiet",
+    "dev": "npm run start"
+  },
+  "keywords": [
+    "signage",
+    "real-time",
+    "websocket",
+    "fallback"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "live-server": "^1.2.2"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/studentsk-signage-frontend.git"
+  },
+  "homepage": "https://github.com/yourusername/studentsk-signage-frontend#readme",
+  "bugs": {
+    "url": "https://github.com/yourusername/studentsk-signage-frontend/issues"
+  },
+  "private": true
+}

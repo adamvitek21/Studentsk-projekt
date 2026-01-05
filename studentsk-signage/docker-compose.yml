@@ -1,0 +1,30 @@
+version: "3.8"
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend:/app:ro
+    ports:
+      - "8000:8000"
+    environment:
+      - GTFS_RT_URL=/tmp/feed.pb
+      - GTFS_POLL_INTERVAL=10
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- --timeout=2 http://127.0.0.1:8000/api/status | grep '\"ok\":' || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  frontend:
+    build:
+      context: ./studentsk-signage-frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ./studentsk-signage-frontend/src:/app:ro
+    ports:
+      - "5000:5000"
+    command: sh -c "npm install --no-audit --no-fund --silent live-server && npx live-server /app --port=5000 --host=0.0.0.0 --quiet"
+    depends_on:
+      - backend

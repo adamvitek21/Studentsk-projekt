@@ -1,0 +1,5 @@
+{
+  "departures": [
+    { "line": "A", "dest": "Muzeum", "in_min": 3 }
+  ]
+}
