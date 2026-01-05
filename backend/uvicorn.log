@@ -89525,3 +89525,211 @@ INFO:     127.0.0.1:65450 - "GET /api/status HTTP/1.1" 200 OK
 2025-12-26 10:32:25,127 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
 2025-12-26 10:32:25,128 DEBUG Parsed 1 departures
 2025-12-26 10:32:25,128 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:32:30,129 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:32:30,129 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:32:30,130 DEBUG Parsed 1 departures
+2025-12-26 10:32:30,130 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:32:35,132 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:32:35,132 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:32:35,132 DEBUG Parsed 1 departures
+2025-12-26 10:32:35,132 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:32:40,132 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:32:40,133 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:32:40,133 DEBUG Parsed 1 departures
+2025-12-26 10:32:40,133 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:32:45,134 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:32:45,135 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:32:45,136 DEBUG Parsed 1 departures
+2025-12-26 10:32:45,136 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:32:50,137 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:32:50,137 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:32:50,138 DEBUG Parsed 1 departures
+2025-12-26 10:32:50,138 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:32:55,138 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:32:55,140 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:32:55,140 DEBUG Parsed 1 departures
+2025-12-26 10:32:55,140 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:33:00,141 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:33:00,141 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:33:00,142 DEBUG Parsed 1 departures
+2025-12-26 10:33:00,142 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:33:05,142 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:33:05,143 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:33:05,144 DEBUG Parsed 1 departures
+2025-12-26 10:33:05,144 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:33:10,143 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:33:10,143 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:33:10,143 DEBUG Parsed 1 departures
+2025-12-26 10:33:10,144 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:33:15,143 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:33:15,144 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:33:15,144 DEBUG Parsed 1 departures
+2025-12-26 10:33:15,144 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:33:20,143 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:33:20,144 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:33:20,145 DEBUG Parsed 1 departures
+2025-12-26 10:33:20,145 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:33:25,144 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:33:25,145 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:33:25,145 DEBUG Parsed 1 departures
+2025-12-26 10:33:25,146 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:33:30,146 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:33:30,146 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:33:30,146 DEBUG Parsed 1 departures
+2025-12-26 10:33:30,146 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:33:35,147 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:33:35,147 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:33:35,147 DEBUG Parsed 1 departures
+2025-12-26 10:33:35,148 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:33:40,148 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:33:40,148 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:33:40,149 DEBUG Parsed 1 departures
+2025-12-26 10:33:40,149 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:33:45,150 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:33:45,150 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:33:45,151 DEBUG Parsed 1 departures
+2025-12-26 10:33:45,151 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:33:50,151 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:33:50,152 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:33:50,152 DEBUG Parsed 1 departures
+2025-12-26 10:33:50,152 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:33:55,153 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:33:55,153 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:33:55,153 DEBUG Parsed 1 departures
+2025-12-26 10:33:55,154 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:34:00,154 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:34:00,155 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:34:00,155 DEBUG Parsed 1 departures
+2025-12-26 10:34:00,155 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:34:05,155 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:34:05,156 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:34:05,156 DEBUG Parsed 1 departures
+2025-12-26 10:34:05,156 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:34:10,157 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:34:10,158 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:34:10,158 DEBUG Parsed 1 departures
+2025-12-26 10:34:10,158 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:34:15,160 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:34:15,160 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:34:15,160 DEBUG Parsed 1 departures
+2025-12-26 10:34:15,160 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:34:20,162 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:34:20,163 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:34:20,163 DEBUG Parsed 1 departures
+2025-12-26 10:34:20,163 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:34:25,163 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:34:25,163 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:34:25,164 DEBUG Parsed 1 departures
+2025-12-26 10:34:25,164 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:34:30,166 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:34:30,166 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:34:30,166 DEBUG Parsed 1 departures
+2025-12-26 10:34:30,167 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:34:35,168 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:34:35,168 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:34:35,168 DEBUG Parsed 1 departures
+2025-12-26 10:34:35,168 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:34:40,170 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:34:40,170 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:34:40,171 DEBUG Parsed 1 departures
+2025-12-26 10:34:40,171 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:34:45,172 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:34:45,172 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:34:45,173 DEBUG Parsed 1 departures
+2025-12-26 10:34:45,173 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:34:50,174 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:34:50,174 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:34:50,175 DEBUG Parsed 1 departures
+2025-12-26 10:34:50,175 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:34:55,176 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:34:55,177 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:34:55,177 DEBUG Parsed 1 departures
+2025-12-26 10:34:55,177 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:35:00,178 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:35:00,178 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:35:00,179 DEBUG Parsed 1 departures
+2025-12-26 10:35:00,179 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:35:05,179 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:35:05,179 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:35:05,179 DEBUG Parsed 1 departures
+2025-12-26 10:35:05,180 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:35:10,181 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:35:10,182 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:35:10,182 DEBUG Parsed 1 departures
+2025-12-26 10:35:10,182 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:35:15,183 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:35:15,184 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:35:15,184 DEBUG Parsed 1 departures
+2025-12-26 10:35:15,184 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:35:20,185 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:35:20,185 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:35:20,185 DEBUG Parsed 1 departures
+2025-12-26 10:35:20,185 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:35:25,186 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:35:25,186 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:35:25,187 DEBUG Parsed 1 departures
+2025-12-26 10:35:25,187 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:35:30,187 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:35:30,188 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:35:30,188 DEBUG Parsed 1 departures
+2025-12-26 10:35:30,188 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:35:35,189 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:35:35,189 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:35:35,190 DEBUG Parsed 1 departures
+2025-12-26 10:35:35,190 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:35:40,191 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:35:40,192 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:35:40,192 DEBUG Parsed 1 departures
+2025-12-26 10:35:40,192 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:35:45,192 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:35:45,192 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:35:45,193 DEBUG Parsed 1 departures
+2025-12-26 10:35:45,193 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:35:50,194 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:35:50,194 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:35:50,195 DEBUG Parsed 1 departures
+2025-12-26 10:35:50,195 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:35:55,196 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:35:55,196 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:35:55,197 DEBUG Parsed 1 departures
+2025-12-26 10:35:55,197 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:36:00,198 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:36:00,198 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:36:00,198 DEBUG Parsed 1 departures
+2025-12-26 10:36:00,198 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:36:05,200 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:36:05,200 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:36:05,201 DEBUG Parsed 1 departures
+2025-12-26 10:36:05,201 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:36:10,201 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:36:10,201 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:36:10,202 DEBUG Parsed 1 departures
+2025-12-26 10:36:10,202 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:36:15,202 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:36:15,202 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:36:15,203 DEBUG Parsed 1 departures
+2025-12-26 10:36:15,203 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:36:20,204 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:36:20,205 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:36:20,205 DEBUG Parsed 1 departures
+2025-12-26 10:36:20,205 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:36:25,206 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:36:25,206 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:36:25,207 DEBUG Parsed 1 departures
+2025-12-26 10:36:25,207 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:36:30,208 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:36:30,208 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:36:30,209 DEBUG Parsed 1 departures
+2025-12-26 10:36:30,209 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:36:35,210 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:36:35,211 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:36:35,211 DEBUG Parsed 1 departures
+2025-12-26 10:36:35,211 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:36:40,212 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:36:40,212 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:36:40,213 DEBUG Parsed 1 departures
+2025-12-26 10:36:40,213 DEBUG Updated LATEST_DEPARTURES (1 items)
+2025-12-26 10:36:45,213 DEBUG Fetching GTFS-RT from /tmp/feed.pb
+2025-12-26 10:36:45,214 DEBUG Reading GTFS-RT local file: /tmp/feed.pb
+2025-12-26 10:36:45,214 DEBUG Parsed 1 departures
+2025-12-26 10:36:45,214 DEBUG Updated LATEST_DEPARTURES (1 items)

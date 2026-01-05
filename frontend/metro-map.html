@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metro Praha - Linka C - Displej</title>
+    <link rel="stylesheet" href="css/metro-map.css">
+</head>
+<body>
+    <div class="display-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="direction">
+                <div class="line-badge">C</div>
+                <div class="direction-text">
+                    <span class="direction-arrow">→</span>
+                    Háje
+                </div>
+            </div>
+            <div class="time">14:32:00</div>
+        </div>
+
+        <!-- Trasa -->
+        <div class="route-container">
+            <div class="route-line"></div>
+            <div class="route-line-passed"></div>
+            
+            <div class="stations">
+                <!-- Stanice budou vygenerovány JavaScriptem -->
+            </div>
+        </div>
+
+        <!-- Info panel -->
+        <div class="info-panel">
+            <div class="next-station">
+                <span class="next-label">Příští stanice:</span>
+                <span class="next-name">--</span>
+            </div>
+            <div class="arrival-time">
+                <span class="arrival-label">Příjezd za:</span>
+                <span class="arrival-value">--:--</span>
+                <span class="arrival-unit">min</span>
+            </div>
+        </div>
+        
+        <!-- Ovládací panel bude přidán JavaScriptem -->
+    </div>
+
+    <script src="js/metro-map.js"></script>
+</body>
+</html>

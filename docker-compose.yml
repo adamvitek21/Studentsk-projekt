@@ -10,16 +10,35 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - GTFS_RT_URL=/tmp/feed.pb
-      - GTFS_POLL_INTERVAL=10
+      - GTFS_RT_URL=${GTFS_RT_URL:-}
+      - GTFS_POLL_INTERVAL=${GTFS_POLL_INTERVAL:-15}
+      - GOLEMIO_API_KEY=${GOLEMIO_API_KEY:-}
+    env_file:
+      - ./backend/.env
+    restart: unless-stopped
 
+  metro-display:
+    image: python:3.11-slim
+    working_dir: /app
+    volumes:
+      - ./frontend:/app:ro
+    ports:
+      - "5000:5000"
+    command: python3 -m http.server 5000
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  # Legacy frontend (studentsk-signage)
   frontend:
     image: python:3.11-slim
     working_dir: /app
     volumes:
       - ./frontend/src:/app:ro
     ports:
-      - "5000:5000"
-    command: python3 -m http.server 5000
+      - "5001:5001"
+    command: python3 -m http.server 5001
     depends_on:
       - backend
+    profiles:
+      - legacy
