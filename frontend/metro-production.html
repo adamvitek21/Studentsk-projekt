@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=4096, height=607, initial-scale=1.0, user-scalable=no">
+    <title>Metro Praha - Informační displej</title>
+    <link rel="stylesheet" href="css/metro-production.css">
+    <!-- Produkční režim: bez ovládacích prvků, automatické fullscreen -->
+    <style>
+        /* Skrytí kurzoru pro produkční displeje */
+        * { cursor: none !important; }
+        
+        /* Zajištění fullscreen bez scrollbarů */
+        html, body {
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="display-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="direction">
+                <div class="line-badge">C</div>
+                <div class="direction-text">
+                    <span class="direction-arrow">→</span>
+                    <span id="terminus">Háje</span>
+                </div>
+            </div>
+            <div class="time-container">
+                <div class="time">14:32:00</div>
+                <div class="delay-badge" id="delay-badge" style="display: none;">
+                    <span class="delay-icon">⚠</span>
+                    <span class="delay-text">+0 min</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trasa -->
+        <div class="route-container">
+            <div class="route-line"></div>
+            <div class="route-line-passed"></div>
+            <div class="route-line-disabled"></div>
+            
+            <div class="stations">
+                <!-- Stanice budou vygenerovány JavaScriptem -->
+            </div>
+        </div>
+
+        <!-- Info panel -->
+        <div class="info-panel">
+            <div class="next-station">
+                <span class="next-label">Příští stanice:</span>
+                <span class="next-name">--</span>
+            </div>
+            <div class="arrival-time">
+                <span class="arrival-label">Příjezd za:</span>
+                <span class="arrival-value">--:--</span>
+                <span class="arrival-unit">min</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/metro-production.js"></script>
+</body>
+</html>

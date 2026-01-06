@@ -1,8 +1,17 @@
 # Metro Praha - Informační Displej 🚇
 
-Informační displej pro metro Praha, linka C. Zobrazuje real-time pozici vlaku, příští stanici a čas příjezdu.
+Informační displej pro pražské metro zobrazující real-time pozice vlaků na linkách A, B a C.
 
 ![Metro Display](docs/screenshot.png)
+
+## ✨ Funkce
+
+- **Multi-line podpora** - Linky A 🟢, B 🟡, C 🔴
+- **Real-time data** - Připojení k Golemio API (PID GTFS-RT)
+- **Simulační režim** - Pro testování bez připojení
+- **Vícejazyčná podpora** - Čeština / English
+- **Obratové stanice** - Podpora zkrácených spojů
+- **Přestupní indikátory** - Metro, vlaky, autobusy
 
 ## 🚀 Rychlý start
 
@@ -18,10 +27,10 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 
 # 2. Frontend (v novém terminálu)
 cd frontend
-python3 -m http.server 5000
+python3 -m http.server 5002
 
 # 3. Otevři v prohlížeči
-open http://localhost:5000/metro-map.html
+open http://localhost:5002/metro-map.html
 ```
 
 ### Docker spuštění
@@ -38,6 +47,22 @@ docker-compose up -d
 open http://localhost:5000/metro-map.html
 ```
 
+## 🖥️ Přepínání linek
+
+**Vývojová verze** (s ovládacím panelem):
+```
+http://localhost:5002/metro-map.html?line=A   # Linka A (zelená)
+http://localhost:5002/metro-map.html?line=B   # Linka B (žlutá)
+http://localhost:5002/metro-map.html?line=C   # Linka C (červená - výchozí)
+```
+
+**Produkční verze** (pro informační panely v soupravách):
+```
+http://localhost:5002/metro-production.html?line=C
+http://localhost:5002/metro-production.html?line=A&lang=en
+http://localhost:5002/metro-production.html?line=B&terminal=florenc-b
+```
+
 ## 📡 Reálná data z PID
 
 Pro zobrazení reálných dat z Pražské integrované dopravy:
@@ -51,11 +76,18 @@ GOLEMIO_API_KEY=tvuj-api-klic
 GTFS_RT_URL=https://api.golemio.cz/v2/vehiclepositions/gtfsrt/
 ```
 
-## 🖥️ Technické specifikace
+## �️ Metro linky
+
+| Linka | Barva | Trasa | Stanic |
+|-------|-------|-------|--------|
+| **A** | 🟢 #00A651 | Nemocnice Motol ↔ Depo Hostivař | 17 |
+| **B** | 🟡 #FFD500 | Zličín ↔ Černý Most | 24 |
+| **C** | 🔴 #E62F23 | Letňany ↔ Háje | 20 |
+
+## �🖥️ Technické specifikace
 
 - **Rozlišení displeje**: 4096×607px (průmyslový formát)
-- **Linka**: Metro C (20 stanic: Letňany ↔ Háje)
-- **Backend**: FastAPI + WebSocket
+- **Backend**: Python 3.11+, FastAPI, uvicorn
 - **Frontend**: Vanilla JavaScript + CSS3
 - **Data**: GTFS Realtime / simulace
 
@@ -64,16 +96,23 @@ GTFS_RT_URL=https://api.golemio.cz/v2/vehiclepositions/gtfsrt/
 ```
 ├── backend/
 │   ├── app/
-│   │   └── main.py          # FastAPI server
+│   │   └── main.py              # FastAPI server
 │   ├── Dockerfile
 │   ├── requirements.txt
 │   └── .env.example
 ├── frontend/
-│   ├── metro-map.html       # Hlavní displej
+│   ├── metro-map.html           # Vývojová verze (s ovládacím panelem)
+│   ├── metro-production.html    # Produkční verze (pro displeje v metrech)
 │   ├── css/
-│   │   └── metro-map.css    # Styly
+│   │   ├── metro-map.css        # Vývojové styly
+│   │   └── metro-production.css # Produkční styly
 │   └── js/
-│       └── metro-map.js     # Logika
+│       ├── metro-map.js         # Vývojová logika
+│       └── metro-production.js  # Produkční logika
+├── docs/
+│   ├── DOKUMENTACE.md       # Projektová dokumentace
+│   ├── TECHNICKA_DOKUMENTACE.md
+│   └── UZIVATELSKA_PRIRUCKA.md
 └── docker-compose.yml
 ```
 
@@ -82,8 +121,9 @@ GTFS_RT_URL=https://api.golemio.cz/v2/vehiclepositions/gtfsrt/
 | Endpoint | Metoda | Popis |
 |----------|--------|-------|
 | `/api/status` | GET | Stav serveru |
-| `/api/metro/line-c` | GET | Data linky C |
-| `/ws/metro/line-c` | WS | Real-time WebSocket |
+| `/api/metro/lines` | GET | Seznam všech linek |
+| `/api/metro/line/{id}` | GET | Data konkrétní linky |
+| `/ws/metro/{id}` | WS | Real-time WebSocket |
 
 ## 🎮 Ovládání simulace
 
@@ -93,7 +133,15 @@ GTFS_RT_URL=https://api.golemio.cz/v2/vehiclepositions/gtfsrt/
 | ⏸ Pauza | Pozastaví/obnoví |
 | ↺ Reset | Vrátí na začátek |
 | ⇄ Otočit | Změní směr jízdy |
+| 1×/2×/5× | Rychlost simulace |
+| 📡/🟠 | Přepnutí API/Simulace |
 | 🌐 EN/CZ | Přepne jazyk |
+
+## 📖 Dokumentace
+
+- [Projektová dokumentace](docs/DOKUMENTACE.md)
+- [Technická dokumentace](docs/TECHNICKA_DOKUMENTACE.md)
+- [Uživatelská příručka](docs/UZIVATELSKA_PRIRUCKA.md)
 
 ## 🎨 Barevné schéma
 

@@ -630,7 +630,8 @@ body {
     cursor: pointer;
 }
 
-/* Výběr konečné stanice */
+/* Výběr výchozí a konečné stanice */
+.start-selector,
 .terminal-selector {
     display: flex;
     align-items: center;
@@ -639,10 +640,12 @@ body {
     font-size: 14px;
 }
 
+.start-selector label,
 .terminal-selector label {
     font-weight: 500;
 }
 
+.start-selector select,
 .terminal-selector select {
     padding: 6px 12px;
     font-size: 14px;
@@ -656,15 +659,18 @@ body {
     transition: all 0.2s ease;
 }
 
+.start-selector select:hover,
 .terminal-selector select:hover {
     background: #444;
 }
 
+.start-selector select:focus,
 .terminal-selector select:focus {
     border-color: #00ff88;
     box-shadow: 0 0 8px rgba(0, 255, 136, 0.4);
 }
 
+.start-selector select option,
 .terminal-selector select option {
     background: #333;
     color: #fff;

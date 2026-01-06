@@ -198,8 +198,12 @@ class MetroMap {
         // Vlastní konečná stanice (null = výchozí z konfigurace)
         this.customTerminal = null;
         
+        // Vlastní výchozí stanice (null = výchozí konečná podle směru)
+        this.customStartStation = null;
+        
         this.init();
     }
+
 
     // Získání linky z URL parametru (?line=A)
     getLineFromUrl() {
@@ -243,6 +247,7 @@ class MetroMap {
         this.currentStationIndex = 0;
         this.direction = 'last';
         this.customTerminal = null; // Reset vlastní konečné
+        this.customStartStation = null; // Reset vlastní výchozí
         
         // Aktualizuj URL bez reloadu
         const url = new URL(window.location);
@@ -256,10 +261,12 @@ class MetroMap {
         this.renderStations();
         this.updateDisplay();
         this.updateLineSelectorButtons();
+        this.updateStartSelector();
         this.updateTerminalSelector();
         
         console.log(`[Metro] Přepnuto na linku ${lineId}`);
     }
+
 
     // Aktualizace barev podle aktuální linky
     updateLineColors() {
@@ -516,6 +523,12 @@ class MetroMap {
                 <button id="btn-pause" class="control-btn">${t.pause}</button>
                 <button id="btn-reset" class="control-btn">${t.reset}</button>
                 <button id="btn-reverse" class="control-btn">${t.reverse}</button>
+                <div class="start-selector" id="start-selector-container">
+                    <label>Výchozí:</label>
+                    <select id="start-selector">
+                        <!-- Bude naplněno JavaScriptem -->
+                    </select>
+                </div>
                 <div class="terminal-selector" id="terminal-selector-container">
                     <label>Konečná:</label>
                     <select id="terminal-selector">
@@ -549,13 +562,89 @@ class MetroMap {
             document.getElementById('btn-mode')?.addEventListener('click', () => this.toggleMode());
             document.getElementById('speed-slider')?.addEventListener('input', (e) => this.setSpeed(e.target.value));
             document.getElementById('terminal-selector')?.addEventListener('change', (e) => this.setCustomTerminal(e.target.value));
+            document.getElementById('start-selector')?.addEventListener('change', (e) => this.setStartStation(e.target.value));
             
-            // Naplnit dropdown pro výběr konečné
+            // Naplnit dropdown pro výběr konečné a výchozí stanice
+            this.updateStartSelector();
             this.updateTerminalSelector();
         }
         
         // Aktualizuj tlačítko režimu
         this.updateModeButton();
+    }
+
+    // Aktualizace dropdownu pro výběr výchozí stanice
+    updateStartSelector() {
+        const selector = document.getElementById('start-selector');
+        if (!selector) return;
+        
+        const config = this.linesConfig[this.currentLine];
+        const possibleTerminals = config.possibleTerminals || [];
+        const stations = config.stations;
+        
+        // Vymazat současné možnosti
+        selector.innerHTML = '';
+        
+        // Přidat výchozí možnost (konečná stanice podle směru)
+        const defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.textContent = this.direction === 'last' ? config.terminals.first : config.terminals.last;
+        selector.appendChild(defaultOption);
+        
+        // Přidat všechny možné výchozí stanice (possibleTerminals)
+        possibleTerminals.forEach(terminalId => {
+            const stationIdx = stations.findIndex(s => s.id === terminalId);
+            if (stationIdx === -1) return;
+            
+            const station = stations[stationIdx];
+            
+            // Přeskočit skutečné konečné stanice (ty jsou už ve výchozí možnosti)
+            if (stationIdx === 0 || stationIdx === stations.length - 1) return;
+            
+            // Podle směru zobrazit pouze stanice, které jsou "za námi" (mohou být výchozí)
+            let isValid = false;
+            if (this.direction === 'last' && stationIdx < this.stations.length - 1) {
+                // Směr k poslední stanici - můžeme začít z jakékoli stanice před konečnou
+                isValid = true;
+            } else if (this.direction === 'first' && stationIdx > 0) {
+                // Směr k první stanici - můžeme začít z jakékoli stanice za první
+                isValid = true;
+            }
+            
+            if (isValid) {
+                const option = document.createElement('option');
+                option.value = terminalId;
+                option.textContent = station.name;
+                if (this.customStartStation === terminalId) {
+                    option.selected = true;
+                }
+                selector.appendChild(option);
+            }
+        });
+    }
+
+    // Nastavení vlastní výchozí stanice
+    setStartStation(stationId) {
+        if (!stationId) {
+            this.customStartStation = null;
+            // Reset na výchozí pozici
+            if (this.direction === 'last') {
+                this.currentStationIndex = 0;
+            } else {
+                this.currentStationIndex = this.stations.length - 1;
+            }
+            console.log(`[Metro] Výchozí stanice: výchozí konečná`);
+        } else {
+            this.customStartStation = stationId;
+            const stationIdx = this.stations.findIndex(s => s.id === stationId);
+            if (stationIdx !== -1) {
+                this.currentStationIndex = stationIdx;
+                const station = this.stations[stationIdx];
+                console.log(`[Metro] Výchozí stanice změněna na: ${station?.name || stationId}`);
+            }
+        }
+        this.updateDisplay();
+        this.updateTerminalSelector(); // Aktualizovat možné konečné podle nové pozice
     }
 
     // Aktualizace dropdownu pro výběr konečné stanice
@@ -1152,8 +1241,17 @@ class MetroMap {
             this.countdownInterval = null;
         }
         
-        // Nastav na první nebo poslední stanici podle směru
-        if (this.direction === 'last') {
+        // Nastav na vlastní výchozí stanici nebo první/poslední podle směru
+        if (this.customStartStation) {
+            const stationIdx = this.stations.findIndex(s => s.id === this.customStartStation);
+            if (stationIdx !== -1) {
+                this.currentStationIndex = stationIdx;
+            } else if (this.direction === 'last') {
+                this.currentStationIndex = 0;
+            } else {
+                this.currentStationIndex = this.stations.length - 1;
+            }
+        } else if (this.direction === 'last') {
             this.currentStationIndex = 0;
         } else {
             this.currentStationIndex = this.stations.length - 1;
@@ -1183,8 +1281,9 @@ class MetroMap {
         // Přepni směr: 'last' <-> 'first'
         this.direction = this.direction === 'last' ? 'first' : 'last';
         
-        // Resetuj vlastní konečnou při obratu
+        // Resetuj vlastní konečnou a výchozí při obratu
         this.customTerminal = null;
+        this.customStartStation = null;
         
         // Nastav na správnou výchozí stanici podle nového směru
         if (this.direction === 'last') {
@@ -1198,6 +1297,7 @@ class MetroMap {
         this.totalTravelTime = 0;
         
         this.updateDisplay();
+        this.updateStartSelector();
         this.updateTerminalSelector();
         
         // Zobraz nový koncový terminus
