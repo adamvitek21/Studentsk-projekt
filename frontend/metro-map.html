@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Metro Praha - Linka C - Displej</title>
+    <title>Metro Praha - Displej</title>
     <link rel="stylesheet" href="css/metro-map.css">
 </head>
 <body>
@@ -12,9 +12,14 @@
         <div class="header">
             <div class="direction">
                 <div class="line-badge">C</div>
+                <div class="line-selector">
+                    <button class="line-btn line-a" data-line="A">A</button>
+                    <button class="line-btn line-b" data-line="B">B</button>
+                    <button class="line-btn line-c active" data-line="C">C</button>
+                </div>
                 <div class="direction-text">
                     <span class="direction-arrow">→</span>
-                    Háje
+                    <span id="terminus">Háje</span>
                 </div>
             </div>
             <div class="time">14:32:00</div>

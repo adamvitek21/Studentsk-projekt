@@ -1,30 +1,103 @@
 class MetroMap {
     constructor() {
-        this.stations = [
-            { id: 'letnany', name: 'Letňany', transfer: null, travelTime: 120 },
-            { id: 'prosek', name: 'Prosek', transfer: null, travelTime: 90 },
-            { id: 'strizkov', name: 'Střížkov', transfer: null, travelTime: 90 },
-            { id: 'ladvi', name: 'Ládví', transfer: null, travelTime: 90 },
-            { id: 'kobylisy', name: 'Kobylisy', transfer: null, travelTime: 90 },
-            { id: 'nadrazi-holesovice', name: 'Nádraží Holešovice', transfer: ['train', 'bus-zoo'], travelTime: 120 },
-            { id: 'vltavska', name: 'Vltavská', transfer: null, travelTime: 90 },
-            { id: 'florenc', name: 'Florenc', transfer: ['B'], travelTime: 90 },
-            { id: 'hlavni-nadrazi', name: 'Hlavní nádraží', transfer: ['train', 'info', 'bus-airport'], travelTime: 60 },
-            { id: 'muzeum', name: 'Muzeum', transfer: ['A'], travelTime: 60 },
-            { id: 'ip-pavlova', name: 'I. P. Pavlova', transfer: null, travelTime: 90 },
-            { id: 'vysehrad', name: 'Vyšehrad', transfer: null, travelTime: 90 },
-            { id: 'prazskeho-povstani', name: 'Pražského povstání', transfer: null, travelTime: 90 },
-            { id: 'pankrac', name: 'Pankrác', transfer: ['D'], travelTime: 90 },
-            { id: 'budejovicka', name: 'Budějovická', transfer: null, travelTime: 90 },
-            { id: 'kacerov', name: 'Kačerov', transfer: ['train'], travelTime: 90 },
-            { id: 'roztyly', name: 'Roztyly', transfer: null, travelTime: 90 },
-            { id: 'chodov', name: 'Chodov', transfer: null, travelTime: 90 },
-            { id: 'opatov', name: 'Opatov', transfer: null, travelTime: 90 },
-            { id: 'haje', name: 'Háje', transfer: null, travelTime: 120 }
-        ];
+        // Konfigurace všech linek metra
+        this.linesConfig = {
+            'A': {
+                color: '#00A651',
+                textColor: '#FFFFFF',
+                terminals: { first: 'Nemocnice Motol', last: 'Depo Hostivař' },
+                // Možné konečné stanice (obratové stanice)
+                possibleTerminals: ['nemocnice-motol', 'petriny', 'dejvicka', 'namesti-miru', 'zelivskeho', 'skalka', 'depo-hostivar'],
+                stations: [
+                    { id: 'nemocnice-motol', name: 'Nemocnice Motol', transfer: null, travelTime: 120 },
+                    { id: 'petriny', name: 'Petřiny', transfer: null, travelTime: 90 },
+                    { id: 'nadrazi-veleslavin', name: 'Nádraží Veleslavín', transfer: ['train', 'bus-airport'], travelTime: 90 },
+                    { id: 'borislavka', name: 'Bořislavka', transfer: null, travelTime: 90 },
+                    { id: 'dejvicka', name: 'Dejvická', transfer: ['bus-airport'], travelTime: 90 },
+                    { id: 'hradcanska', name: 'Hradčanská', transfer: ['train'], travelTime: 90 },
+                    { id: 'malostranska', name: 'Malostranská', transfer: null, travelTime: 90 },
+                    { id: 'staromestska', name: 'Staroměstská', transfer: null, travelTime: 90 },
+                    { id: 'mustek', name: 'Můstek', transfer: ['B'], travelTime: 60 },
+                    { id: 'muzeum-a', name: 'Muzeum', transfer: ['C'], travelTime: 60 },
+                    { id: 'namesti-miru', name: 'Náměstí Míru', transfer: null, travelTime: 90 },
+                    { id: 'jiriho-z-podebrad', name: 'Jiřího z Poděbrad', transfer: null, travelTime: 90 },
+                    { id: 'flora', name: 'Flora', transfer: null, travelTime: 90 },
+                    { id: 'zelivskeho', name: 'Želivského', transfer: null, travelTime: 90 },
+                    { id: 'strasnicka', name: 'Strašnická', transfer: null, travelTime: 90 },
+                    { id: 'skalka', name: 'Skalka', transfer: null, travelTime: 90 },
+                    { id: 'depo-hostivar', name: 'Depo Hostivař', transfer: null, travelTime: 120 }
+                ]
+            },
+            'B': {
+                color: '#FFD500',
+                textColor: '#000000',
+                terminals: { first: 'Zličín', last: 'Černý Most' },
+                // Možné konečné stanice (obratové stanice)
+                possibleTerminals: ['zlicin', 'nove-butovice', 'smichovske-nadrazi','florenc-b', 'ceskomoravska','vysocanska', 'cerny-most'],
+                stations: [
+                    { id: 'zlicin', name: 'Zličín', transfer: ['bus-airport'], travelTime: 120 },
+                    { id: 'stodulky', name: 'Stodůlky', transfer: null, travelTime: 90 },
+                    { id: 'luka', name: 'Luka', transfer: null, travelTime: 90 },
+                    { id: 'luziny', name: 'Lužiny', transfer: null, travelTime: 90 },
+                    { id: 'hurka', name: 'Hůrka', transfer: null, travelTime: 90 },
+                    { id: 'nove-butovice', name: 'Nové Butovice', transfer: null, travelTime: 90 },
+                    { id: 'jinonice', name: 'Jinonice', transfer: ['train'], travelTime: 90 },
+                    { id: 'radlicka', name: 'Radlická', transfer: null, travelTime: 90 },
+                    { id: 'smichovske-nadrazi', name: 'Smíchovské nádraží', transfer: ['train'], travelTime: 90 },
+                    { id: 'andel', name: 'Anděl', transfer: null, travelTime: 90 },
+                    { id: 'karlovo-namesti', name: 'Karlovo náměstí', transfer: null, travelTime: 90 },
+                    { id: 'narodni-trida', name: 'Národní třída', transfer: null, travelTime: 60 },
+                    { id: 'mustek-b', name: 'Můstek', transfer: ['A'], travelTime: 60 },
+                    { id: 'namesti-republiky', name: 'Náměstí Republiky', transfer: null, travelTime: 90 },
+                    { id: 'florenc-b', name: 'Florenc', transfer: ['C', 'A'], travelTime: 90 },
+                    { id: 'krizikova', name: 'Křižíkova', transfer: null, travelTime: 90 },
+                    { id: 'invalidovna', name: 'Invalidovna', transfer: null, travelTime: 90 },
+                    { id: 'palmovka', name: 'Palmovka', transfer: null, travelTime: 90 },
+                    { id: 'ceskomoravska', name: 'Českomoravská', transfer: null, travelTime: 90 },
+                    { id: 'vysocanska', name: 'Vysočanská', transfer: ['train'], travelTime: 90 },
+                    { id: 'kolbenova', name: 'Kolbenova', transfer: null, travelTime: 90 },
+                    { id: 'hloubetin', name: 'Hloubětín', transfer: null, travelTime: 90 },
+                    { id: 'rajska-zahrada', name: 'Rajská zahrada', transfer: ['train'], travelTime: 90 },
+                    { id: 'cerny-most', name: 'Černý Most', transfer: null, travelTime: 120 }
+                ]
+            },
+            'C': {
+                color: '#E62F23',
+                textColor: '#FFFFFF',
+                terminals: { first: 'Letňany', last: 'Háje' },
+                // Možné konečné stanice (obratové stanice)
+                possibleTerminals: ['letnany', 'ladvi', 'nadrazi-holesovice', 'florenc', 'prazskeho-povstani', 'kacerov', 'haje'],
+                stations: [
+                    { id: 'letnany', name: 'Letňany', transfer: null, travelTime: 120 },
+                    { id: 'prosek', name: 'Prosek', transfer: null, travelTime: 90 },
+                    { id: 'strizkov', name: 'Střížkov', transfer: null, travelTime: 90 },
+                    { id: 'ladvi', name: 'Ládví', transfer: null, travelTime: 90 },
+                    { id: 'kobylisy', name: 'Kobylisy', transfer: null, travelTime: 90 },
+                    { id: 'nadrazi-holesovice', name: 'Nádraží Holešovice', transfer: ['train', 'bus-zoo'], travelTime: 120 },
+                    { id: 'vltavska', name: 'Vltavská', transfer: null, travelTime: 90 },
+                    { id: 'florenc', name: 'Florenc', transfer: ['B', 'bus'], travelTime: 90 },
+                    { id: 'hlavni-nadrazi', name: 'Hlavní nádraží', transfer: ['train', 'bus-airport'], travelTime: 60 },
+                    { id: 'muzeum', name: 'Muzeum', transfer: ['A'], travelTime: 60 },
+                    { id: 'ip-pavlova', name: 'I. P. Pavlova', transfer: null, travelTime: 90 },
+                    { id: 'vysehrad', name: 'Vyšehrad', transfer: null, travelTime: 90 },
+                    { id: 'prazskeho-povstani', name: 'Pražského povstání', transfer: null, travelTime: 90 },
+                    { id: 'pankrac', name: 'Pankrác', transfer: null, travelTime: 90 },
+                    { id: 'budejovicka', name: 'Budějovická', transfer: null, travelTime: 90 },
+                    { id: 'kacerov', name: 'Kačerov', transfer: ['train'], travelTime: 90 },
+                    { id: 'roztyly', name: 'Roztyly', transfer: null, travelTime: 90 },
+                    { id: 'chodov', name: 'Chodov', transfer: null, travelTime: 90 },
+                    { id: 'opatov', name: 'Opatov', transfer: null, travelTime: 90 },
+                    { id: 'haje', name: 'Háje', transfer: null, travelTime: 120 }
+                ]
+            }
+        };
+        
+        // Aktuální linka - výchozí C nebo z URL parametru
+        this.currentLine = this.getLineFromUrl() || 'C';
+        this.stations = this.linesConfig[this.currentLine].stations;
         
         this.currentStationIndex = 0;
-        this.direction = 'haje';
+        this.direction = 'last'; // 'first' nebo 'last'
         this.isMoving = false;
         this.isPaused = false;
         this.arrivalCountdown = 0;
@@ -115,10 +188,27 @@ class MetroMap {
             train: `<svg viewBox="0 0 24 24"><path d="M12 2C8 2 4 2.5 4 6v9.5C4 17.43 5.57 19 7.5 19L6 20.5v.5h2l1.5-2h5l1.5 2h2v-.5L16.5 19c1.93 0 3.5-1.57 3.5-3.5V6c0-3.5-4-4-8-4zM7.5 17c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm3.5-6H6V6h5v5zm2 0V6h5v5h-5zm3.5 6c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>`,
             bus: `<svg viewBox="0 0 24 24"><path d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H6V6h12v5z"/></svg>`,
             info: `<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>`,
-            plane: `<svg viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>`
+            plane: `<svg viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>`,
+            // Metro linky jako SVG kolečka
+            metroA: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#00A651" stroke="#000" stroke-width="1"/><text x="12" y="16" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold" font-family="Arial">A</text></svg>`,
+            metroB: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#FFD500" stroke="#000" stroke-width="1"/><text x="12" y="16" text-anchor="middle" fill="#000" font-size="14" font-weight="bold" font-family="Arial">B</text></svg>`,
+            metroC: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#E62F23" stroke="#000" stroke-width="1"/><text x="12" y="16" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold" font-family="Arial">C</text></svg>`
         };
         
+        // Vlastní konečná stanice (null = výchozí z konfigurace)
+        this.customTerminal = null;
+        
         this.init();
+    }
+
+    // Získání linky z URL parametru (?line=A)
+    getLineFromUrl() {
+        const params = new URLSearchParams(window.location.search);
+        const line = params.get('line');
+        if (line && this.linesConfig && this.linesConfig[line.toUpperCase()]) {
+            return line.toUpperCase();
+        }
+        return null;
     }
 
     // Získání URL backendu z URL parametrů nebo výchozí
@@ -132,15 +222,128 @@ class MetroMap {
         return `http://${window.location.hostname}:8000`;
     }
 
+    // Přepnutí na jinou linku
+    switchLine(lineId) {
+        if (!this.linesConfig[lineId]) {
+            console.error(`Linka ${lineId} neexistuje`);
+            return;
+        }
+        
+        // Zastav simulaci
+        this.isMoving = false;
+        this.isPaused = false;
+        if (this.countdownInterval) {
+            clearInterval(this.countdownInterval);
+            this.countdownInterval = null;
+        }
+        
+        // Přepni linku
+        this.currentLine = lineId;
+        this.stations = this.linesConfig[lineId].stations;
+        this.currentStationIndex = 0;
+        this.direction = 'last';
+        this.customTerminal = null; // Reset vlastní konečné
+        
+        // Aktualizuj URL bez reloadu
+        const url = new URL(window.location);
+        url.searchParams.set('line', lineId);
+        window.history.pushState({}, '', url);
+        
+        // Aktualizuj barvy
+        this.updateLineColors();
+        
+        // Překresli
+        this.renderStations();
+        this.updateDisplay();
+        this.updateLineSelectorButtons();
+        this.updateTerminalSelector();
+        
+        console.log(`[Metro] Přepnuto na linku ${lineId}`);
+    }
+
+    // Aktualizace barev podle aktuální linky
+    updateLineColors() {
+        const config = this.linesConfig[this.currentLine];
+        const root = document.documentElement;
+        
+        root.style.setProperty('--line-color', config.color);
+        root.style.setProperty('--line-text-color', config.textColor);
+        
+        // Aktualizuj badge linky
+        const lineBadge = document.querySelector('.line-badge');
+        if (lineBadge) {
+            lineBadge.textContent = this.currentLine;
+            lineBadge.style.background = config.color;
+            lineBadge.style.color = config.textColor;
+        }
+        
+        // Aktualizuj barvu tratě
+        const routeLine = document.querySelector('.route-line');
+        if (routeLine) {
+            routeLine.style.background = config.color;
+        }
+    }
+
+    // Aktualizace tlačítek přepínače linek
+    updateLineSelectorButtons() {
+        const buttons = document.querySelectorAll('.line-selector .line-btn');
+        buttons.forEach(btn => {
+            const lineId = btn.dataset.line;
+            btn.classList.toggle('active', lineId === this.currentLine);
+        });
+    }
+
     init() {
         this.updateClock();
         setInterval(() => this.updateClock(), 1000);
+        
+        // Nastav barvy pro aktuální linku
+        this.updateLineColors();
+        
+        // Přidej disabled line element
+        this.createDisabledLineElement();
+        
         this.renderStations();
         this.updateDisplay();
         this.setupControls();
+        this.setupLineSelector();
         
-        // Pokus o připojení k backendu
-        this.connectToBackend();
+        // Výchozí režim: simulace (nepřipojovat k backendu automaticky)
+        // Pro API režim klikni na tlačítko "📡 API"
+        this.useBackend = false;
+        this.connectionStatus = 'disconnected';
+        console.log('[Metro] Spuštěno v simulačním režimu. Pro API klikni na tlačítko.');
+    }
+
+    // Vytvoření elementu pro disabled část linky
+    createDisabledLineElement() {
+        const routeContainer = document.querySelector('.route-container');
+        if (!routeContainer) return;
+        
+        // Kontrola zda už existuje
+        if (!document.querySelector('.route-line-disabled')) {
+            const disabledLine = document.createElement('div');
+            disabledLine.className = 'route-line-disabled';
+            routeContainer.appendChild(disabledLine);
+        }
+    }
+
+    // Nastavení přepínače linek
+    setupLineSelector() {
+        const selector = document.querySelector('.line-selector');
+        if (!selector) return;
+        
+        selector.addEventListener('click', (e) => {
+            const btn = e.target.closest('.line-btn');
+            if (btn) {
+                const lineId = btn.dataset.line;
+                if (lineId && lineId !== this.currentLine) {
+                    this.switchLine(lineId);
+                }
+            }
+        });
+        
+        this.updateLineSelectorButtons();
     }
 
     // ====== Backend Connection ======
@@ -150,7 +353,7 @@ class MetroMap {
         this.updateConnectionIndicator();
         
         const wsUrl = this.backendUrl.replace('http://', 'ws://').replace('https://', 'wss://');
-        const wsEndpoint = `${wsUrl}/ws/metro/line-c`;
+        const wsEndpoint = `${wsUrl}/ws/metro/line-${this.currentLine.toLowerCase()}`;
         
         console.log(`[Metro] Connecting to WebSocket: ${wsEndpoint}`);
         
@@ -197,8 +400,16 @@ class MetroMap {
     }
 
     scheduleReconnect() {
+        // Nepřipojovat znovu pokud jsme v simulačním režimu
+        if (!this.useBackend) {
+            console.log('[Metro] V simulačním režimu - nepřipojuji se znovu');
+            return;
+        }
+        
         if (this.wsReconnectAttempts >= this.wsMaxReconnectAttempts) {
             console.log('[Metro] Max reconnect attempts reached, falling back to simulation');
+            this.useBackend = false;
+            this.updateModeButton();
             return;
         }
         
@@ -206,7 +417,11 @@ class MetroMap {
         const delay = this.wsReconnectDelay * Math.min(this.wsReconnectAttempts, 5);
         console.log(`[Metro] Reconnecting in ${delay}ms (attempt ${this.wsReconnectAttempts})`);
         
-        setTimeout(() => this.connectToBackend(), delay);
+        setTimeout(() => {
+            if (this.useBackend) {
+                this.connectToBackend();
+            }
+        }, delay);
     }
 
     handleBackendUpdate(data) {
@@ -296,10 +511,17 @@ class MetroMap {
         const controlsHTML = `
             <div class="simulation-controls">
                 <div class="connection-indicator disconnected" id="connection-indicator">${t.disconnected}</div>
+                <button id="btn-mode" class="control-btn mode-btn">🔄 Simulace</button>
                 <button id="btn-start" class="control-btn">${t.start}</button>
                 <button id="btn-pause" class="control-btn">${t.pause}</button>
                 <button id="btn-reset" class="control-btn">${t.reset}</button>
                 <button id="btn-reverse" class="control-btn">${t.reverse}</button>
+                <div class="terminal-selector" id="terminal-selector-container">
+                    <label>Konečná:</label>
+                    <select id="terminal-selector">
+                        <!-- Bude naplněno JavaScriptem -->
+                    </select>
+                </div>
                 <button id="btn-language" class="control-btn lang-btn">${t.language}</button>
                 <div class="speed-control">
                     <label>${t.speed} <span id="speed-value">1x</span></label>
@@ -324,7 +546,139 @@ class MetroMap {
             document.getElementById('btn-reset')?.addEventListener('click', () => this.resetSimulation());
             document.getElementById('btn-reverse')?.addEventListener('click', () => this.reverseDirection());
             document.getElementById('btn-language')?.addEventListener('click', () => this.toggleLanguage());
+            document.getElementById('btn-mode')?.addEventListener('click', () => this.toggleMode());
             document.getElementById('speed-slider')?.addEventListener('input', (e) => this.setSpeed(e.target.value));
+            document.getElementById('terminal-selector')?.addEventListener('change', (e) => this.setCustomTerminal(e.target.value));
+            
+            // Naplnit dropdown pro výběr konečné
+            this.updateTerminalSelector();
+        }
+        
+        // Aktualizuj tlačítko režimu
+        this.updateModeButton();
+    }
+
+    // Aktualizace dropdownu pro výběr konečné stanice
+    updateTerminalSelector() {
+        const selector = document.getElementById('terminal-selector');
+        if (!selector) return;
+        
+        const config = this.linesConfig[this.currentLine];
+        const possibleTerminals = config.possibleTerminals || [];
+        
+        // Vymazat současné možnosti
+        selector.innerHTML = '';
+        
+        // Přidat výchozí možnost (celá linka)
+        const defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.textContent = this.direction === 'last' ? config.terminals.last : config.terminals.first;
+        selector.appendChild(defaultOption);
+        
+        // Získat stanice podle směru
+        const stations = config.stations;
+        const currentIdx = this.currentStationIndex;
+        
+        // Filtrovat možné konečné podle směru
+        possibleTerminals.forEach(terminalId => {
+            const stationIdx = stations.findIndex(s => s.id === terminalId);
+            if (stationIdx === -1) return;
+            
+            const station = stations[stationIdx];
+            
+            // Přeskočit konečné stanice (ty jsou vždy výchozí)
+            if (stationIdx === 0 || stationIdx === stations.length - 1) return;
+            
+            // Podle směru zobrazit pouze stanice, které jsou "před námi"
+            let isValid = false;
+            if (this.direction === 'last' && stationIdx > currentIdx) {
+                isValid = true;
+            } else if (this.direction === 'first' && stationIdx < currentIdx) {
+                isValid = true;
+            }
+            
+            if (isValid) {
+                const option = document.createElement('option');
+                option.value = terminalId;
+                option.textContent = station.name;
+                if (this.customTerminal === terminalId) {
+                    option.selected = true;
+                }
+                selector.appendChild(option);
+            }
+        });
+    }
+
+    // Nastavení vlastní konečné stanice
+    setCustomTerminal(terminalId) {
+        if (!terminalId) {
+            this.customTerminal = null;
+            console.log(`[Metro] Konečná: výchozí`);
+        } else {
+            this.customTerminal = terminalId;
+            const station = this.stations.find(s => s.id === terminalId);
+            console.log(`[Metro] Konečná změněna na: ${station?.name || terminalId}`);
+        }
+        this.updateDirectionDisplay();
+        this.updateStationStyles();
+        this.updatePassedLine();
+    }
+
+    // Získání aktuální konečné stanice (s ohledem na vlastní konečnou)
+    getCurrentTerminal() {
+        if (this.customTerminal) {
+            const station = this.stations.find(s => s.id === this.customTerminal);
+            return station ? station.name : this.linesConfig[this.currentLine].terminals[this.direction];
+        }
+        return this.linesConfig[this.currentLine].terminals[this.direction];
+    }
+
+    // Získání indexu konečné stanice
+    getTerminalIndex() {
+        if (this.customTerminal) {
+            const idx = this.stations.findIndex(s => s.id === this.customTerminal);
+            if (idx !== -1) return idx;
+        }
+        return this.direction === 'last' ? this.stations.length - 1 : 0;
+    }
+
+    // Přepnutí mezi simulací a API režimem
+    toggleMode() {
+        this.useBackend = !this.useBackend;
+        
+        if (this.useBackend) {
+            // Připojit k backendu
+            this.connectToBackend();
+        } else {
+            // Odpojit od backendu a přepnout na simulaci
+            if (this.ws) {
+                this.ws.close();
+                this.ws = null;
+            }
+            this.connectionStatus = 'disconnected';
+            this.updateConnectionIndicator();
+            
+            // Resetovat simulaci
+            this.resetSimulation();
+        }
+        
+        this.updateModeButton();
+        console.log(`[Metro] Režim přepnut na: ${this.useBackend ? 'API' : 'Simulace'}`);
+    }
+
+    // Aktualizace tlačítka režimu
+    updateModeButton() {
+        const btn = document.getElementById('btn-mode');
+        if (btn) {
+            if (this.useBackend) {
+                btn.textContent = '📡 API';
+                btn.classList.add('api-mode');
+                btn.classList.remove('sim-mode');
+            } else {
+                btn.textContent = '🔄 Simulace';
+                btn.classList.add('sim-mode');
+                btn.classList.remove('api-mode');
+            }
         }
     }
 
@@ -433,6 +787,7 @@ class MetroMap {
                 station.transfer.forEach(t => {
                     if (t === 'A') classes.push('transfer-a');
                     if (t === 'B') classes.push('transfer-b');
+                    if (t === 'C') classes.push('transfer-c');
                     if (t === 'D') classes.push('transfer-d');
                 });
             }
@@ -454,10 +809,12 @@ class MetroMap {
         let html = '<span class="transfer-inline">';
         
         station.transfer.forEach(t => {
-            if (t === 'A') html += `<span class="badge line-a">A</span>`;
-            else if (t === 'B') html += `<span class="badge line-b">B</span>`;
+            if (t === 'A') html += `<span class="icon metro-icon">${this.icons.metroA}</span>`;
+            else if (t === 'B') html += `<span class="icon metro-icon">${this.icons.metroB}</span>`;
+            else if (t === 'C') html += `<span class="icon metro-icon">${this.icons.metroC}</span>`;
             else if (t === 'D') html += `<span class="badge line-d">D</span>`;
             else if (t === 'train') html += `<span class="icon">${this.icons.train}</span>`;
+            else if (t === 'bus') html += `<span class="icon">${this.icons.bus}</span>`;
             else if (t === 'info') html += `<span class="icon">${this.icons.info}</span>`;
             else if (t === 'bus-zoo') {
                 html += `<span class="icon">${this.icons.bus}</span>`;
@@ -482,9 +839,10 @@ class MetroMap {
 
     updateStationStyles() {
         const stationEls = document.querySelectorAll('.station');
+        const terminalIndex = this.getTerminalIndex();
         
         stationEls.forEach((el, index) => {
-            el.classList.remove('current', 'passed', 'arriving');
+            el.classList.remove('current', 'passed', 'arriving', 'disabled');
             
             const station = this.stations[index];
             if (station.transfer && station.transfer.length > 0) {
@@ -496,7 +854,17 @@ class MetroMap {
                 });
             }
             
-            if (this.direction === 'haje') {
+            // Kontrola zda je stanice za vlastní konečnou (disabled)
+            if (this.customTerminal) {
+                if (this.direction === 'last' && index > terminalIndex) {
+                    el.classList.add('disabled');
+                } else if (this.direction === 'first' && index < terminalIndex) {
+                    el.classList.add('disabled');
+                }
+            }
+            
+            // 'last' = směr k poslední stanici, 'first' = směr k první stanici
+            if (this.direction === 'last') {
                 if (index < this.currentStationIndex) {
                     el.classList.add('passed');
                 } else if (index === this.currentStationIndex) {
@@ -518,7 +886,7 @@ class MetroMap {
     }
 
     getNextStationIndex() {
-        if (this.direction === 'haje') {
+        if (this.direction === 'last') {
             return this.currentStationIndex + 1;
         } else {
             return this.currentStationIndex - 1;
@@ -532,7 +900,7 @@ class MetroMap {
             return 0;
         }
         
-        if (this.direction === 'haje') {
+        if (this.direction === 'last') {
             return this.stations[this.currentStationIndex].travelTime;
         } else {
             return this.stations[nextIndex].travelTime;
@@ -541,26 +909,56 @@ class MetroMap {
 
     updatePassedLine() {
         const passedLine = document.querySelector('.route-line-passed');
-        if (!passedLine) return;
+        const disabledLine = document.querySelector('.route-line-disabled');
+        const routeLine = document.querySelector('.route-line');
+        if (!passedLine || !routeLine) return;
         
         const totalStations = this.stations.length - 1;
+        const terminalIndex = this.getTerminalIndex();
+        
+        // Získej skutečnou šířku linky (bez paddingu 50px na každé straně)
+        const lineWidth = routeLine.offsetWidth;
         
         let progressOffset = 0;
         if (this.isMoving && this.totalTravelTime > 0 && this.arrivalCountdown > 0) {
             const progress = 1 - (this.arrivalCountdown / this.totalTravelTime);
-            progressOffset = (progress / totalStations) * 100;
+            progressOffset = (progress / totalStations) * lineWidth;
         }
         
-        if (this.direction === 'haje') {
-            const passedPercentage = (this.currentStationIndex / totalStations) * 100 + progressOffset;
+        // 'last' = směr k poslední stanici (doprava)
+        if (this.direction === 'last') {
+            const passedWidth = (this.currentStationIndex / totalStations) * lineWidth + progressOffset;
             passedLine.style.left = '50px';
             passedLine.style.right = 'auto';
-            passedLine.style.width = `${Math.min(Math.max(passedPercentage, 0), 100)}%`;
+            passedLine.style.width = `${Math.min(Math.max(passedWidth, 0), lineWidth)}px`;
+            
+            // Disabled část za vlastní konečnou (začíná UPROSTŘED kolečka konečné stanice)
+            if (disabledLine && this.customTerminal && terminalIndex < totalStations) {
+                // Šířka disabled části = od terminálu do konce
+                const disabledWidth = ((totalStations - terminalIndex) / totalStations) * lineWidth;
+                disabledLine.style.left = 'auto';
+                disabledLine.style.right = '50px';
+                disabledLine.style.width = `${Math.max(disabledWidth, 0)}px`;
+            } else if (disabledLine) {
+                disabledLine.style.width = '0px';
+            }
         } else {
-            const passedPercentage = ((totalStations - this.currentStationIndex) / totalStations) * 100 + progressOffset;
+            // 'first' = směr k první stanici (doleva)
+            const passedWidth = ((totalStations - this.currentStationIndex) / totalStations) * lineWidth + progressOffset;
             passedLine.style.left = 'auto';
             passedLine.style.right = '50px';
-            passedLine.style.width = `${Math.min(Math.max(passedPercentage, 0), 100)}%`;
+            passedLine.style.width = `${Math.min(Math.max(passedWidth, 0), lineWidth)}px`;
+            
+            // Disabled část za vlastní konečnou (při směru doleva - začíná UPROSTŘED kolečka konečné)
+            if (disabledLine && this.customTerminal && terminalIndex > 0) {
+                // Šířka disabled části = od začátku do terminálu
+                const disabledWidth = (terminalIndex / totalStations) * lineWidth;
+                disabledLine.style.left = '50px';
+                disabledLine.style.right = 'auto';
+                disabledLine.style.width = `${Math.max(disabledWidth, 0)}px`;
+            } else if (disabledLine) {
+                disabledLine.style.width = '0px';
+            }
         }
     }
 
@@ -593,10 +991,19 @@ class MetroMap {
 
     updateDirectionDisplay() {
         const directionText = document.querySelector('.direction-text');
-        if (directionText) {
-            const terminus = this.direction === 'haje' ? 'Háje' : 'Letňany';
-            const arrow = this.direction === 'haje' ? '→' : '←';
-            directionText.innerHTML = `<span class="direction-arrow">${arrow}</span>${terminus}`;
+        const terminusEl = document.getElementById('terminus');
+        
+        if (directionText || terminusEl) {
+            const terminus = this.getCurrentTerminal();
+            const arrow = this.direction === 'last' ? '→' : '←';
+            
+            if (terminusEl) {
+                terminusEl.textContent = terminus;
+                const arrowEl = document.querySelector('.direction-arrow');
+                if (arrowEl) arrowEl.textContent = arrow;
+            } else if (directionText) {
+                directionText.innerHTML = `<span class="direction-arrow">${arrow}</span><span id="terminus">${terminus}</span>`;
+            }
         }
     }
 
@@ -621,10 +1028,24 @@ class MetroMap {
     moveToNextStation() {
         const t = this.translations[this.language];
         const nextIndex = this.getNextStationIndex();
+        const terminalIndex = this.getTerminalIndex();
         
+        // Kontrola zda jsme na konečné (vlastní nebo výchozí)
         if (nextIndex < 0 || nextIndex >= this.stations.length) {
             this.arriveAtTerminus();
             return;
+        }
+        
+        // Kontrola zda jsme dosáhli vlastní konečné
+        if (this.customTerminal) {
+            if (this.direction === 'last' && this.currentStationIndex >= terminalIndex) {
+                this.arriveAtTerminus();
+                return;
+            }
+            if (this.direction === 'first' && this.currentStationIndex <= terminalIndex) {
+                this.arriveAtTerminus();
+                return;
+            }
         }
         
         this.totalTravelTime = this.getTravelTimeToNextStation();
@@ -659,9 +1080,16 @@ class MetroMap {
         this.arrivalCountdown = 0;
         this.totalTravelTime = 0;
         this.updateDisplay();
+        this.updateTerminalSelector(); // Aktualizuj dostupné konečné
         
         // Přehrání zvuku příjezdu (volitelné)
         this.playArrivalSound();
+        
+        // Kontrola zda jsme dosáhli vlastní konečné
+        if (this.customTerminal && this.stations[stationIndex].id === this.customTerminal) {
+            this.arriveAtTerminus();
+            return;
+        }
         
         const stopTime = (this.stationStopTime / this.simulationSpeed) * 1000;
         
@@ -691,7 +1119,7 @@ class MetroMap {
             this.countdownInterval = null;
         }
         
-        const terminus = this.direction === 'haje' ? 'Háje' : 'Letňany';
+        const terminus = this.getCurrentTerminal();
         this.updateStatus(`${t.terminus}: ${terminus}`);
         this.updateDisplay();
         
@@ -724,7 +1152,8 @@ class MetroMap {
             this.countdownInterval = null;
         }
         
-        if (this.direction === 'haje') {
+        // Nastav na první nebo poslední stanici podle směru
+        if (this.direction === 'last') {
             this.currentStationIndex = 0;
         } else {
             this.currentStationIndex = this.stations.length - 1;
@@ -751,9 +1180,14 @@ class MetroMap {
             this.countdownInterval = null;
         }
         
-        this.direction = this.direction === 'haje' ? 'letnany' : 'haje';
+        // Přepni směr: 'last' <-> 'first'
+        this.direction = this.direction === 'last' ? 'first' : 'last';
         
-        if (this.direction === 'haje') {
+        // Resetuj vlastní konečnou při obratu
+        this.customTerminal = null;
+        
+        // Nastav na správnou výchozí stanici podle nového směru
+        if (this.direction === 'last') {
             this.currentStationIndex = 0;
         } else {
             this.currentStationIndex = this.stations.length - 1;
@@ -764,8 +1198,10 @@ class MetroMap {
         this.totalTravelTime = 0;
         
         this.updateDisplay();
+        this.updateTerminalSelector();
         
-        const newTerminus = this.direction === 'haje' ? 'Háje' : 'Letňany';
+        // Zobraz nový koncový terminus
+        const newTerminus = this.getCurrentTerminal();
         this.updateStatus(`${t.direction} ${newTerminus}`);
         
         const pauseBtn = document.getElementById('btn-pause');
