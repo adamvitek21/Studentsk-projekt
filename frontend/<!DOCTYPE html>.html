@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metro Praha - Linka C - Displej</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            background: #000;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .display-container {
+            width: 100%;
+            max-width: 900px;
+            background: linear-gradient(180deg, #1a1a2e 0%, #0d0d1a 100%);
+            border-radius: 12px;
+            padding: 20px 25px;
+            box-shadow: 
+                0 0 30px rgba(0, 0, 0, 0.8),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border: 2px solid #333;
+        }
+
+        /* Header - Směr a čas */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+
+        .direction {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .line-badge {
+            width: 45px;
+            height: 45px;
+            background: #E32726;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 2px 10px rgba(227, 39, 38, 0.5);
+        }
+
+        .direction-text {
+            color: #fff;
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .direction-arrow {
+            color: #E32726;
+            font-size: 24px;
+            margin-right: 8px;
+        }
+
+        .time {
+            color: #00ff88;
+            font-size: 28px;
+            font-weight: bold;
+            font-family: 'Consolas', monospace;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+        }
+
+        /* Trasa - hlavní část */
+        .route-container {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        /* Linka trasy */
+        .route-line {
+            position: absolute;
+            top: 50%;
+            left: 30px;
+            right: 30px;
+            height: 6px;
+            background: #E32726;
+            transform: translateY(-50%);
+            border-radius: 3px;
+            z-index: 1;
+        }
+
+        /* Projetá část */
+        .route-line-passed {
+            position: absolute;
+            top: 50%;
+            left: 30px;
+            width: 25%;
+            height: 6px;
+            background: #666;
+            transform: translateY(-50%);
+            border-radius: 3px 0 0 3px;
+            z-index: 2;
+        }
+
+        /* Stanice */
+        .stations {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            z-index: 3;
+        }
+
+        .station {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 80px;
+        }
+
+        .station-dot {
+            width: 20px;
+            height: 20px;
+            background: #E32726;
+            border: 3px solid #fff;
+            border-radius: 50%;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 4;
+        }
+
+        .station.passed .station-dot {
+            background: #666;
+            border-color: #888;
+        }
+
+        .station.current .station-dot {
+            width: 26px;
+            height: 26px;
+            background: #00ff88;
+            border: 4px solid #fff;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.8);
+            animation: pulse 1.5s infinite;
+        }
+
+        .station.transfer .station-dot {
+            width: 24px;
+            height: 24px;
+            background: #fff;
+            border: 4px solid #E32726;
+        }
+
+        .station.transfer.current .station-dot {
+            background: #00ff88;
+            border-color: #fff;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 15px rgba(0, 255, 136, 0.8); }
+            50% { box-shadow: 0 0 25px rgba(0, 255, 136, 1); }
+        }
+
+        .station-name {
+            color: #fff;
+            font-size: 11px;
+            text-align: center;
+            font-weight: 500;
+            line-height: 1.2;
+            max-width: 75px;
+        }
+
+        .station.passed .station-name {
+            color: #666;
+        }
+
+        .station.current .station-name {
+            color: #00ff88;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        /* Přestupní symboly */
+        .transfer-lines {
+            display: flex;
+            gap: 3px;
+            margin-top: 5px;
+        }
+
+        .transfer-badge {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 10px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .transfer-badge.line-a { background: #00A651; }
+        .transfer-badge.line-b { background: #F7D117; color: #000; }
+
+        /* Info panel */
+        .info-panel {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #333;
+        }
+
+        .next-station {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .next-label {
+            color: #888;
+            font-size: 14px;
+        }
+
+        .next-name {
+            color: #fff;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .arrival-time {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .arrival-label {
+            color: #888;
+            font-size: 14px;
+        }
+
+        .arrival-value {
+            color: #00ff88;
+            font-size: 24px;
+            font-weight: bold;
+            font-family: 'Consolas', monospace;
+        }
+
+        .arrival-unit {
+            color: #00ff88;
+            font-size: 14px;
+        }
+
+        /* Animovaný vlak */
+        .train-icon {
+            position: absolute;
+            top: 50%;
+            left: calc(25% + 20px);
+            transform: translate(-50%, -50%);
+            z-index: 5;
+            font-size: 24px;
+            animation: trainMove 3s ease-in-out infinite;
+        }
+
+        @keyframes trainMove {
+            0%, 100% { transform: translate(-50%, -50%) translateX(0); }
+            50% { transform: translate(-50%, -50%) translateX(10px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="display-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="direction">
+                <div class="line-badge">C</div>
+                <div class="direction-text">
+                    <span class="direction-arrow">→</span>
+                    Háje
+                </div>
+            </div>
+            <div class="time">14:32</div>
+        </div>
+
+        <!-- Trasa -->
+        <div class="route-container">
+            <div class="route-line"></div>
+            <div class="route-line-passed"></div>
+            <div class="train-icon">🚇</div>
+            
+            <div class="stations">
+                <div class="station passed">
+                    <div class="station-dot"></div>
+                    <div class="station-name">Vltavská</div>
+                </div>
+
+                <div class="station current transfer">
+                    <div class="station-dot"></div>
+                    <div class="station-name">Florenc</div>
+                    <div class="transfer-lines">
+                        <div class="transfer-badge line-b">B</div>
+                    </div>
+                </div>
+
+                <div class="station">
+                    <div class="station-dot"></div>
+                    <div class="station-name">Hlavní nádraží</div>
+                </div>
+
+                <div class="station transfer">
+                    <div class="station-dot"></div>
+                    <div class="station-name">Muzeum</div>
+                    <div class="transfer-lines">
+                        <div class="transfer-badge line-a">A</div>
+                    </div>
+                </div>
+
+                <div class="station">
+                    <div class="station-dot"></div>
+                    <div class="station-name">I. P. Pavlova</div>
+                </div>
+
+                <div class="station">
+                    <div class="station-dot"></div>
+                    <div class="station-name">Vyšehrad</div>
+                </div>
+
+                <div class="station">
+                    <div class="station-dot"></div>
+                    <div class="station-name">Pražského povstání</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Info panel -->
+        <div class="info-panel">
+            <div class="next-station">
+                <span class="next-label">Příští stanice:</span>
+                <span class="next-name">Hlavní nádraží</span>
+            </div>
+            <div class="arrival-time">
+                <span class="arrival-label">Příjezd za:</span>
+                <span class="arrival-value">1:30</span>
+                <span class="arrival-unit">min</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

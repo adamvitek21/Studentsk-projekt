@@ -49,7 +49,7 @@ class MetroMap {
                     { id: 'narodni-trida', name: 'Národní třída', transfer: null, travelTime: 60 },
                     { id: 'mustek-b', name: 'Můstek', transfer: ['A'], travelTime: 60 },
                     { id: 'namesti-republiky', name: 'Náměstí Republiky', transfer: null, travelTime: 90 },
-                    { id: 'florenc-b', name: 'Florenc', transfer: ['C', 'A'], travelTime: 90 },
+                    { id: 'florenc-b', name: 'Florenc', transfer: ['C'], travelTime: 90 },
                     { id: 'krizikova', name: 'Křižíkova', transfer: null, travelTime: 90 },
                     { id: 'invalidovna', name: 'Invalidovna', transfer: null, travelTime: 90 },
                     { id: 'palmovka', name: 'Palmovka', transfer: null, travelTime: 90 },
@@ -99,6 +99,7 @@ class MetroMap {
         this.currentStationIndex = 0;
         this.direction = 'last'; // 'first' nebo 'last'
         this.isMoving = false;
+        this.isAtStation = true; // Vlak je ve stanici (ne v pohybu)
         this.isPaused = false;
         this.arrivalCountdown = 0;
         this.totalTravelTime = 0;
@@ -123,7 +124,9 @@ class MetroMap {
         this.translations = {
             cs: {
                 nextStation: 'Příští stanice:',
+                atStation: 'Ve stanici:',
                 arrivalIn: 'Příjezd za:',
+                departsIn: 'Odjezd za:',
                 min: 'min',
                 terminus: 'Konečná',
                 ready: 'Připraveno',
@@ -151,7 +154,9 @@ class MetroMap {
             },
             en: {
                 nextStation: 'Next station:',
+                atStation: 'At station:',
                 arrivalIn: 'Arriving in:',
+                departsIn: 'Departing in:',
                 min: 'min',
                 terminus: 'Terminus',
                 ready: 'Ready',
@@ -1055,25 +1060,42 @@ class MetroMap {
         const t = this.translations[this.language];
         const nextNameEl = document.querySelector('.next-name');
         const arrivalEl = document.querySelector('.arrival-value');
+        const nextLabel = document.querySelector('.next-label');
+        const arrivalLabel = document.querySelector('.arrival-label');
+        const arrivalUnit = document.querySelector('.arrival-unit');
         
+        const currentStation = this.stations[this.currentStationIndex];
         const nextIndex = this.getNextStationIndex();
+        const nextStation = nextIndex >= 0 && nextIndex < this.stations.length 
+            ? this.stations[nextIndex] 
+            : null;
         
-        if (nextIndex >= 0 && nextIndex < this.stations.length && nextNameEl) {
-            nextNameEl.textContent = this.stations[nextIndex].name;
-        } else if (nextNameEl) {
-            nextNameEl.textContent = t.terminus;
-        }
-        
-        if (arrivalEl) {
-            if (this.isMoving && this.arrivalCountdown > 0) {
-                const displayTime = Math.max(0, this.arrivalCountdown);
-                const minutes = Math.floor(displayTime / 60);
-                const secs = Math.floor(displayTime % 60);
-                arrivalEl.textContent = `${minutes}:${secs.toString().padStart(2, '0')}`;
-            } else if (this.isMoving) {
-                arrivalEl.textContent = '0:00';
-            } else {
-                arrivalEl.textContent = '--:--';
+        // Zobrazení podle stavu vlaku
+        if (this.isAtStation) {
+            // Vlak je ve stanici
+            if (nextLabel) nextLabel.textContent = t.atStation;
+            if (nextNameEl) nextNameEl.textContent = currentStation.name;
+            if (arrivalLabel) arrivalLabel.textContent = t.nextStation.replace(':', '');
+            if (arrivalEl) arrivalEl.textContent = nextStation ? nextStation.name : t.terminus;
+            if (arrivalUnit) arrivalUnit.textContent = '';
+        } else {
+            // Vlak je v pohybu
+            if (nextLabel) nextLabel.textContent = t.nextStation;
+            if (nextNameEl) nextNameEl.textContent = nextStation ? nextStation.name : t.terminus;
+            if (arrivalLabel) arrivalLabel.textContent = t.arrivalIn;
+            if (arrivalUnit) arrivalUnit.textContent = t.min;
+            
+            if (arrivalEl) {
+                if (this.isMoving && this.arrivalCountdown > 0) {
+                    const displayTime = Math.max(0, this.arrivalCountdown);
+                    const minutes = Math.floor(displayTime / 60);
+                    const secs = Math.floor(displayTime % 60);
+                    arrivalEl.textContent = `${minutes}:${secs.toString().padStart(2, '0')}`;
+                } else if (this.isMoving) {
+                    arrivalEl.textContent = '0:00';
+                } else {
+                    arrivalEl.textContent = '--:--';
+                }
             }
         }
     }
@@ -1137,6 +1159,7 @@ class MetroMap {
             }
         }
         
+        this.isAtStation = false; // Vlak vyjíždí ze stanice
         this.totalTravelTime = this.getTravelTimeToNextStation();
         this.arrivalCountdown = this.totalTravelTime;
         
@@ -1163,6 +1186,7 @@ class MetroMap {
     arriveAtStation(stationIndex) {
         const t = this.translations[this.language];
         this.currentStationIndex = stationIndex;
+        this.isAtStation = true; // Vlak dorazil do stanice
         const station = this.stations[stationIndex];
         
         this.updateStatus(`${t.station} ${station.name}`);

@@ -117,6 +117,7 @@ class MetroMapProduction {
         // Stav aplikace
         this.direction = this.params.get('direction') || 'last';
         this.isMoving = false;
+        this.isAtStation = true; // Vlak je ve stanici (ne v pohybu)
         this.arrivalCountdown = 0;
         this.totalTravelTime = 0;
         
@@ -135,14 +136,18 @@ class MetroMapProduction {
         this.translations = {
             cs: {
                 nextStation: 'Příští stanice:',
+                atStation: 'Ve stanici:',
                 arrivalIn: 'Příjezd za:',
+                departsIn: 'Odjezd za:',
                 min: 'min',
                 terminus: 'Konečná',
                 noDelay: 'Bez zpoždění'
             },
             en: {
                 nextStation: 'Next station:',
+                atStation: 'At station:',
                 arrivalIn: 'Arriving in:',
+                departsIn: 'Departing in:',
                 min: 'min',
                 terminus: 'Terminus',
                 noDelay: 'On time'
@@ -432,6 +437,7 @@ class MetroMapProduction {
             }
         }
         
+        this.isAtStation = false; // Vlak vyjíždí ze stanice
         this.totalTravelTime = this.getTravelTimeToNextStation();
         this.arrivalCountdown = this.totalTravelTime;
         
@@ -454,6 +460,7 @@ class MetroMapProduction {
         this.currentStationIndex = stationIndex;
         this.arrivalCountdown = 0;
         this.totalTravelTime = 0;
+        this.isAtStation = true; // Vlak dorazil do stanice
         this.updateDisplay();
         
         // Kontrola vlastní konečné
@@ -735,29 +742,38 @@ class MetroMapProduction {
         const arrivalLabel = document.querySelector('.arrival-label');
         const arrivalUnit = document.querySelector('.arrival-unit');
         
-        // Aktualizovat labels podle jazyka
-        if (nextLabel) nextLabel.textContent = t.nextStation;
-        if (arrivalLabel) arrivalLabel.textContent = t.arrivalIn;
-        if (arrivalUnit) arrivalUnit.textContent = t.min;
-        
+        const currentStation = this.stations[this.currentStationIndex];
         const nextIndex = this.getNextStationIndex();
+        const nextStation = nextIndex >= 0 && nextIndex < this.stations.length 
+            ? this.stations[nextIndex] 
+            : null;
         
-        if (nextIndex >= 0 && nextIndex < this.stations.length && nextNameEl) {
-            nextNameEl.textContent = this.stations[nextIndex].name;
-        } else if (nextNameEl) {
-            nextNameEl.textContent = t.terminus;
-        }
-        
-        if (arrivalEl) {
-            if (this.isMoving && this.arrivalCountdown > 0) {
-                const displayTime = Math.max(0, this.arrivalCountdown);
-                const minutes = Math.floor(displayTime / 60);
-                const secs = Math.floor(displayTime % 60);
-                arrivalEl.textContent = `${minutes}:${secs.toString().padStart(2, '0')}`;
-            } else if (this.isMoving) {
-                arrivalEl.textContent = '0:00';
-            } else {
-                arrivalEl.textContent = '--:--';
+        // Zobrazení podle stavu vlaku
+        if (this.isAtStation) {
+            // Vlak je ve stanici
+            if (nextLabel) nextLabel.textContent = t.atStation;
+            if (nextNameEl) nextNameEl.textContent = currentStation.name;
+            if (arrivalLabel) arrivalLabel.textContent = t.nextStation.replace(':', '');
+            if (arrivalEl) arrivalEl.textContent = nextStation ? nextStation.name : t.terminus;
+            if (arrivalUnit) arrivalUnit.textContent = '';
+        } else {
+            // Vlak je v pohybu
+            if (nextLabel) nextLabel.textContent = t.nextStation;
+            if (nextNameEl) nextNameEl.textContent = nextStation ? nextStation.name : t.terminus;
+            if (arrivalLabel) arrivalLabel.textContent = t.arrivalIn;
+            if (arrivalUnit) arrivalUnit.textContent = t.min;
+            
+            if (arrivalEl) {
+                if (this.isMoving && this.arrivalCountdown > 0) {
+                    const displayTime = Math.max(0, this.arrivalCountdown);
+                    const minutes = Math.floor(displayTime / 60);
+                    const secs = Math.floor(displayTime % 60);
+                    arrivalEl.textContent = `${minutes}:${secs.toString().padStart(2, '0')}`;
+                } else if (this.isMoving) {
+                    arrivalEl.textContent = '0:00';
+                } else {
+                    arrivalEl.textContent = '--:--';
+                }
             }
         }
     }
