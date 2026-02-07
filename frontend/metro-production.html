@@ -2,9 +2,34 @@
 <html lang="cs">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Metro Praha - Displej</title>
-    <link rel="stylesheet" href="css/metro-map.css">
+    <meta name="viewport" content="width=4096, height=607, initial-scale=1.0, user-scalable=no">
+    <title>Metro Praha - Informační displej</title>
+    <link rel="stylesheet" href="css/metro-production.css">
+    <!-- Produkční režim: bez ovládacích prvků, automatické fullscreen -->
+    <style>
+        /* Skrytí kurzoru pro produkční displeje */
+        * { cursor: none !important; }
+        
+        /* Fixní velikost pro produkční displej */
+        html, body {
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            width: 4096px;
+            height: 607px;
+            background: #1a1a1a;
+        }
+        
+        /* Kontejner má fixní rozměry */
+        .display-container {
+            width: 4096px !important;
+            height: 607px !important;
+            min-width: 4096px !important;
+            min-height: 607px !important;
+            max-width: 4096px !important;
+            max-height: 607px !important;
+        }
+    </style>
 </head>
 <body>
     <div class="display-container">
@@ -12,23 +37,21 @@
         <div class="header">
             <div class="direction">
                 <div class="line-badge">C</div>
-                <div class="line-selector">
-                    <button class="line-btn line-a" data-line="A">A</button>
-                    <button class="line-btn line-b" data-line="B">B</button>
-                    <button class="line-btn line-c active" data-line="C">C</button>
-                </div>
                 <div class="direction-text">
                     <span class="direction-arrow">→</span>
                     <span id="terminus">Háje</span>
                 </div>
             </div>
-            <div class="time">14:32:00</div>
+            <div class="time-container">
+                <div class="time">14:32:00</div>
+            </div>
         </div>
 
         <!-- Trasa -->
         <div class="route-container">
             <div class="route-line"></div>
             <div class="route-line-passed"></div>
+            <div class="route-line-disabled"></div>
             
             <div class="stations">
                 <!-- Stanice budou vygenerovány JavaScriptem -->
@@ -47,10 +70,8 @@
                 <span class="arrival-unit">min</span>
             </div>
         </div>
-        
-        <!-- Ovládací panel bude přidán JavaScriptem -->
     </div>
 
-    <script src="js/metro-map.js"></script>
+    <script src="js/metro-production.js"></script>
 </body>
 </html>

@@ -1,5 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
+:root {
+    --line-color: #E62F23;
+    --line-text-color: #FFFFFF;
+    --line-a-color: #00A651;
+    --line-b-color: #FFD500;
+    --line-c-color: #E62F23;
+    --current-station-color: #00ff88;
+    --background-color: #262625;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -8,7 +18,7 @@
 
 body {
     font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
-    background: #262625;
+    background: var(--background-color);
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -19,7 +29,7 @@ body {
 .display-container {
     width: 4096px;
     height: 607px;
-    background: #262625;
+    background: var(--background-color);
     padding: 30px 50px;
     display: flex;
     flex-direction: column;
@@ -45,15 +55,62 @@ body {
 .line-badge {
     width: 70px;
     height: 70px;
-    background: #E62F23;
+    background: var(--line-color);
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 42px;
     font-weight: bold;
-    color: white;
-    box-shadow: 0 4px 15px rgba(230, 47, 35, 0.5);
+    color: var(--line-text-color);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    transition: background 0.3s, color 0.3s;
+}
+
+/* Přepínač linek */
+.line-selector {
+    display: flex;
+    gap: 10px;
+    margin-left: 20px;
+}
+
+.line-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    opacity: 0.6;
+}
+
+.line-btn:hover {
+    opacity: 0.9;
+    transform: scale(1.1);
+}
+
+.line-btn.active {
+    opacity: 1;
+    border-color: #fff;
+    transform: scale(1.15);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+}
+
+.line-btn.line-a {
+    background: var(--line-a-color);
+    color: #fff;
+}
+
+.line-btn.line-b {
+    background: var(--line-b-color);
+    color: #000;
+}
+
+.line-btn.line-c {
+    background: var(--line-c-color);
+    color: #fff;
 }
 
 .direction-text {
@@ -64,13 +121,14 @@ body {
 }
 
 .direction-arrow {
-    color: #E62F23;
+    color: var(--line-color);
     font-size: 38px;
     margin-right: 10px;
+    transition: color 0.3s;
 }
 
 .time {
-    color: #00ff88;
+    color: var(--current-station-color);
     font-size: 44px;
     font-weight: bold;
     font-family: 'Consolas', monospace;
@@ -80,28 +138,29 @@ body {
 /* Trasa - hlavní část */
 .route-container {
     position: relative;
-    height: 350px;
+    height: 400px;
     display: flex;
     align-items: flex-end;
-    padding-bottom: 130px;
+    padding-bottom: 80px;
 }
 
 /* Linka trasy */
 .route-line {
     position: absolute;
-    bottom: 80px;
+    bottom: 50px;
     left: 50px;
     right: 50px;
     height: 22px;
-    background: #E62F23;
+    background: var(--line-color);
     border: 1px solid #000;
     z-index: 1;
+    transition: background 0.3s;
 }
 
 /* Projetá část */
 .route-line-passed {
     position: absolute;
-    bottom: 80px;
+    bottom: 50px;
     left: 50px;
     width: 0%;
     height: 22px;
@@ -111,12 +170,26 @@ body {
     transition: width 0.3s ease;
 }
 
+/* Disabled část linky (za vlastní konečnou) */
+.route-line-disabled {
+    position: absolute;
+    bottom: 50px;
+    right: 50px;
+    width: 0%;
+    height: 22px;
+    background: #333;
+    border: 1px solid #222;
+    z-index: 2;
+    opacity: 0.5;
+    transition: width 0.3s ease;
+}
+
 /* Stanice */
 .stations {
     display: flex;
     justify-content: space-between;
     position: absolute;
-    bottom: 80px;
+    bottom: 50px;
     left: 50px;
     right: 50px;
     height: 22px;
@@ -145,7 +218,7 @@ body {
 .station-dot {
     width: 26px;
     height: 26px;
-    background: #E62F23;
+    background: var(--line-color);
     border: 1px solid #000;
     border-radius: 50%;
     position: relative;
@@ -167,7 +240,7 @@ body {
 
 .station-name {
     position: absolute;
-    bottom: 25px;
+    bottom: 40px;
     left: 50%;
     color: #fff;
     font-size: 18px;
@@ -203,6 +276,7 @@ body {
 
 .transfer-inline .badge.line-a { background: #00A651; color: #fff; }
 .transfer-inline .badge.line-b { background: #F7D117; color: #000; }
+.transfer-inline .badge.line-c { background: #E62F23; color: #fff; }
 .transfer-inline .badge.line-d { background: #007DC5; color: #fff; }
 
 .transfer-inline .icon {
@@ -214,6 +288,18 @@ body {
     width: 14px;
     height: 14px;
     fill: #fff;
+}
+
+/* Metro ikony SVG - větší a bez fill override */
+.transfer-inline .icon.metro-icon {
+    width: 18px;
+    height: 18px;
+}
+
+.transfer-inline .icon.metro-icon svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
 }
 
 .transfer-inline .text-badge {
@@ -236,6 +322,27 @@ body {
 
 .station.passed .station-name {
     color: #666;
+}
+
+/* Disabled stanice (za vlastní konečnou) */
+.station.disabled .station-dot {
+    background: #444;
+    border-color: #333;
+    opacity: 0.4;
+}
+
+.station.disabled .station-dot::after {
+    background: #333;
+    opacity: 0.5;
+}
+
+.station.disabled .station-name {
+    color: #444;
+    opacity: 0.4;
+}
+
+.station.disabled .transfer-inline {
+    opacity: 0.3;
 }
 
 /* Aktuální stanice */
@@ -268,7 +375,7 @@ body {
 .station.transfer .station-dot {
     width: 32px;
     height: 32px;
-    background: #E62F23;
+    background: var(--line-color);
     border: 2px solid #000;
 }
 
@@ -289,6 +396,11 @@ body {
     background: #50AF31;
     box-shadow: 0 0 12px rgba(80, 175, 49, 0.6);
 }
+.station.transfer.transfer-c .station-dot {
+    background: #E62F23;
+    box-shadow: 0 0 12px rgba(230, 47, 35, 0.6);
+}
+
 
 /* Pankrác - přestup na linku D (modrá) */
 .station.transfer.transfer-d .station-dot {
@@ -463,6 +575,21 @@ body {
     color: #fff;
 }
 
+/* Tlačítko pro přepínání režimu (Simulace/API) */
+.control-btn.mode-btn {
+    background: #FF9500;
+    color: #fff;
+    min-width: 130px;
+}
+
+.control-btn.mode-btn.sim-mode {
+    background: #FF9500;
+}
+
+.control-btn.mode-btn.api-mode {
+    background: #00A651;
+}
+
 .control-btn:hover {
     transform: scale(1.05);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
@@ -501,6 +628,53 @@ body {
     border-radius: 50%;
     background: #00ff88;
     cursor: pointer;
+}
+
+/* Výběr výchozí a konečné stanice */
+.start-selector,
+.terminal-selector {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #fff;
+    font-size: 14px;
+}
+
+.start-selector label,
+.terminal-selector label {
+    font-weight: 500;
+}
+
+.start-selector select,
+.terminal-selector select {
+    padding: 6px 12px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: 2px solid var(--line-color);
+    background: #333;
+    color: #fff;
+    cursor: pointer;
+    outline: none;
+    min-width: 150px;
+    transition: all 0.2s ease;
+}
+
+.start-selector select:hover,
+.terminal-selector select:hover {
+    background: #444;
+}
+
+.start-selector select:focus,
+.terminal-selector select:focus {
+    border-color: #00ff88;
+    box-shadow: 0 0 8px rgba(0, 255, 136, 0.4);
+}
+
+.start-selector select option,
+.terminal-selector select option {
+    background: #333;
+    color: #fff;
+    padding: 8px;
 }
 
 /* Indikátor zpoždění */
@@ -631,4 +805,81 @@ body {
     50% { 
         opacity: 0.5;
     }
+}
+
+/* ==================== */
+/* IKONY POD LINKOU     */
+/* ==================== */
+
+.below-line-icons {
+    position: absolute;
+    top: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    background: rgba(38, 38, 37, 0.95);
+    padding: 4px 6px;
+    border-radius: 6px;
+    border: 1px solid #444;
+    z-index: 10;
+}
+
+.below-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+}
+
+.below-icon svg {
+    width: 16px;
+    height: 16px;
+    fill: #fff;
+}
+
+/* Kombinovaná ikona autobus + letadlo je širší */
+.below-icon.airport {
+    width: 32px;
+}
+
+.below-icon.airport svg {
+    width: 28px;
+    height: 18px;
+}
+
+.below-icon.zoo .text-badge {
+    font-size: 8px;
+    font-weight: bold;
+    padding: 2px 4px;
+    border-radius: 3px;
+    background: #00A651;
+    color: #fff;
+    white-space: nowrap;
+}
+
+/* Projetá stanice - ikony pod linkou zašedlé */
+.station.passed .below-line-icons {
+    opacity: 0.4;
+    border-color: #333;
+}
+
+.station.passed .below-icon svg {
+    fill: #666;
+}
+
+/* Disabled stanice - ikony pod linkou zašedlé */
+.station.disabled .below-line-icons {
+    opacity: 0.3;
+    border-color: #222;
+}
+
+/* Aktuální stanice - ikony pod linkou zvýrazněné */
+.station.current .below-line-icons {
+    border-color: #00ff88;
+    box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
 }

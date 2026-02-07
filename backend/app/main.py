@@ -8,12 +8,19 @@ import logging
 import base64
 
 import httpx
+from dotenv import load_dotenv
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from google.transit import gtfs_realtime_pb2
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
+
+# Load .env file
+env_path = ROOT / ".env"
+if env_path.exists():
+    load_dotenv(env_path)
+    logging.info(f"Loaded .env from {env_path}")
 
 app = FastAPI()
 logging.basicConfig(level=logging.DEBUG, format="%(asctime)s %(levelname)s %(message)s")
@@ -64,30 +71,94 @@ async def status():
     return {"ok": True, "time": datetime.datetime.utcnow().isoformat()}
 
 
-# ====== Metro Linka C - speciální endpoint pro displej ======
-# Stanice linky C s jejich GTFS stop_id (PID Praha)
-METRO_LINE_C_STATIONS = [
-    {"id": "letnany", "name": "Letňany", "stop_ids": ["U1081Z1", "U1081Z2"]},
-    {"id": "prosek", "name": "Prosek", "stop_ids": ["U1099Z1", "U1099Z2"]},
-    {"id": "strizkov", "name": "Střížkov", "stop_ids": ["U1088Z1", "U1088Z2"]},
-    {"id": "ladvi", "name": "Ládví", "stop_ids": ["U1077Z1", "U1077Z2"]},
-    {"id": "kobylisy", "name": "Kobylisy", "stop_ids": ["U1078Z1", "U1078Z2"]},
-    {"id": "nadrazi-holesovice", "name": "Nádraží Holešovice", "stop_ids": ["U1072Z1", "U1072Z2"]},
-    {"id": "vltavska", "name": "Vltavská", "stop_ids": ["U1067Z1", "U1067Z2"]},
-    {"id": "florenc", "name": "Florenc", "stop_ids": ["U1063Z1", "U1063Z2"]},
-    {"id": "hlavni-nadrazi", "name": "Hlavní nádraží", "stop_ids": ["U1059Z1", "U1059Z2"]},
-    {"id": "muzeum", "name": "Muzeum", "stop_ids": ["U1058Z1", "U1058Z2"]},
-    {"id": "ip-pavlova", "name": "I. P. Pavlova", "stop_ids": ["U1057Z1", "U1057Z2"]},
-    {"id": "vysehrad", "name": "Vyšehrad", "stop_ids": ["U1056Z1", "U1056Z2"]},
-    {"id": "prazskeho-povstani", "name": "Pražského povstání", "stop_ids": ["U1053Z1", "U1053Z2"]},
-    {"id": "pankrac", "name": "Pankrác", "stop_ids": ["U1051Z1", "U1051Z2"]},
-    {"id": "budejovicka", "name": "Budějovická", "stop_ids": ["U1049Z1", "U1049Z2"]},
-    {"id": "kacerov", "name": "Kačerov", "stop_ids": ["U1047Z1", "U1047Z2"]},
-    {"id": "roztyly", "name": "Roztyly", "stop_ids": ["U1044Z1", "U1044Z2"]},
-    {"id": "chodov", "name": "Chodov", "stop_ids": ["U1041Z1", "U1041Z2"]},
-    {"id": "opatov", "name": "Opatov", "stop_ids": ["U1039Z1", "U1039Z2"]},
-    {"id": "haje", "name": "Háje", "stop_ids": ["U1036Z1", "U1036Z2"]},
-]
+# ====== Konfigurace metro linek ======
+METRO_LINES = {
+    "A": {
+        "color": "#00A651",
+        "route_id": "L990",
+        "terminals": {"first": "Nemocnice Motol", "last": "Depo Hostivař"},
+        "stations": [
+            {"id": "nemocnice-motol", "name": "Nemocnice Motol", "stop_ids": ["U321Z1", "U321Z2"]},
+            {"id": "petriny", "name": "Petřiny", "stop_ids": ["U320Z1", "U320Z2"]},
+            {"id": "nadrazi-veleslavin", "name": "Nádraží Veleslavín", "stop_ids": ["U319Z1", "U319Z2"]},
+            {"id": "borislavka", "name": "Bořislavka", "stop_ids": ["U318Z1", "U318Z2"]},
+            {"id": "dejvicka", "name": "Dejvická", "stop_ids": ["U317Z1", "U317Z2"]},
+            {"id": "hradcanska", "name": "Hradčanská", "stop_ids": ["U316Z1", "U316Z2"]},
+            {"id": "malostranska", "name": "Malostranská", "stop_ids": ["U315Z1", "U315Z2"]},
+            {"id": "staromestska", "name": "Staroměstská", "stop_ids": ["U314Z1", "U314Z2"]},
+            {"id": "mustek", "name": "Můstek", "stop_ids": ["U313Z1", "U313Z2"]},
+            {"id": "muzeum-a", "name": "Muzeum", "stop_ids": ["U312Z1", "U312Z2"]},
+            {"id": "namesti-miru", "name": "Náměstí Míru", "stop_ids": ["U311Z1", "U311Z2"]},
+            {"id": "jiriho-z-podebrad", "name": "Jiřího z Poděbrad", "stop_ids": ["U310Z1", "U310Z2"]},
+            {"id": "flora", "name": "Flora", "stop_ids": ["U309Z1", "U309Z2"]},
+            {"id": "zelivskeho", "name": "Želivského", "stop_ids": ["U308Z1", "U308Z2"]},
+            {"id": "strasnicka", "name": "Strašnická", "stop_ids": ["U307Z1", "U307Z2"]},
+            {"id": "skalka", "name": "Skalka", "stop_ids": ["U306Z1", "U306Z2"]},
+            {"id": "depo-hostivar", "name": "Depo Hostivař", "stop_ids": ["U305Z1", "U305Z2"]},
+        ]
+    },
+    "B": {
+        "color": "#FFD500",
+        "route_id": "L992",
+        "terminals": {"first": "Zličín", "last": "Černý Most"},
+        "stations": [
+            {"id": "zlicin", "name": "Zličín", "stop_ids": ["U401Z1", "U401Z2"]},
+            {"id": "stodulky", "name": "Stodůlky", "stop_ids": ["U402Z1", "U402Z2"]},
+            {"id": "luka", "name": "Luka", "stop_ids": ["U403Z1", "U403Z2"]},
+            {"id": "luziny", "name": "Lužiny", "stop_ids": ["U404Z1", "U404Z2"]},
+            {"id": "hurka", "name": "Hůrka", "stop_ids": ["U405Z1", "U405Z2"]},
+            {"id": "nove-butovice", "name": "Nové Butovice", "stop_ids": ["U406Z1", "U406Z2"]},
+            {"id": "jinonice", "name": "Jinonice", "stop_ids": ["U407Z1", "U407Z2"]},
+            {"id": "radlicka", "name": "Radlická", "stop_ids": ["U408Z1", "U408Z2"]},
+            {"id": "smichovske-nadrazi", "name": "Smíchovské nádraží", "stop_ids": ["U409Z1", "U409Z2"]},
+            {"id": "andel", "name": "Anděl", "stop_ids": ["U410Z1", "U410Z2"]},
+            {"id": "karlovo-namesti", "name": "Karlovo náměstí", "stop_ids": ["U411Z1", "U411Z2"]},
+            {"id": "narodni-trida", "name": "Národní třída", "stop_ids": ["U412Z1", "U412Z2"]},
+            {"id": "mustek-b", "name": "Můstek", "stop_ids": ["U413Z1", "U413Z2"]},
+            {"id": "namesti-republiky", "name": "Náměstí Republiky", "stop_ids": ["U414Z1", "U414Z2"]},
+            {"id": "florenc-b", "name": "Florenc", "stop_ids": ["U415Z1", "U415Z2"]},
+            {"id": "krizikova", "name": "Křižíkova", "stop_ids": ["U416Z1", "U416Z2"]},
+            {"id": "invalidovna", "name": "Invalidovna", "stop_ids": ["U417Z1", "U417Z2"]},
+            {"id": "palmovka", "name": "Palmovka", "stop_ids": ["U418Z1", "U418Z2"]},
+            {"id": "ceskomoravska", "name": "Českomoravská", "stop_ids": ["U419Z1", "U419Z2"]},
+            {"id": "vysocanska", "name": "Vysočanská", "stop_ids": ["U420Z1", "U420Z2"]},
+            {"id": "kolbenova", "name": "Kolbenova", "stop_ids": ["U421Z1", "U421Z2"]},
+            {"id": "hloubetin", "name": "Hloubětín", "stop_ids": ["U422Z1", "U422Z2"]},
+            {"id": "rajska-zahrada", "name": "Rajská zahrada", "stop_ids": ["U423Z1", "U423Z2"]},
+            {"id": "cerny-most", "name": "Černý Most", "stop_ids": ["U424Z1", "U424Z2"]},
+        ]
+    },
+    "C": {
+        "color": "#E62F23",
+        "route_id": "L991",
+        "terminals": {"first": "Letňany", "last": "Háje"},
+        "stations": [
+            {"id": "letnany", "name": "Letňany", "stop_ids": ["U1081Z1", "U1081Z2"]},
+            {"id": "prosek", "name": "Prosek", "stop_ids": ["U1099Z1", "U1099Z2"]},
+            {"id": "strizkov", "name": "Střížkov", "stop_ids": ["U1088Z1", "U1088Z2"]},
+            {"id": "ladvi", "name": "Ládví", "stop_ids": ["U1077Z1", "U1077Z2"]},
+            {"id": "kobylisy", "name": "Kobylisy", "stop_ids": ["U1078Z1", "U1078Z2"]},
+            {"id": "nadrazi-holesovice", "name": "Nádraží Holešovice", "stop_ids": ["U1072Z1", "U1072Z2"]},
+            {"id": "vltavska", "name": "Vltavská", "stop_ids": ["U1067Z1", "U1067Z2"]},
+            {"id": "florenc", "name": "Florenc", "stop_ids": ["U1063Z1", "U1063Z2"]},
+            {"id": "hlavni-nadrazi", "name": "Hlavní nádraží", "stop_ids": ["U1059Z1", "U1059Z2"]},
+            {"id": "muzeum", "name": "Muzeum", "stop_ids": ["U1058Z1", "U1058Z2"]},
+            {"id": "ip-pavlova", "name": "I. P. Pavlova", "stop_ids": ["U1057Z1", "U1057Z2"]},
+            {"id": "vysehrad", "name": "Vyšehrad", "stop_ids": ["U1056Z1", "U1056Z2"]},
+            {"id": "prazskeho-povstani", "name": "Pražského povstání", "stop_ids": ["U1053Z1", "U1053Z2"]},
+            {"id": "pankrac", "name": "Pankrác", "stop_ids": ["U1051Z1", "U1051Z2"]},
+            {"id": "budejovicka", "name": "Budějovická", "stop_ids": ["U1049Z1", "U1049Z2"]},
+            {"id": "kacerov", "name": "Kačerov", "stop_ids": ["U1047Z1", "U1047Z2"]},
+            {"id": "roztyly", "name": "Roztyly", "stop_ids": ["U1044Z1", "U1044Z2"]},
+            {"id": "chodov", "name": "Chodov", "stop_ids": ["U1041Z1", "U1041Z2"]},
+            {"id": "opatov", "name": "Opatov", "stop_ids": ["U1039Z1", "U1039Z2"]},
+            {"id": "haje", "name": "Háje", "stop_ids": ["U1036Z1", "U1036Z2"]},
+        ]
+    }
+}
+
+# Pro zpětnou kompatibilitu
+METRO_LINE_C_STATIONS = METRO_LINES["C"]["stations"]
 
 # Cached metro state
 METRO_LINE_C_STATE = {
@@ -97,17 +168,25 @@ METRO_LINE_C_STATE = {
 }
 
 
-def find_station_by_stop_id(stop_id: str):
-    """Find station index by GTFS stop_id"""
-    for i, station in enumerate(METRO_LINE_C_STATIONS):
+def find_station_by_stop_id(line_id: str, stop_id: str):
+    """Find station index by GTFS stop_id for given line"""
+    if line_id not in METRO_LINES:
+        return None, None
+    for i, station in enumerate(METRO_LINES[line_id]["stations"]):
         if stop_id in station["stop_ids"]:
             return i, station
     return None, None
 
 
-def parse_vehicle_positions_for_metro_c(feed: gtfs_realtime_pb2.FeedMessage) -> list:
-    """Parse GTFS-RT VehiclePositions feed to find metro line C vehicles"""
+def parse_vehicle_positions_for_metro(feed: gtfs_realtime_pb2.FeedMessage, line_id: str) -> list:
+    """Parse GTFS-RT VehiclePositions feed to find metro vehicles for given line"""
     global METRO_C_VEHICLES, LAST_VEHICLE_UPDATE
+    
+    if line_id not in METRO_LINES:
+        return []
+    
+    line_config = METRO_LINES[line_id]
+    route_id_expected = line_config["route_id"]
     
     vehicles = []
     
@@ -115,37 +194,35 @@ def parse_vehicle_positions_for_metro_c(feed: gtfs_realtime_pb2.FeedMessage) -> 
         if entity.HasField("vehicle"):
             vp = entity.vehicle
             
-            # Check if this is metro line C
             route_id = ""
             if vp.HasField("trip") and vp.trip.route_id:
                 route_id = vp.trip.route_id
             
-            # Metro line C route IDs in Prague: L991, or contains "C"
-            is_line_c = route_id in ["L991", "C"] or "metro_c" in route_id.lower()
+            # Check if this vehicle belongs to the requested line
+            is_match = route_id == route_id_expected or route_id.upper() == line_id
             
-            if is_line_c or route_id.upper() == "C":
+            if is_match:
                 vehicle_info = {
                     "vehicle_id": vp.vehicle.id if vp.HasField("vehicle") else entity.id,
                     "route_id": route_id,
                     "trip_id": vp.trip.trip_id if vp.HasField("trip") else None,
                     "current_stop_sequence": vp.current_stop_sequence if vp.current_stop_sequence else 0,
                     "stop_id": vp.stop_id if vp.stop_id else None,
-                    "current_status": vp.current_status,  # 0=INCOMING_AT, 1=STOPPED_AT, 2=IN_TRANSIT_TO
+                    "current_status": vp.current_status,
                     "timestamp": vp.timestamp if vp.timestamp else None,
                     "latitude": vp.position.latitude if vp.HasField("position") else None,
                     "longitude": vp.position.longitude if vp.HasField("position") else None,
                 }
                 
-                # Find station index from stop_id
                 if vehicle_info["stop_id"]:
-                    idx, station = find_station_by_stop_id(vehicle_info["stop_id"])
+                    idx, station = find_station_by_stop_id(line_id, vehicle_info["stop_id"])
                     if idx is not None:
                         vehicle_info["station_index"] = idx
                         vehicle_info["station_name"] = station["name"]
                 
                 vehicles.append(vehicle_info)
     
-    if vehicles:
+    if vehicles and line_id == "C":
         METRO_C_VEHICLES = vehicles
         LAST_VEHICLE_UPDATE = datetime.datetime.utcnow().isoformat()
         logging.info(f"Found {len(vehicles)} metro line C vehicles")
@@ -186,31 +263,69 @@ def parse_metro_c_from_gtfs(feed_data: list) -> dict:
     }
 
 
-@app.get("/api/metro/line-c")
-async def metro_line_c():
-    """Get current state of metro line C for display"""
-    global METRO_LINE_C_STATE
-    
-    if LATEST_DEPARTURES:
-        metro_data = parse_metro_c_from_gtfs(LATEST_DEPARTURES)
-        return {
-            "ok": True,
-            "source": "gtfs-rt",
-            "stations": METRO_LINE_C_STATIONS,
-            **metro_data
+# ====== Generický endpoint pro všechny linky metra ======
+@app.get("/api/metro/lines")
+async def metro_lines():
+    """Get list of available metro lines"""
+    return {
+        "ok": True,
+        "lines": list(METRO_LINES.keys()),
+        "details": {
+            line_id: {
+                "color": config["color"],
+                "terminals": config["terminals"],
+                "station_count": len(config["stations"])
+            }
+            for line_id, config in METRO_LINES.items()
         }
+    }
+
+
+@app.get("/api/metro/line/{line_id}")
+async def metro_line(line_id: str):
+    """Get current state of any metro line for display"""
+    line_id = line_id.upper()
+    
+    if line_id not in METRO_LINES:
+        return {"ok": False, "error": f"Line {line_id} not found"}
+    
+    line_config = METRO_LINES[line_id]
     
     # Fallback simulation data
     return {
         "ok": True,
         "source": "simulation",
-        "stations": METRO_LINE_C_STATIONS,
+        "line": line_id,
+        "color": line_config["color"],
+        "terminals": line_config["terminals"],
+        "stations": line_config["stations"],
         "trains": [
-            {"dest": "Háje", "direction": "haje", "arrival_min": 2, "delay": 0},
-            {"dest": "Letňany", "direction": "letnany", "arrival_min": 4, "delay": 0}
+            {"dest": line_config["terminals"]["last"], "direction": "last", "arrival_min": 2, "delay": 0},
+            {"dest": line_config["terminals"]["first"], "direction": "first", "arrival_min": 4, "delay": 0}
         ],
         "timestamp": datetime.datetime.utcnow().isoformat()
     }
+
+
+# Pro zpětnou kompatibilitu: /api/metro/line-c
+@app.get("/api/metro/line-c")
+async def metro_line_c():
+    """Get current state of metro line C for display (legacy endpoint)"""
+    return await metro_line("C")
+
+
+# Pro zpětnou kompatibilitu: /api/metro/line-a
+@app.get("/api/metro/line-a")
+async def metro_line_a():
+    """Get current state of metro line A for display"""
+    return await metro_line("A")
+
+
+# Pro zpětnou kompatibilitu: /api/metro/line-b
+@app.get("/api/metro/line-b")
+async def metro_line_b():
+    """Get current state of metro line B for display"""
+    return await metro_line("B")
 
 
 @app.get("/api/fallback")
@@ -390,82 +505,84 @@ async def websocket_endpoint(websocket: WebSocket):
             pass
 
 
-@app.websocket("/ws/metro/line-c")
-async def websocket_metro_c(websocket: WebSocket):
-    """WebSocket pro real-time aktualizace linky C pro displej"""
+@app.websocket("/ws/metro/line-{line_id}")
+async def websocket_metro_line(websocket: WebSocket, line_id: str):
+    """WebSocket pro real-time aktualizace jakékoliv linky metra"""
+    line_id = line_id.upper()
+    
+    if line_id not in METRO_LINES:
+        await websocket.close(code=1008, reason=f"Line {line_id} not found")
+        return
+    
     await websocket.accept()
-    logging.info("Metro line C display connected via WebSocket")
+    logging.info(f"Metro line {line_id} display connected via WebSocket")
+    
+    line_config = METRO_LINES[line_id]
+    stations = line_config["stations"]
+    
     try:
         # Simulační stav vlaku
         sim_position = 0  # Index stanice
-        sim_direction = "haje"  # Směr
+        sim_direction = "last"  # Směr
         sim_progress = 0.0  # 0.0-1.0 mezi stanicemi
         sim_delay = 0  # Zpoždění v sekundách
         
         while True:
             now = datetime.datetime.utcnow().isoformat()
             
-            if LATEST_DEPARTURES:
-                # Real GTFS data
-                metro_data = parse_metro_c_from_gtfs(LATEST_DEPARTURES)
-                payload = {
-                    "type": "update",
-                    "source": "gtfs-rt",
-                    "timestamp": now,
-                    **metro_data
+            # Simulation mode - pohyb vlaku
+            sim_progress += 0.1
+            if sim_progress >= 1.0:
+                sim_progress = 0.0
+                if sim_direction == "last":
+                    sim_position += 1
+                    if sim_position >= len(stations) - 1:
+                        sim_position = len(stations) - 1
+                        sim_direction = "first"
+                else:
+                    sim_position -= 1
+                    if sim_position <= 0:
+                        sim_position = 0
+                        sim_direction = "last"
+            
+            # Random delay simulation (occasionally)
+            if random.random() < 0.05:
+                sim_delay = random.randint(0, 180)
+            
+            current_station = stations[sim_position]
+            next_idx = sim_position + 1 if sim_direction == "last" else sim_position - 1
+            next_station = stations[next_idx] if 0 <= next_idx < len(stations) else None
+            
+            terminus = line_config["terminals"]["last"] if sim_direction == "last" else line_config["terminals"]["first"]
+            arrival_sec = int((1.0 - sim_progress) * 90)  # ~90 sekund mezi stanicemi
+            
+            payload = {
+                "type": "update",
+                "source": "simulation",
+                "timestamp": now,
+                "line": line_id,
+                "color": line_config["color"],
+                "train": {
+                    "currentStation": current_station["id"],
+                    "currentStationIndex": sim_position,
+                    "nextStation": next_station["id"] if next_station else None,
+                    "nextStationIndex": next_idx if next_station else None,
+                    "direction": sim_direction,
+                    "terminus": terminus,
+                    "progress": sim_progress,
+                    "arrivalSeconds": arrival_sec,
+                    "delay": sim_delay
                 }
-            else:
-                # Simulation mode - pohyb vlaku
-                sim_progress += 0.1
-                if sim_progress >= 1.0:
-                    sim_progress = 0.0
-                    if sim_direction == "haje":
-                        sim_position += 1
-                        if sim_position >= len(METRO_LINE_C_STATIONS) - 1:
-                            sim_position = len(METRO_LINE_C_STATIONS) - 1
-                            sim_direction = "letnany"
-                    else:
-                        sim_position -= 1
-                        if sim_position <= 0:
-                            sim_position = 0
-                            sim_direction = "haje"
-                
-                # Random delay simulation (occasionally)
-                if random.random() < 0.05:
-                    sim_delay = random.randint(0, 180)
-                
-                current_station = METRO_LINE_C_STATIONS[sim_position]
-                next_idx = sim_position + 1 if sim_direction == "haje" else sim_position - 1
-                next_station = METRO_LINE_C_STATIONS[next_idx] if 0 <= next_idx < len(METRO_LINE_C_STATIONS) else None
-                
-                terminus = "Háje" if sim_direction == "haje" else "Letňany"
-                arrival_sec = int((1.0 - sim_progress) * 90)  # ~90 sekund mezi stanicemi
-                
-                payload = {
-                    "type": "update",
-                    "source": "simulation",
-                    "timestamp": now,
-                    "train": {
-                        "currentStation": current_station["id"],
-                        "currentStationIndex": sim_position,
-                        "nextStation": next_station["id"] if next_station else None,
-                        "nextStationIndex": next_idx if next_station else None,
-                        "direction": sim_direction,
-                        "terminus": terminus,
-                        "progress": sim_progress,
-                        "arrivalSeconds": arrival_sec,
-                        "delay": sim_delay
-                    }
-                }
+            }
             
             await websocket.send_json(payload)
             await asyncio.sleep(3)  # Update every 3 seconds
             
     except WebSocketDisconnect:
-        logging.info("Metro line C display disconnected")
+        logging.info(f"Metro line {line_id} display disconnected")
         return
     except Exception as e:
-        logging.exception("WebSocket error for metro line C")
+        logging.exception(f"WebSocket error for metro line {line_id}")
         try:
             await websocket.close()
         except Exception:
@@ -482,3 +599,139 @@ async def api_raw(raw: bool = False):
     if raw:
         resp["last_raw_base64"] = base64.b64encode(LAST_RAW_BYTES or b"").decode("ascii")
     return resp
+
+
+# ====== DEPARTURES API (Golemio Proxy) ======
+
+@app.get("/api/departures")
+async def get_departures(ids: str = "", names: str = "", limit: int = 20):
+    """
+    Proxy endpoint for Golemio PID Departure Boards API.
+    
+    Args:
+        ids: Comma-separated ASW node IDs (e.g., "689" for Florenc)
+        names: Comma-separated stop names (e.g., "Florenc,Muzeum")
+        limit: Maximum number of departures
+    
+    Returns:
+        List of departures with real-time data
+    """
+    if not GOLEMIO_API_KEY:
+        return {"ok": False, "error": "GOLEMIO_API_KEY not configured", "departures": []}
+    
+    if not ids and not names:
+        return {"ok": False, "error": "No stop IDs or names provided", "departures": []}
+    
+    try:
+        headers = {"X-Access-Token": GOLEMIO_API_KEY}
+        
+        async with httpx.AsyncClient(timeout=15.0) as client:
+            # Build params based on what we have
+            params = {
+                "limit": limit,
+                "minutesBefore": 0,
+                "minutesAfter": 120,
+                "includeMetroTrains": "true",
+            }
+            
+            # Prefer names parameter as it's more reliable
+            if names:
+                params["names"] = names
+            elif ids:
+                # Convert IDs to names or use aswIds format
+                params["aswIds"] = ids
+            
+            logging.info(f"Fetching departures with params: {params}")
+            
+            response = await client.get(
+                "https://api.golemio.cz/v2/pid/departureboards",
+                params=params,
+                headers=headers
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                departures = data.get("departures", [])
+                stops = data.get("stops", [])
+                
+                logging.info(f"Got {len(departures)} departures from {len(stops)} stops")
+                
+                return {
+                    "ok": True,
+                    "names": names,
+                    "ids": ids,
+                    "stops": stops,
+                    "departures": departures,
+                    "count": len(departures),
+                    "timestamp": datetime.datetime.utcnow().isoformat()
+                }
+            else:
+                logging.error(f"Golemio API error: {response.status_code} - {response.text}")
+                return {
+                    "ok": False,
+                    "error": f"Golemio API returned {response.status_code}: {response.text[:200]}",
+                    "departures": []
+                }
+    
+    except httpx.TimeoutException:
+        logging.error("Golemio API timeout")
+        return {"ok": False, "error": "API timeout", "departures": []}
+    except Exception as e:
+        logging.exception("Error fetching departures")
+        return {"ok": False, "error": str(e), "departures": []}
+
+
+@app.get("/api/stops/search")
+async def search_stops(query: str = "", limit: int = 10):
+    """
+    Search for PID stops by name.
+    
+    Args:
+        query: Search query (stop name)
+        limit: Maximum results
+    
+    Returns:
+        List of matching stops with IDs
+    """
+    if not GOLEMIO_API_KEY:
+        return {"ok": False, "error": "GOLEMIO_API_KEY not configured", "stops": []}
+    
+    if not query or len(query) < 2:
+        return {"ok": False, "error": "Query too short", "stops": []}
+    
+    try:
+        headers = {"X-Access-Token": GOLEMIO_API_KEY}
+        
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            response = await client.get(
+                "https://api.golemio.cz/v2/pid/stops",
+                params={"name": query, "limit": limit},
+                headers=headers
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                stops = data.get("stops", [])
+                
+                # Simplify stop data
+                simplified = [{
+                    "id": s.get("stop_id"),
+                    "name": s.get("stop_name"),
+                    "zone": s.get("zone_id"),
+                    "lat": s.get("stop_lat"),
+                    "lon": s.get("stop_lon"),
+                    "wheelchair": s.get("wheelchair_boarding")
+                } for s in stops]
+                
+                return {
+                    "ok": True,
+                    "query": query,
+                    "stops": simplified,
+                    "count": len(simplified)
+                }
+            else:
+                return {"ok": False, "error": f"API returned {response.status_code}", "stops": []}
+    
+    except Exception as e:
+        logging.exception("Error searching stops")
+        return {"ok": False, "error": str(e), "stops": []}

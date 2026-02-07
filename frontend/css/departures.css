@@ -1,0 +1,750 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* ========================================
+   CSS PRO TABULKU ODJEZDŮ
+   Formát: 4096×607px průmyslový displej
+   ======================================== */
+
+:root {
+    /* Metro barvy */
+    --line-a-color: #00A651;
+    --line-b-color: #FFD500;
+    --line-c-color: #E62F23;
+    --line-d-color: #007DC5;
+    
+    /* Tramvaj barvy */
+    --tram-color: #8B0000;
+    
+    /* Autobus barvy */
+    --bus-color: #0066CC;
+    --bus-night-color: #1a1a4e;
+    
+    /* Vlak barvy */
+    --train-color: #003366;
+    --train-s-color: #006633;
+    
+    /* UI barvy */
+    --background-color: #1a1a1a;
+    --text-color: #ffffff;
+    --text-muted: #888888;
+    --row-bg: rgba(255, 255, 255, 0.03);
+    --row-hover: rgba(255, 255, 255, 0.08);
+    --countdown-color: #00ff88;
+    --warning-color: #FFD500;
+    --danger-color: #E62F23;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
+    background: var(--background-color);
+    color: var(--text-color);
+    width: 4096px;
+    height: 607px;
+    overflow: hidden;
+}
+
+/* Fullscreen mode */
+body.fullscreen-mode {
+    width: 100vw;
+    height: 100vh;
+}
+
+body.fullscreen-mode .control-panel {
+    display: none;
+}
+
+body.fullscreen-mode .departures-container {
+    height: 100vh;
+}
+
+body.fullscreen-mode .departures-table {
+    height: calc(100vh - 100px);
+}
+
+body.fullscreen-mode .table-body {
+    max-height: calc(100vh - 180px);
+}
+
+.departures-container {
+    width: 100%;
+    height: 607px;
+    display: flex;
+    flex-direction: column;
+    padding: 15px 30px;
+}
+
+/* ==================== */
+/* HEADER               */
+/* ==================== */
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3));
+    border-radius: 15px;
+    margin-bottom: 15px;
+    flex-shrink: 0;
+}
+
+.station-info {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.station-icon {
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    color: #ffffff;
+}
+
+.station-icon svg {
+    width: 42px;
+    height: 42px;
+}
+
+.station-name-header {
+    display: flex;
+    flex-direction: column;
+}
+
+.station-label {
+    font-size: 16px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.station-name {
+    font-size: 38px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+.connection-status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 16px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+.status-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    animation: pulse-dot 2s infinite;
+}
+
+.connection-status.connected .status-dot {
+    background: var(--countdown-color);
+}
+
+.connection-status.error .status-dot {
+    background: var(--danger-color);
+}
+
+@keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.time {
+    font-size: 52px;
+    font-weight: bold;
+    font-family: 'Consolas', 'Courier New', monospace;
+    color: var(--countdown-color);
+    text-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+}
+
+/* ==================== */
+/* TABULKA ODJEZDŮ      */
+/* ==================== */
+
+.departures-table {
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.2));
+    border-radius: 15px;
+    overflow: hidden;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.table-header {
+    display: grid;
+    grid-template-columns: 80px 120px 1fr 100px 140px 140px;
+    padding: 18px 30px;
+    background: rgba(0, 0, 0, 0.5);
+    font-weight: 600;
+    color: var(--text-muted);
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    flex-shrink: 0;
+}
+
+.table-body {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.departure-row {
+    display: grid;
+    grid-template-columns: 80px 120px 1fr 100px 140px 140px;
+    padding: 16px 30px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
+    align-items: center;
+}
+
+.departure-row:nth-child(even) {
+    background: var(--row-bg);
+}
+
+.departure-row:hover {
+    background: var(--row-hover);
+}
+
+/* Zvýraznění prvního odjezdu */
+.departure-row.next {
+    background: linear-gradient(90deg, rgba(0, 255, 136, 0.15), rgba(0, 255, 136, 0.05));
+    border-left: 5px solid var(--countdown-color);
+}
+
+.departure-row.next .col-countdown {
+    font-size: 28px;
+}
+
+/* ==================== */
+/* TYPY DOPRAVY         */
+/* ==================== */
+
+.col-type {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.transport-icon {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    color: #ffffff;
+}
+
+.transport-icon svg {
+    width: 32px;
+    height: 32px;
+}
+
+.transport-icon.metro { 
+    background: rgba(230, 47, 35, 0.3); 
+}
+.transport-icon.tram { 
+    background: rgba(139, 0, 0, 0.3); 
+}
+.transport-icon.bus { 
+    background: rgba(0, 102, 204, 0.3); 
+}
+.transport-icon.train { 
+    background: rgba(0, 51, 102, 0.3); 
+}
+.transport-icon.ferry { 
+    background: rgba(0, 150, 255, 0.3); 
+}
+
+/* ==================== */
+/* LINKA                */
+/* ==================== */
+
+.col-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.line-indicator {
+    min-width: 60px;
+    height: 45px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 22px;
+    padding: 0 12px;
+}
+
+/* Metro */
+.line-indicator.line-a { background: var(--line-a-color); color: #fff; }
+.line-indicator.line-b { background: var(--line-b-color); color: #000; }
+.line-indicator.line-c { background: var(--line-c-color); color: #fff; }
+.line-indicator.line-d { background: var(--line-d-color); color: #fff; }
+
+/* Tramvaje */
+.line-indicator.tram { 
+    background: var(--tram-color); 
+    color: #fff;
+    border-radius: 6px;
+}
+
+/* Autobusy */
+.line-indicator.bus { 
+    background: var(--bus-color); 
+    color: #fff;
+    border-radius: 4px;
+}
+
+.line-indicator.bus-night { 
+    background: var(--bus-night-color); 
+    color: #fff;
+}
+
+/* Vlaky */
+.line-indicator.train { 
+    background: var(--train-color); 
+    color: #fff;
+}
+
+.line-indicator.train-s { 
+    background: var(--train-s-color); 
+    color: #fff;
+}
+
+/* ==================== */
+/* SMĚR                 */
+/* ==================== */
+
+.col-direction {
+    font-size: 22px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-right: 20px;
+}
+
+.direction-arrow {
+    color: var(--countdown-color);
+    font-size: 20px;
+}
+
+/* ==================== */
+/* NÁSTUPIŠTĚ           */
+/* ==================== */
+
+.col-platform {
+    font-size: 20px;
+    font-weight: 600;
+    text-align: center;
+    color: var(--text-muted);
+}
+
+.platform-badge {
+    display: inline-block;
+    padding: 6px 14px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    min-width: 50px;
+}
+
+/* ==================== */
+/* ČAS ODJEZDU          */
+/* ==================== */
+
+.col-time {
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 24px;
+    text-align: center;
+}
+
+.scheduled-time {
+    color: var(--text-muted);
+}
+
+.realtime-time {
+    color: var(--text-color);
+}
+
+.delay-indicator {
+    font-size: 14px;
+    margin-left: 8px;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.delay-indicator.on-time {
+    color: var(--countdown-color);
+}
+
+.delay-indicator.delayed {
+    background: var(--danger-color);
+    color: #fff;
+}
+
+.delay-indicator.early {
+    background: var(--countdown-color);
+    color: #000;
+}
+
+/* ==================== */
+/* ODPOČET              */
+/* ==================== */
+
+.col-countdown {
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 26px;
+    font-weight: bold;
+    color: var(--countdown-color);
+    text-align: right;
+}
+
+/* Stavy */
+.departure-row.arriving .col-countdown {
+    color: var(--warning-color);
+    animation: pulse-text 1s infinite;
+}
+
+.departure-row.boarding .col-countdown {
+    color: var(--countdown-color);
+    animation: pulse-text 0.5s infinite;
+    font-size: 28px;
+}
+
+@keyframes pulse-text {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* Prázdný stav */
+.no-departures {
+    padding: 60px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 24px;
+}
+
+.loading-spinner {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--text-muted);
+    border-top-color: var(--countdown-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ==================== */
+/* OVLÁDACÍ PANEL       */
+/* ==================== */
+
+.control-panel {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(180deg, rgba(30, 30, 30, 0.98), rgba(20, 20, 20, 0.98));
+    padding: 20px 30px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.control-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.control-section h3 {
+    font-size: 14px;
+    color: var(--countdown-color);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+}
+
+.control-row {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.control-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.control-group label {
+    color: var(--text-muted);
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.control-group input[type="text"] {
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #444;
+    background: #2a2a2a;
+    color: #fff;
+    font-size: 14px;
+    width: 200px;
+}
+
+.control-group input[type="text"]:focus {
+    outline: none;
+    border-color: var(--countdown-color);
+}
+
+.control-group select {
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #444;
+    background: #2a2a2a;
+    color: #fff;
+    font-size: 14px;
+    min-width: 180px;
+}
+
+.control-group input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--countdown-color);
+}
+
+/* Filter buttons */
+.filter-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.filter-btn {
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: 1px solid #444;
+    background: #2a2a2a;
+    color: var(--text-muted);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.filter-btn:hover {
+    border-color: var(--countdown-color);
+    color: #fff;
+}
+
+.filter-btn.active {
+    background: var(--countdown-color);
+    color: #000;
+    border-color: var(--countdown-color);
+    font-weight: 600;
+}
+
+.filter-icon {
+    width: 18px;
+    height: 18px;
+}
+
+/* Section icons in control panel */
+.section-icon {
+    width: 18px;
+    height: 18px;
+    vertical-align: middle;
+    margin-right: 6px;
+    color: var(--countdown-color);
+}
+
+.settings-icon {
+    color: var(--text-muted);
+}
+
+.btn-icon {
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+    margin-right: 4px;
+}
+
+/* Buttons */
+button {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.primary-btn {
+    background: var(--countdown-color);
+    color: #000;
+}
+
+.primary-btn:hover {
+    filter: brightness(1.1);
+}
+
+.secondary-btn {
+    background: #444;
+    color: #fff;
+}
+
+.secondary-btn:hover {
+    background: #555;
+}
+
+#load-stop-btn {
+    background: var(--line-c-color);
+    color: #fff;
+}
+
+/* API info */
+.api-info {
+    flex-direction: row !important;
+    justify-content: space-between;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+/* ==================== */
+/* SCROLLBAR            */
+/* ==================== */
+
+.table-body::-webkit-scrollbar {
+    width: 10px;
+}
+
+.table-body::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.table-body::-webkit-scrollbar-thumb {
+    background: #444;
+    border-radius: 5px;
+}
+
+.table-body::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* ==================== */
+/* RESPONSIVE           */
+/* ==================== */
+
+@media (max-width: 1920px) {
+    body {
+        width: 100%;
+        height: auto;
+        min-height: 100vh;
+    }
+    
+    .departures-container {
+        width: 100%;
+        height: auto;
+        min-height: 100vh;
+        padding-bottom: 320px;
+    }
+    
+    .table-header,
+    .departure-row {
+        grid-template-columns: 60px 90px 1fr 80px 110px 110px;
+    }
+    
+    .line-indicator {
+        min-width: 50px;
+        height: 38px;
+        font-size: 18px;
+    }
+    
+    .transport-icon {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .transport-icon svg {
+        width: 24px;
+        height: 24px;
+    }
+    
+    .col-direction {
+        font-size: 18px;
+    }
+    
+    .col-time {
+        font-size: 18px;
+    }
+    
+    .col-countdown {
+        font-size: 20px;
+    }
+    
+    .station-name {
+        font-size: 28px;
+    }
+    
+    .time {
+        font-size: 36px;
+    }
+}
+
+@media (max-width: 768px) {
+    .table-header,
+    .departure-row {
+        grid-template-columns: 50px 70px 1fr 60px 80px 80px;
+        padding: 12px 15px;
+    }
+    
+    .header {
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+    
+    .control-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .filter-buttons {
+        flex-wrap: wrap;
+    }
+}
