@@ -128,9 +128,6 @@ class MetroMapProduction {
         // Vlastní konečná stanice
         this.customTerminal = this.params.get('terminal') || null;
         
-        // Zpoždění
-        this.delay = 0;
-        
         // Jazyk
         this.language = this.params.get('lang') || 'cs';
         this.translations = {
@@ -158,7 +155,8 @@ class MetroMapProduction {
         this.icons = {
             train: `<svg viewBox="0 0 24 24"><path d="M12 2C8 2 4 2.5 4 6v9.5C4 17.43 5.57 19 7.5 19L6 20.5v.5h2l1.5-2h5l1.5 2h2v-.5L16.5 19c1.93 0 3.5-1.57 3.5-3.5V6c0-3.5-4-4-8-4zM7.5 17c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm3.5-6H6V6h5v5zm2 0V6h5v5h-5zm3.5 6c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>`,
             bus: `<svg viewBox="0 0 24 24"><path d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H6V6h12v5z"/></svg>`,
-            plane: `<svg viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>`,
+            // Kombinovaná ikona: autobus + letadlo (Airport Express)
+            busAirport: `<svg viewBox="0 0 32 24"><path d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H6V6h12v5z" fill="#fff"/><path d="M28 10v-1.5l-5-3V2.5c0-.55-.45-1-1-1s-1 .45-1 1v3l-5 3V10l5-1.5v4l-1.5 1v1.5l2.5-.75 2.5.75v-1.5l-1.5-1v-4l5 1.5z" fill="#0066CC"/></svg>`,
             metroA: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#00A651" stroke="#000" stroke-width="1"/><text x="12" y="16" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold" font-family="Arial">A</text></svg>`,
             metroB: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#FFD500" stroke="#000" stroke-width="1"/><text x="12" y="16" text-anchor="middle" fill="#000" font-size="14" font-weight="bold" font-family="Arial">B</text></svg>`,
             metroC: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#E62F23" stroke="#000" stroke-width="1"/><text x="12" y="16" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold" font-family="Arial">C</text></svg>`
@@ -173,11 +171,23 @@ class MetroMapProduction {
         this.useBackend = !this.params.has('simulation');
         this.connectionStatus = 'disconnected';
         
+        // API polling
+        this.apiPollingActive = false;
+        this.apiPollTimeout = null;
+        this.apiPollRate = 5000; // Poll každých 5 sekund
+        this.trackedTrainDest = null; // Sledovaný vlak - cíl
+        this.trackedTrainDirection = null; // Sledovaný vlak - směr
+        
+        // Smooth animace
+        this.animationFrame = null;
+        this.lastFrameTime = 0;
+        this.smoothProgress = 0; // Plynulý progress mezi 0 a 1
+        this.targetProgress = 0; // Cílový progress
+        
         // Simulační fallback
-        this.simulationInterval = null;
-        this.tickInterval = 100;
+        this.tickInterval = 50; // Rychlejší tick pro smooth animace
         this.simulationSpeed = 1;
-        this.stationStopTime = 20;
+        this.stationStopTime = 15; // Kratší zastávka
         
         this.init();
     }
@@ -233,12 +243,17 @@ class MetroMapProduction {
         // Aktualizovat displej
         this.updateDisplay();
         
-        // Připojit k API nebo spustit simulaci
+        // Spustit simulaci (vždy běží jako základ pro plynulou animaci)
+        console.log('[Metro Production] Spouštění smooth simulace');
+        this.startSimulation();
+        
+        // Připojit k API (WebSocket nebo REST polling)
         if (this.useBackend) {
+            // Zkusit WebSocket, v případě neúspěchu se spustí REST polling
             this.connectToBackend();
-        } else {
-            console.log('[Metro Production] Simulační režim aktivován');
-            this.startSimulation();
+            
+            // Spustit REST API polling pro aktualizaci dat
+            this.startApiPolling();
         }
         
         // Automatické přepnutí do fullscreen
@@ -317,9 +332,9 @@ class MetroMapProduction {
                 this.wsReconnectAttempts = 0;
                 
                 // Zastavit simulaci pokud běží
-                if (this.simulationInterval) {
-                    clearInterval(this.simulationInterval);
-                    this.simulationInterval = null;
+                if (this.animationFrame) {
+                    cancelAnimationFrame(this.animationFrame);
+                    this.animationFrame = null;
                 }
             };
             
@@ -357,7 +372,7 @@ class MetroMapProduction {
         console.log(`[Metro Production] Opětovné připojení za ${Math.round(delay / 1000)}s (pokus ${this.wsReconnectAttempts})`);
         
         // Spustit simulaci jako fallback
-        if (!this.simulationInterval) {
+        if (!this.animationFrame) {
             console.log('[Metro Production] Aktivace fallback simulace');
             this.startSimulation();
         }
@@ -369,6 +384,99 @@ class MetroMapProduction {
         }, delay);
     }
 
+    // ====== REST API POLLING ======
+    
+    async startApiPolling() {
+        console.log('[Metro Production] Spouštění REST API polling');
+        this.apiPollingActive = true;
+        this.pollApi();
+    }
+    
+    stopApiPolling() {
+        this.apiPollingActive = false;
+        if (this.apiPollTimeout) {
+            clearTimeout(this.apiPollTimeout);
+            this.apiPollTimeout = null;
+        }
+    }
+    
+    async pollApi() {
+        if (!this.apiPollingActive) return;
+        
+        try {
+            const response = await fetch(`${this.backendUrl}/api/metro/line/${this.currentLine}`);
+            
+            if (!response.ok) {
+                throw new Error(`API error: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            this.handleApiResponse(data);
+            
+        } catch (error) {
+            console.error('[Metro Production] API polling chyba:', error);
+        }
+        
+        // Naplánovat další poll
+        this.apiPollTimeout = setTimeout(() => this.pollApi(), this.apiPollRate);
+    }
+    
+    handleApiResponse(data) {
+        if (!data.ok || !data.trains || data.trains.length === 0) {
+            return;
+        }
+        
+        // Najdi vlak, který sledujeme, nebo vyber první
+        let train = null;
+        
+        if (this.trackedTrainDest && this.trackedTrainDirection) {
+            // Hledej konkrétní vlak
+            train = data.trains.find(t => 
+                t.dest === this.trackedTrainDest && 
+                t.direction === this.trackedTrainDirection
+            );
+        }
+        
+        // Pokud nenajdeme sledovaný vlak, vezmi první ve směru
+        if (!train) {
+            train = data.trains.find(t => t.direction === this.direction) || data.trains[0];
+            
+            // Nastav tento vlak jako sledovaný
+            if (train) {
+                this.trackedTrainDest = train.dest;
+                this.trackedTrainDirection = train.direction;
+                console.log(`[Metro Production] Sledování vlaku: ${train.dest} (směr: ${train.direction})`);
+            }
+        }
+        
+        if (train) {
+            const newArrival = train.arrival_min * 60;
+            
+            // Smooth aktualizace arrival countdown
+            if (this.isMoving) {
+                // Pomalá konvergence k API hodnotě pro plynulý přechod
+                const diff = newArrival - this.arrivalCountdown;
+                if (Math.abs(diff) > 30) {
+                    // Velký skok - pravděpodobně nový vlak nebo chyba
+                    this.arrivalCountdown = newArrival;
+                } else {
+                    // Postupná korekce
+                    this.arrivalCountdown += diff * 0.2;
+                }
+            } else {
+                this.arrivalCountdown = newArrival;
+            }
+            
+            this.totalTravelTime = Math.max(this.arrivalCountdown, 90);
+            this.direction = train.direction;
+            
+            // Debug log
+            if (this.params.has('debug')) {
+                console.log(`[Metro Production] API: vlak ${train.dest}, příjezd za ${train.arrival_min} min`);
+            }
+        }
+    }
+
     handleBackendUpdate(data) {
         if (data.type === 'update') {
             const source = data.source;
@@ -377,10 +485,6 @@ class MetroMapProduction {
                 const train = data.train;
                 this.currentStationIndex = train.currentStationIndex;
                 this.direction = train.direction;
-                
-                if (train.delay !== undefined) {
-                    this.setDelay(train.delay);
-                }
                 
                 if (train.arrivalSeconds !== undefined) {
                     this.arrivalCountdown = train.arrivalSeconds;
@@ -395,10 +499,6 @@ class MetroMapProduction {
                     this.arrivalCountdown = nextTrain.arrival_min * 60;
                     this.totalTravelTime = Math.max(this.arrivalCountdown, 90);
                     this.direction = nextTrain.direction;
-                    
-                    if (nextTrain.delay) {
-                        this.setDelay(nextTrain.delay);
-                    }
                 }
             }
             
@@ -409,11 +509,42 @@ class MetroMapProduction {
     // ====== SIMULACE (FALLBACK) ======
 
     startSimulation() {
-        if (this.simulationInterval) return;
+        if (this.animationFrame) return;
         
-        console.log('[Metro Production] Spouštění simulace');
+        console.log('[Metro Production] Spouštění smooth simulace');
         this.isMoving = true;
+        this.lastFrameTime = performance.now();
         this.moveToNextStation();
+    }
+    
+    // Smooth animační loop pomocí requestAnimationFrame
+    animationLoop(currentTime) {
+        if (!this.isMoving) {
+            this.animationFrame = null;
+            return;
+        }
+        
+        // Výpočet delta času
+        const deltaTime = (currentTime - this.lastFrameTime) / 1000; // v sekundách
+        this.lastFrameTime = currentTime;
+        
+        // Aktualizace countdown
+        if (this.arrivalCountdown > 0) {
+            this.arrivalCountdown -= deltaTime * this.simulationSpeed;
+            
+            if (this.arrivalCountdown <= 0) {
+                this.arrivalCountdown = 0;
+                const nextIndex = this.getNextStationIndex();
+                this.arriveAtStation(nextIndex);
+                return;
+            }
+        }
+        
+        // Aktualizace displeje (každý frame)
+        this.updateDisplay();
+        
+        // Pokračuj v animaci
+        this.animationFrame = requestAnimationFrame((t) => this.animationLoop(t));
     }
 
     moveToNextStation() {
@@ -438,29 +569,32 @@ class MetroMapProduction {
         }
         
         this.isAtStation = false; // Vlak vyjíždí ze stanice
+        this.smoothProgress = 0; // Reset smooth progress
+        this.targetProgress = 0;
         this.totalTravelTime = this.getTravelTimeToNextStation();
         this.arrivalCountdown = this.totalTravelTime;
         
-        this.simulationInterval = setInterval(() => {
-            const decrement = (this.tickInterval / 1000) * this.simulationSpeed;
-            this.arrivalCountdown -= decrement;
-            
-            if (this.arrivalCountdown <= 0) {
-                this.arrivalCountdown = 0;
-                clearInterval(this.simulationInterval);
-                this.simulationInterval = null;
-                this.arriveAtStation(nextIndex);
-            }
-            
-            this.updateDisplay();
-        }, this.tickInterval);
+        // Spusť animační loop
+        this.lastFrameTime = performance.now();
+        if (!this.animationFrame) {
+            this.animationFrame = requestAnimationFrame((t) => this.animationLoop(t));
+        }
     }
 
     arriveAtStation(stationIndex) {
         this.currentStationIndex = stationIndex;
         this.arrivalCountdown = 0;
         this.totalTravelTime = 0;
+        this.smoothProgress = 0;
+        this.targetProgress = 0;
         this.isAtStation = true; // Vlak dorazil do stanice
+        
+        // Zastav animační loop
+        if (this.animationFrame) {
+            cancelAnimationFrame(this.animationFrame);
+            this.animationFrame = null;
+        }
+        
         this.updateDisplay();
         
         // Kontrola vlastní konečné
@@ -482,10 +616,13 @@ class MetroMapProduction {
         this.isMoving = false;
         this.arrivalCountdown = 0;
         this.totalTravelTime = 0;
+        this.smoothProgress = 0;
+        this.targetProgress = 0;
         
-        if (this.simulationInterval) {
-            clearInterval(this.simulationInterval);
-            this.simulationInterval = null;
+        // Zastav animační loop
+        if (this.animationFrame) {
+            cancelAnimationFrame(this.animationFrame);
+            this.animationFrame = null;
         }
         
         this.updateDisplay();
@@ -514,24 +651,6 @@ class MetroMapProduction {
     }
 
     // ====== POMOCNÉ METODY ======
-
-    setDelay(seconds) {
-        this.delay = seconds;
-        this.updateDelayBadge();
-    }
-
-    updateDelayBadge() {
-        const badge = document.getElementById('delay-badge');
-        if (!badge) return;
-        
-        if (this.delay > 0) {
-            const mins = Math.ceil(this.delay / 60);
-            badge.querySelector('.delay-text').textContent = `+${mins} min`;
-            badge.style.display = 'flex';
-        } else {
-            badge.style.display = 'none';
-        }
-    }
 
     updateClock() {
         const now = new Date();
@@ -584,60 +703,89 @@ class MetroMapProduction {
         const stationsContainer = document.querySelector('.stations');
         if (!stationsContainer) return;
         
-        stationsContainer.innerHTML = this.stations.map((station, index) => {
-            let classes = ['station'];
+        stationsContainer.innerHTML = '';
+        
+        this.stations.forEach((station, index) => {
+            const stationEl = document.createElement('div');
+            stationEl.className = 'station';
+            stationEl.dataset.stationIndex = index;
             
-            if (index < this.currentStationIndex) {
-                classes.push('passed');
-            } else if (index === this.currentStationIndex) {
-                classes.push('current');
-            }
-            
+            // Přidání transfer tříd pro barvu kolečka
             if (station.transfer && station.transfer.length > 0) {
-                classes.push('transfer');
-                station.transfer.forEach(t => {
-                    if (t === 'A') classes.push('transfer-a');
-                    if (t === 'B') classes.push('transfer-b');
-                    if (t === 'C') classes.push('transfer-c');
-                    if (t === 'D') classes.push('transfer-d');
-                });
+                stationEl.classList.add('transfer');
+                if (station.transfer.includes('A')) stationEl.classList.add('transfer-a');
+                if (station.transfer.includes('B')) stationEl.classList.add('transfer-b');
+                if (station.transfer.includes('C')) stationEl.classList.add('transfer-c');
+                if (station.transfer.includes('D')) stationEl.classList.add('transfer-d');
             }
             
-            const inlineIcons = this.generateInlineIcons(station);
+            // Kolečko stanice
+            const dot = document.createElement('div');
+            dot.className = 'station-dot';
             
-            return `
-                <div class="${classes.join(' ')}" data-station-index="${index}">
-                    <div class="station-dot"></div>
-                    <div class="station-name">${station.name}${inlineIcons}</div>
-                </div>
-            `;
-        }).join('');
+            // Název stanice s inline ikonami metra
+            const name = document.createElement('div');
+            name.className = 'station-name';
+            name.innerHTML = station.name + this.generateMetroIcons(station);
+            
+            // Ikony pod linkou (vlak, autobus, letiště, ZOO)
+            const belowIcons = this.generateBelowLineIcons(station);
+            
+            stationEl.appendChild(dot);
+            stationEl.appendChild(name);
+            if (belowIcons) {
+                stationEl.insertAdjacentHTML('beforeend', belowIcons);
+            }
+            
+            stationsContainer.appendChild(stationEl);
+        });
     }
 
-    generateInlineIcons(station) {
+    // Generování ikon metra (A, B, C, D) - zůstávají vedle názvu
+    generateMetroIcons(station) {
         if (!station.transfer || station.transfer.length === 0) return '';
         
         let html = '<span class="transfer-inline">';
         
         station.transfer.forEach(t => {
-            if (t === 'A') html += `<span class="icon metro-icon">${this.icons.metroA}</span>`;
-            else if (t === 'B') html += `<span class="icon metro-icon">${this.icons.metroB}</span>`;
-            else if (t === 'C') html += `<span class="icon metro-icon">${this.icons.metroC}</span>`;
-            else if (t === 'D') html += `<span class="badge line-d">D</span>`;
-            else if (t === 'train') html += `<span class="icon">${this.icons.train}</span>`;
-            else if (t === 'bus') html += `<span class="icon">${this.icons.bus}</span>`;
-            else if (t === 'bus-zoo') {
-                html += `<span class="icon">${this.icons.bus}</span>`;
-                html += `<span class="text-badge">ZOO</span>`;
-            }
-            else if (t === 'bus-airport') {
-                html += `<span class="icon">${this.icons.bus}</span>`;
-                html += `<span class="icon">${this.icons.plane}</span>`;
+            if (t === 'A' || t === 'B' || t === 'C' || t === 'D') {
+                html += `<span class="icon metro-icon">${this.icons['metro' + t]}</span>`;
             }
         });
         
         html += '</span>';
+        
+        if (html === '<span class="transfer-inline"></span>') return '';
+        
         return html;
+    }
+
+    // Generování ikon pod linkou (vlak, autobus, letiště, ZOO)
+    generateBelowLineIcons(station) {
+        if (!station.transfer || station.transfer.length === 0) return null;
+        
+        let icons = [];
+        
+        station.transfer.forEach(t => {
+            switch(t) {
+                case 'train':
+                    icons.push(`<span class="below-icon">${this.icons.train}</span>`);
+                    break;
+                case 'bus':
+                    icons.push(`<span class="below-icon">${this.icons.bus}</span>`);
+                    break;
+                case 'bus-airport':
+                    icons.push(`<span class="below-icon airport">${this.icons.busAirport}</span>`);
+                    break;
+                case 'bus-zoo':
+                    icons.push(`<span class="below-icon zoo"><span class="text-badge">ZOO</span></span>`);
+                    break;
+            }
+        });
+        
+        if (icons.length === 0) return null;
+        
+        return `<div class="below-line-icons">${icons.join('')}</div>`;
     }
 
     updateDisplay() {
@@ -645,7 +793,39 @@ class MetroMapProduction {
         this.updatePassedLine();
         this.updateNextStationInfo();
         this.updateDirectionDisplay();
-        this.updateDelayBadge();
+        this.broadcastStationUpdate();
+    }
+    
+    // Posílání aktuální stanice rodičovskému oknu (pro combined-production)
+    broadcastStationUpdate() {
+        // Pokud je aktivován broadcast mode (např. z combined-production)
+        if (!this.params.has('broadcast') && window.parent === window) {
+            return; // Není v iframe nebo není požadován broadcast
+        }
+        
+        const currentStation = this.stations[this.currentStationIndex];
+        const nextIndex = this.getNextStationIndex();
+        const nextStation = (nextIndex >= 0 && nextIndex < this.stations.length) 
+            ? this.stations[nextIndex] 
+            : null;
+        
+        const message = {
+            type: 'metro-station-update',
+            currentStation: currentStation ? currentStation.name : null,
+            currentStationId: currentStation ? currentStation.id : null,
+            nextStation: nextStation ? nextStation.name : null,
+            nextStationId: nextStation ? nextStation.id : null,
+            direction: this.direction,
+            line: this.currentLine,
+            isMoving: this.isMoving,
+            isAtStation: this.isAtStation,
+            arrivalCountdown: this.arrivalCountdown
+        };
+        
+        // Pošli zprávu rodičovskému oknu
+        if (window.parent && window.parent !== window) {
+            window.parent.postMessage(message, '*');
+        }
     }
 
     updateStationStyles() {
@@ -697,10 +877,22 @@ class MetroMapProduction {
         const terminalIndex = this.getTerminalIndex();
         const lineWidth = routeLine.offsetWidth;
         
+        // Použij smooth progress pro plynulou animaci
         let progressOffset = 0;
-        if (this.isMoving && this.totalTravelTime > 0 && this.arrivalCountdown > 0) {
-            const progress = 1 - (this.arrivalCountdown / this.totalTravelTime);
-            progressOffset = (progress / totalStations) * lineWidth;
+        if (this.isMoving && this.totalTravelTime > 0) {
+            // Interpoluj smooth progress směrem k cílovému
+            const rawProgress = 1 - (this.arrivalCountdown / this.totalTravelTime);
+            this.targetProgress = Math.max(0, Math.min(1, rawProgress));
+            
+            // Smooth interpolace (lerp)
+            const lerpFactor = 0.15;
+            this.smoothProgress += (this.targetProgress - this.smoothProgress) * lerpFactor;
+            
+            progressOffset = (this.smoothProgress / totalStations) * lineWidth;
+        } else {
+            // Reset smooth progress když vlak stojí
+            this.smoothProgress = 0;
+            this.targetProgress = 0;
         }
         
         if (this.direction === 'last') {

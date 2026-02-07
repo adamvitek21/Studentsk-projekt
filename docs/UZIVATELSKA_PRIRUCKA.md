@@ -6,6 +6,18 @@ Aplikace Metro Praha Displej je informační systém zobrazující aktuální po
 
 ---
 
+## Dostupné verze aplikace
+
+| Verze | URL | Popis |
+|-------|-----|-------|
+| **Vývojová metro** | `metro-map.html` | S ovládacím panelem |
+| **Produkční metro** | `metro-production.html` | Fixní 4096×607px, bez ovládání |
+| **Vývojová odjezdy** | `departures.html` | Tabulka odjezdů s ovládáním |
+| **Produkční odjezdy** | `departures-production.html` | Fixní rozlišení |
+| **Kombinovaný** | `combined-production.html` | Metro mapa + odjezdy střídavě |
+
+---
+
 ## Rychlý start
 
 ### Spuštění aplikace
@@ -15,6 +27,14 @@ Aplikace Metro Praha Displej je informační systém zobrazující aktuální po
    - **Linka C (výchozí):** `http://localhost:5002/metro-map.html`
    - **Linka A:** `http://localhost:5002/metro-map.html?line=A`
    - **Linka B:** `http://localhost:5002/metro-map.html?line=B`
+
+### Produkční verze (doporučeno pro displeje)
+
+```
+http://localhost:5002/metro-production.html?line=C
+http://localhost:5002/combined-production.html?line=C
+http://localhost:5002/departures-production.html?stop=Florenc
+```
 
 ### První kroky
 
@@ -263,5 +283,101 @@ Pro hlášení chyb nebo návrhy na vylepšení navštivte:
 
 ---
 
-*Uživatelská příručka verze 1.0*
-*Aktualizováno: 6. ledna 2026*
+## Kombinovaný displej (NOVÉ)
+
+Kombinovaný displej automaticky střídá metro mapu a tabulku odjezdů.
+
+### Spuštění
+
+```
+http://localhost:5002/combined-production.html?line=C
+http://localhost:5002/combined-production.html?line=C&debug=true
+```
+
+### Konfigurace časování
+
+| Parametr | Výchozí | Popis |
+|----------|---------|-------|
+| `metroTime` | 15 | Čas zobrazení metro mapy (sekundy) |
+| `departuresTime` | 5 | Čas zobrazení odjezdů (sekundy) |
+
+**Příklad:**
+```
+?line=C&metroTime=20&departuresTime=10
+```
+
+### Automatická synchronizace
+
+Kombinovaný displej automaticky:
+1. Sleduje aktuální stanici z metro mapy
+2. Při přepnutí na odjezdy zobrazí odjezdy ze stanice, kam vlak právě přijíždí
+3. Dynamicky aktualizuje odjezdy podle pohybu vlaku
+
+### Debug režim
+
+Přidejte `&debug=true` pro zobrazení:
+- Aktuální zobrazení (metro/departures)
+- Zbývající čas do přepnutí
+- Aktuální sledovaná stanice
+
+---
+
+## Tabulka odjezdů (NOVÉ)
+
+Zobrazuje real-time odjezdy ze zastávek PID (metro, tramvaje, autobusy, vlaky).
+
+### Spuštění
+
+```
+http://localhost:5002/departures-production.html?stop=Florenc
+http://localhost:5002/departures-production.html?stop=Muzeum&limit=8
+```
+
+### Parametry
+
+| Parametr | Výchozí | Popis |
+|----------|---------|-------|
+| `stop` | Florenc | Název zastávky |
+| `limit` | 10 | Počet zobrazených odjezdů |
+| `refresh` | 30 | Interval obnovení (sekundy) |
+
+### Zobrazované informace
+
+- Typ dopravy (ikona: metro, tramvaj, autobus, vlak)
+- Číslo linky
+- Cílová stanice
+- Čas odjezdu
+- Odpočet do odjezdu
+
+---
+
+## Produkční nasazení
+
+### Doporučené nastavení pro průmyslové displeje
+
+1. Použijte **fixní rozlišení 4096×607px**
+2. Použijte produkční verze (`*-production.html`)
+3. Nastavte prohlížeč do fullscreen režimu (F11)
+4. Zakažte screensaver a usínání displeje
+
+### Příklady konfigurace
+
+**Jen metro mapa:**
+```
+metro-production.html?line=C&lang=cs
+```
+
+**Kombinovaný displej (doporučeno):**
+```
+combined-production.html?line=C&metroTime=15&departuresTime=5
+```
+
+**Jen odjezdy:**
+```
+departures-production.html?stop=Florenc&limit=10&refresh=30
+```
+
+---
+
+*Uživatelská příručka verze 2.0*
+*Aktualizováno: 7. února 2026*

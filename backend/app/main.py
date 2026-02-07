@@ -8,12 +8,19 @@ import logging
 import base64
 
 import httpx
+from dotenv import load_dotenv
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from google.transit import gtfs_realtime_pb2
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
+
+# Load .env file
+env_path = ROOT / ".env"
+if env_path.exists():
+    load_dotenv(env_path)
+    logging.info(f"Loaded .env from {env_path}")
 
 app = FastAPI()
 logging.basicConfig(level=logging.DEBUG, format="%(asctime)s %(levelname)s %(message)s")
@@ -592,3 +599,139 @@ async def api_raw(raw: bool = False):
     if raw:
         resp["last_raw_base64"] = base64.b64encode(LAST_RAW_BYTES or b"").decode("ascii")
     return resp
+
+
+# ====== DEPARTURES API (Golemio Proxy) ======
+
+@app.get("/api/departures")
+async def get_departures(ids: str = "", names: str = "", limit: int = 20):
+    """
+    Proxy endpoint for Golemio PID Departure Boards API.
+    
+    Args:
+        ids: Comma-separated ASW node IDs (e.g., "689" for Florenc)
+        names: Comma-separated stop names (e.g., "Florenc,Muzeum")
+        limit: Maximum number of departures
+    
+    Returns:
+        List of departures with real-time data
+    """
+    if not GOLEMIO_API_KEY:
+        return {"ok": False, "error": "GOLEMIO_API_KEY not configured", "departures": []}
+    
+    if not ids and not names:
+        return {"ok": False, "error": "No stop IDs or names provided", "departures": []}
+    
+    try:
+        headers = {"X-Access-Token": GOLEMIO_API_KEY}
+        
+        async with httpx.AsyncClient(timeout=15.0) as client:
+            # Build params based on what we have
+            params = {
+                "limit": limit,
+                "minutesBefore": 0,
+                "minutesAfter": 120,
+                "includeMetroTrains": "true",
+            }
+            
+            # Prefer names parameter as it's more reliable
+            if names:
+                params["names"] = names
+            elif ids:
+                # Convert IDs to names or use aswIds format
+                params["aswIds"] = ids
+            
+            logging.info(f"Fetching departures with params: {params}")
+            
+            response = await client.get(
+                "https://api.golemio.cz/v2/pid/departureboards",
+                params=params,
+                headers=headers
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                departures = data.get("departures", [])
+                stops = data.get("stops", [])
+                
+                logging.info(f"Got {len(departures)} departures from {len(stops)} stops")
+                
+                return {
+                    "ok": True,
+                    "names": names,
+                    "ids": ids,
+                    "stops": stops,
+                    "departures": departures,
+                    "count": len(departures),
+                    "timestamp": datetime.datetime.utcnow().isoformat()
+                }
+            else:
+                logging.error(f"Golemio API error: {response.status_code} - {response.text}")
+                return {
+                    "ok": False,
+                    "error": f"Golemio API returned {response.status_code}: {response.text[:200]}",
+                    "departures": []
+                }
+    
+    except httpx.TimeoutException:
+        logging.error("Golemio API timeout")
+        return {"ok": False, "error": "API timeout", "departures": []}
+    except Exception as e:
+        logging.exception("Error fetching departures")
+        return {"ok": False, "error": str(e), "departures": []}
+
+
+@app.get("/api/stops/search")
+async def search_stops(query: str = "", limit: int = 10):
+    """
+    Search for PID stops by name.
+    
+    Args:
+        query: Search query (stop name)
+        limit: Maximum results
+    
+    Returns:
+        List of matching stops with IDs
+    """
+    if not GOLEMIO_API_KEY:
+        return {"ok": False, "error": "GOLEMIO_API_KEY not configured", "stops": []}
+    
+    if not query or len(query) < 2:
+        return {"ok": False, "error": "Query too short", "stops": []}
+    
+    try:
+        headers = {"X-Access-Token": GOLEMIO_API_KEY}
+        
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            response = await client.get(
+                "https://api.golemio.cz/v2/pid/stops",
+                params={"name": query, "limit": limit},
+                headers=headers
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                stops = data.get("stops", [])
+                
+                # Simplify stop data
+                simplified = [{
+                    "id": s.get("stop_id"),
+                    "name": s.get("stop_name"),
+                    "zone": s.get("zone_id"),
+                    "lat": s.get("stop_lat"),
+                    "lon": s.get("stop_lon"),
+                    "wheelchair": s.get("wheelchair_boarding")
+                } for s in stops]
+                
+                return {
+                    "ok": True,
+                    "query": query,
+                    "stops": simplified,
+                    "count": len(simplified)
+                }
+            else:
+                return {"ok": False, "error": f"API returned {response.status_code}", "stops": []}
+    
+    except Exception as e:
+        logging.exception("Error searching stops")
+        return {"ok": False, "error": str(e), "stops": []}

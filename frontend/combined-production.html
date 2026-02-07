@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=4096, height=607, initial-scale=1.0, user-scalable=no">
+    <title>Metro Praha - Kombinovaný produkční displej</title>
+    <style>
+        /* Produkční režim: bez ovládacích prvků */
+        * { cursor: none !important; }
+        
+        /* Fixní velikost pro produkční displej */
+        html, body {
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            width: 4096px;
+            height: 607px;
+            background: #000;
+        }
+        
+        .view-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4096px;
+            height: 607px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease-in-out;
+        }
+        
+        .view-container.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .view-container iframe {
+            width: 4096px;
+            height: 607px;
+            border: none;
+        }
+        
+        /* Debug info (skryté v produkci) */
+        .debug-info {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.7);
+            color: #0f0;
+            padding: 5px 10px;
+            font-family: monospace;
+            font-size: 12px;
+            border-radius: 4px;
+            z-index: 9999;
+            display: none;
+        }
+        
+        body.debug .debug-info {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Metro Map View -->
+    <div id="metro-view" class="view-container active">
+        <iframe id="metro-iframe" src="about:blank"></iframe>
+    </div>
+    
+    <!-- Departures View -->
+    <div id="departures-view" class="view-container">
+        <iframe id="departures-iframe" src="about:blank"></iframe>
+    </div>
+    
+    <!-- Debug Info -->
+    <div class="debug-info">
+        <span id="debug-view">View: metro</span> | 
+        <span id="debug-timer">Timer: 30s</span>
+    </div>
+
+    <script>
+    /**
+     * Metro Praha - Kombinovaný produkční displej
+     * 
+     * Střídá metro mapu a tabulku odjezdů - odjezdy automaticky ukazují
+     * zastávku, na kterou právě přijíždí vlak podle metro mapy.
+     * 
+     * URL parametry:
+     *   ?line=A|B|C              - Linka metra (výchozí: C)
+     *   ?backend=url             - URL backendu (výchozí: localhost:8000)
+     *   ?metroTime=30            - Čas zobrazení metro mapy v sekundách
+     *   ?departuresTime=30       - Čas zobrazení odjezdů v sekundách
+     *   ?terminal=station-id     - Vlastní konečná stanice
+     *   ?direction=first|last    - Počáteční směr
+     *   ?limit=10                - Počet odjezdů
+     *   ?debug=true              - Zobrazit debug info
+     */
+    
+    class CombinedProductionDisplay {
+        constructor() {
+            this.params = new URLSearchParams(window.location.search);
+            
+            // Konfigurace
+            this.line = this.params.get('line') || 'C';
+            this.backend = this.params.get('backend') || 'localhost:8000';
+            this.metroTime = parseInt(this.params.get('metroTime')) || 15;
+            this.departuresTime = parseInt(this.params.get('departuresTime')) || 5;
+            this.terminal = this.params.get('terminal') || '';
+            this.direction = this.params.get('direction') || 'last';
+            this.limit = parseInt(this.params.get('limit')) || 10;
+            this.debug = this.params.get('debug') === 'true';
+            
+            // Aktuální stanice z metro mapy
+            this.currentStation = null;      // Stanice kde vlak stojí
+            this.nextStation = null;         // Příští stanice (kam přijíždí)
+            this.lastLoadedStop = null;      // Poslední načtená zastávka pro departures
+            
+            // Stav
+            this.currentView = 'metro'; // 'metro' nebo 'departures'
+            this.timeRemaining = this.metroTime;
+            this.timerInterval = null;
+            
+            // Elementy
+            this.metroView = document.getElementById('metro-view');
+            this.departuresView = document.getElementById('departures-view');
+            this.metroIframe = document.getElementById('metro-iframe');
+            this.departuresIframe = document.getElementById('departures-iframe');
+            
+            this.init();
+        }
+        
+        init() {
+            // Debug mode
+            if (this.debug) {
+                document.body.classList.add('debug');
+            }
+            
+            // Naslouchej zprávám z metro iframe
+            window.addEventListener('message', (event) => this.handleMessage(event));
+            
+            // Sestavení URL pro metro iframe
+            this.buildMetroUrl();
+            
+            // Načtení metro iframe
+            this.metroIframe.src = this.metroUrl;
+            
+            // Start přepínání
+            this.startSwitching();
+            
+            console.log(`Combined display started: ${this.metroTime}s metro, ${this.departuresTime}s departures`);
+        }
+        
+        handleMessage(event) {
+            // Přijmi zprávy z metro iframe
+            const data = event.data;
+            
+            if (data && data.type === 'metro-station-update') {
+                this.currentStation = data.currentStation;
+                this.nextStation = data.nextStation;
+                
+                if (this.debug) {
+                    console.log('Station update:', data);
+                }
+            }
+        }
+        
+        buildMetroUrl() {
+            const metroParams = new URLSearchParams();
+            metroParams.set('line', this.line);
+            metroParams.set('backend', this.backend);
+            if (this.terminal) metroParams.set('terminal', this.terminal);
+            metroParams.set('direction', this.direction);
+            metroParams.set('broadcast', 'true'); // Aktivuj posílání zpráv
+            this.metroUrl = `metro-production.html?${metroParams.toString()}`;
+            console.log('Metro URL:', this.metroUrl);
+        }
+        
+        buildDeparturesUrl(stopName) {
+            const deptParams = new URLSearchParams();
+            deptParams.set('stop', stopName);
+            deptParams.set('backend', this.backend);
+            deptParams.set('limit', this.limit);
+            deptParams.set('refresh', 300); // Dlouhý refresh - sami budeme měnit iframe
+            return `departures-production.html?${deptParams.toString()}`;
+        }
+        
+        loadDeparturesForStop(stopName) {
+            if (!stopName) return;
+            
+            // Nenačítej znovu stejnou zastávku
+            if (stopName === this.lastLoadedStop) {
+                console.log(`Departures already loaded for: ${stopName}`);
+                return;
+            }
+            
+            const url = this.buildDeparturesUrl(stopName);
+            console.log(`Loading departures for: ${stopName}`, url);
+            this.departuresIframe.src = url;
+            this.lastLoadedStop = stopName;
+        }
+        
+        getCurrentStopForDepartures() {
+            // Použij příští stanici (kam přijíždíme) nebo aktuální stanici
+            return this.nextStation || this.currentStation || 'Florenc';
+        }
+        
+        startSwitching() {
+            // Zobraz metro view jako první
+            this.showView('metro');
+            
+            // Spusť timer
+            this.timerInterval = setInterval(() => this.tick(), 1000);
+        }
+        
+        tick() {
+            this.timeRemaining--;
+            
+            // Update debug
+            if (this.debug) {
+                const stopName = this.getCurrentStopForDepartures();
+                document.getElementById('debug-view').textContent = `View: ${this.currentView}`;
+                document.getElementById('debug-timer').textContent = `Timer: ${this.timeRemaining}s | Stop: ${stopName}`;
+            }
+            
+            // Přepnutí view
+            if (this.timeRemaining <= 0) {
+                this.switchView();
+            }
+        }
+        
+        switchView() {
+            if (this.currentView === 'metro') {
+                // Přepni na departures - použij aktuální/příští stanici z metro mapy
+                const stopName = this.getCurrentStopForDepartures();
+                this.loadDeparturesForStop(stopName);
+                this.showView('departures');
+                this.timeRemaining = this.departuresTime;
+            } else {
+                // Zpět na metro
+                this.showView('metro');
+                this.timeRemaining = this.metroTime;
+            }
+        }
+        
+        showView(view) {
+            this.currentView = view;
+            
+            if (view === 'metro') {
+                this.metroView.classList.add('active');
+                this.departuresView.classList.remove('active');
+            } else {
+                this.departuresView.classList.add('active');
+                this.metroView.classList.remove('active');
+            }
+            
+            const stopInfo = view === 'departures' ? ` (${this.getCurrentStopForDepartures()})` : '';
+            console.log(`Switched to: ${view}${stopInfo}`);
+        }
+    }
+    
+    // Inicializace
+    document.addEventListener('DOMContentLoaded', () => {
+        window.combinedDisplay = new CombinedProductionDisplay();
+    });
+    </script>
+</body>
+</html>

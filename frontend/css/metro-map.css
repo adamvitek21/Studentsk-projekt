@@ -806,3 +806,80 @@ body {
         opacity: 0.5;
     }
 }
+
+/* ==================== */
+/* IKONY POD LINKOU     */
+/* ==================== */
+
+.below-line-icons {
+    position: absolute;
+    top: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    background: rgba(38, 38, 37, 0.95);
+    padding: 4px 6px;
+    border-radius: 6px;
+    border: 1px solid #444;
+    z-index: 10;
+}
+
+.below-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+}
+
+.below-icon svg {
+    width: 16px;
+    height: 16px;
+    fill: #fff;
+}
+
+/* Kombinovaná ikona autobus + letadlo je širší */
+.below-icon.airport {
+    width: 32px;
+}
+
+.below-icon.airport svg {
+    width: 28px;
+    height: 18px;
+}
+
+.below-icon.zoo .text-badge {
+    font-size: 8px;
+    font-weight: bold;
+    padding: 2px 4px;
+    border-radius: 3px;
+    background: #00A651;
+    color: #fff;
+    white-space: nowrap;
+}
+
+/* Projetá stanice - ikony pod linkou zašedlé */
+.station.passed .below-line-icons {
+    opacity: 0.4;
+    border-color: #333;
+}
+
+.station.passed .below-icon svg {
+    fill: #666;
+}
+
+/* Disabled stanice - ikony pod linkou zašedlé */
+.station.disabled .below-line-icons {
+    opacity: 0.3;
+    border-color: #222;
+}
+
+/* Aktuální stanice - ikony pod linkou zvýrazněné */
+.station.current .below-line-icons {
+    border-color: #00ff88;
+    box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+}

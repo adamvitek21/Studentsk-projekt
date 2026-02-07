@@ -12,6 +12,20 @@ Informační displej pro pražské metro zobrazující real-time pozice vlaků n
 - **Vícejazyčná podpora** - Čeština / English
 - **Obratové stanice** - Podpora zkrácených spojů
 - **Přestupní indikátory** - Metro, vlaky, autobusy
+- **Tabulka odjezdů** - Real-time odjezdy ze zastávek
+- **Kombinovaný displej** - Střídání metro mapy a odjezdů
+- **Smooth animace** - Plynulý pohyb pomocí requestAnimationFrame
+- **Fixní rozlišení 4096×607px** - Bez deformace pro průmyslové displeje
+
+## 🖥️ Verze aplikace
+
+| Soubor | Popis |
+|--------|-------|
+| `metro-map.html` | Vývojová verze s ovládacím panelem |
+| `metro-production.html` | Produkční metro mapa (fixní 4096×607px) |
+| `departures.html` | Vývojová verze tabulky odjezdů |
+| `departures-production.html` | Produkční tabulka odjezdů |
+| `combined-production.html` | **Kombinovaný displej** - střídá metro mapu (15s) a odjezdy (5s) |
 
 ## 🚀 Rychlý start
 
@@ -63,6 +77,19 @@ http://localhost:5002/metro-production.html?line=A&lang=en
 http://localhost:5002/metro-production.html?line=B&terminal=florenc-b
 ```
 
+**Kombinovaný produkční displej** (střídání metro + odjezdy):
+```
+http://localhost:5002/combined-production.html?line=C
+http://localhost:5002/combined-production.html?line=C&metroTime=15&departuresTime=5
+http://localhost:5002/combined-production.html?line=C&debug=true
+```
+
+**Tabulka odjezdů**:
+```
+http://localhost:5002/departures-production.html?stop=Florenc
+http://localhost:5002/departures-production.html?stop=Muzeum&limit=8
+```
+
 ## 📡 Reálná data z PID
 
 Pro zobrazení reálných dat z Pražské integrované dopravy:
@@ -102,13 +129,19 @@ GTFS_RT_URL=https://api.golemio.cz/v2/vehiclepositions/gtfsrt/
 │   └── .env.example
 ├── frontend/
 │   ├── metro-map.html           # Vývojová verze (s ovládacím panelem)
-│   ├── metro-production.html    # Produkční verze (pro displeje v metrech)
+│   ├── metro-production.html    # Produkční verze (fixní 4096×607px)
+│   ├── departures.html          # Tabulka odjezdů - vývojová
+│   ├── departures-production.html # Tabulka odjezdů - produkční
+│   ├── combined-production.html # Kombinovaný displej (metro + odjezdy)
 │   ├── css/
 │   │   ├── metro-map.css        # Vývojové styly
-│   │   └── metro-production.css # Produkční styly
+│   │   ├── metro-production.css # Produkční styly
+│   │   └── departures.css       # Styly odjezdů
 │   └── js/
 │       ├── metro-map.js         # Vývojová logika
-│       └── metro-production.js  # Produkční logika
+│       ├── metro-production.js  # Produkční logika (smooth animace)
+│       ├── departures.js        # Logika odjezdů
+│       └── departures-production.js # Produkční odjezdy
 ├── docs/
 │   ├── DOKUMENTACE.md       # Projektová dokumentace
 │   ├── TECHNICKA_DOKUMENTACE.md
@@ -122,8 +155,37 @@ GTFS_RT_URL=https://api.golemio.cz/v2/vehiclepositions/gtfsrt/
 |----------|--------|-------|
 | `/api/status` | GET | Stav serveru |
 | `/api/metro/lines` | GET | Seznam všech linek |
-| `/api/metro/line/{id}` | GET | Data konkrétní linky |
+| `/api/metro/line/{id}` | GET | Data konkrétní linky + pozice vlaků |
+| `/api/departures` | GET | Odjezdy ze zastávky |
 | `/ws/metro/{id}` | WS | Real-time WebSocket |
+
+## ⚙️ URL Parametry
+
+### metro-production.html
+| Parametr | Hodnoty | Popis |
+|----------|---------|-------|
+| `line` | A, B, C | Linka metra |
+| `backend` | URL | URL backendu |
+| `terminal` | station-id | Vlastní konečná |
+| `lang` | cs, en | Jazyk |
+| `direction` | first, last | Počáteční směr |
+| `simulation` | true | Simulační režim |
+
+### combined-production.html
+| Parametr | Výchozí | Popis |
+|----------|---------|-------|
+| `line` | C | Linka metra |
+| `metroTime` | 15 | Čas zobrazení metro mapy (s) |
+| `departuresTime` | 5 | Čas zobrazení odjezdů (s) |
+| `limit` | 10 | Počet odjezdů |
+| `debug` | false | Zobrazit debug info |
+
+### departures-production.html
+| Parametr | Výchozí | Popis |
+|----------|---------|-------|
+| `stop` | Florenc | Název zastávky |
+| `limit` | 10 | Počet odjezdů |
+| `refresh` | 30 | Interval obnovení (s) |
 
 ## 🎮 Ovládání simulace
 
@@ -155,11 +217,14 @@ GTFS_RT_URL=https://api.golemio.cz/v2/vehiclepositions/gtfsrt/
 
 ## 📋 TODO
 
-- [ ] Přidat linky A, B, D
 - [ ] Hlasová oznámení
-- [ ] Responzivní design
+- [ ] Responzivní design pro menší displeje
 - [ ] PWA podpora
 - [ ] Konfigurační soubor stanic
+- [x] Kombinovaný displej (metro + odjezdy)
+- [x] Smooth animace (requestAnimationFrame)
+- [x] REST API polling pro real-time data
+- [x] Fixní rozlišení pro průmyslové displeje
 
 ## 📄 Licence
 

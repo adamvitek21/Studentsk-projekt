@@ -10,13 +10,24 @@
         /* Skrytí kurzoru pro produkční displeje */
         * { cursor: none !important; }
         
-        /* Zajištění fullscreen bez scrollbarů */
+        /* Fixní velikost pro produkční displej */
         html, body {
             overflow: hidden;
             margin: 0;
             padding: 0;
-            width: 100%;
-            height: 100%;
+            width: 4096px;
+            height: 607px;
+            background: #1a1a1a;
+        }
+        
+        /* Kontejner má fixní rozměry */
+        .display-container {
+            width: 4096px !important;
+            height: 607px !important;
+            min-width: 4096px !important;
+            min-height: 607px !important;
+            max-width: 4096px !important;
+            max-height: 607px !important;
         }
     </style>
 </head>
@@ -33,10 +44,6 @@
             </div>
             <div class="time-container">
                 <div class="time">14:32:00</div>
-                <div class="delay-badge" id="delay-badge" style="display: none;">
-                    <span class="delay-icon">⚠</span>
-                    <span class="delay-text">+0 min</span>
-                </div>
             </div>
         </div>
 

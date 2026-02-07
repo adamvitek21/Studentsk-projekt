@@ -193,7 +193,8 @@ class MetroMap {
             train: `<svg viewBox="0 0 24 24"><path d="M12 2C8 2 4 2.5 4 6v9.5C4 17.43 5.57 19 7.5 19L6 20.5v.5h2l1.5-2h5l1.5 2h2v-.5L16.5 19c1.93 0 3.5-1.57 3.5-3.5V6c0-3.5-4-4-8-4zM7.5 17c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm3.5-6H6V6h5v5zm2 0V6h5v5h-5zm3.5 6c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>`,
             bus: `<svg viewBox="0 0 24 24"><path d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H6V6h12v5z"/></svg>`,
             info: `<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>`,
-            plane: `<svg viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>`,
+            // Kombinovaná ikona: autobus + letadlo (Airport Express)
+            busAirport: `<svg viewBox="0 0 32 24"><path d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H6V6h12v5z" fill="#fff"/><path d="M28 10v-1.5l-5-3V2.5c0-.55-.45-1-1-1s-1 .45-1 1v3l-5 3V10l5-1.5v4l-1.5 1v1.5l2.5-.75 2.5.75v-1.5l-1.5-1v-4l5 1.5z" fill="#0066CC"/></svg>`,
             // Metro linky jako SVG kolečka
             metroA: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#00A651" stroke="#000" stroke-width="1"/><text x="12" y="16" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold" font-family="Arial">A</text></svg>`,
             metroB: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#FFD500" stroke="#000" stroke-width="1"/><text x="12" y="16" text-anchor="middle" fill="#000" font-size="14" font-weight="bold" font-family="Arial">B</text></svg>`,
@@ -867,61 +868,102 @@ class MetroMap {
         const stationsContainer = document.querySelector('.stations');
         if (!stationsContainer) return;
         
-        stationsContainer.innerHTML = this.stations.map((station, index) => {
-            let classes = ['station'];
+        stationsContainer.innerHTML = '';
+        
+        this.stations.forEach((station, index) => {
+            const stationEl = document.createElement('div');
+            stationEl.className = 'station';
+            stationEl.dataset.stationIndex = index;
             
-            if (index < this.currentStationIndex) {
-                classes.push('passed');
-            } else if (index === this.currentStationIndex) {
-                classes.push('current');
-            }
-            
+            // Přidání transfer tříd pro barvu kolečka
             if (station.transfer && station.transfer.length > 0) {
-                classes.push('transfer');
-                station.transfer.forEach(t => {
-                    if (t === 'A') classes.push('transfer-a');
-                    if (t === 'B') classes.push('transfer-b');
-                    if (t === 'C') classes.push('transfer-c');
-                    if (t === 'D') classes.push('transfer-d');
-                });
+                stationEl.classList.add('transfer');
+                // Přidání specifické třídy pro barvu podle přestupu na jinou linku metra
+                if (station.transfer.includes('A')) stationEl.classList.add('transfer-a');
+                if (station.transfer.includes('B')) stationEl.classList.add('transfer-b');
+                if (station.transfer.includes('C')) stationEl.classList.add('transfer-c');
+                if (station.transfer.includes('D')) stationEl.classList.add('transfer-d');
             }
             
-            const inlineIcons = this.generateInlineIcons(station);
+            // Kolečko stanice
+            const dot = document.createElement('div');
+            dot.className = 'station-dot';
             
-            return `
-                <div class="${classes.join(' ')}" data-station-index="${index}">
-                    <div class="station-dot"></div>
-                    <div class="station-name">${station.name}${inlineIcons}</div>
-                </div>
-            `;
-        }).join('');
+            // Název stanice s inline ikonami metra
+            const name = document.createElement('div');
+            name.className = 'station-name';
+            name.innerHTML = station.name + this.generateMetroIcons(station);
+            
+            // Ikony pod linkou (vlak, autobus, letiště, ZOO)
+            const belowIcons = this.generateBelowLineIcons(station);
+            
+            stationEl.appendChild(dot);
+            stationEl.appendChild(name);
+            if (belowIcons) {
+                stationEl.insertAdjacentHTML('beforeend', belowIcons);
+            }
+            
+            // Click handler pro nastavení aktuální stanice
+            stationEl.addEventListener('click', () => {
+                this.setCurrentStation(index);
+            });
+            
+            stationsContainer.appendChild(stationEl);
+        });
     }
 
-    generateInlineIcons(station) {
+    // Generování ikon metra (A, B, C, D) - zůstávají vedle názvu
+    generateMetroIcons(station) {
         if (!station.transfer || station.transfer.length === 0) return '';
         
         let html = '<span class="transfer-inline">';
         
         station.transfer.forEach(t => {
-            if (t === 'A') html += `<span class="icon metro-icon">${this.icons.metroA}</span>`;
-            else if (t === 'B') html += `<span class="icon metro-icon">${this.icons.metroB}</span>`;
-            else if (t === 'C') html += `<span class="icon metro-icon">${this.icons.metroC}</span>`;
-            else if (t === 'D') html += `<span class="badge line-d">D</span>`;
-            else if (t === 'train') html += `<span class="icon">${this.icons.train}</span>`;
-            else if (t === 'bus') html += `<span class="icon">${this.icons.bus}</span>`;
-            else if (t === 'info') html += `<span class="icon">${this.icons.info}</span>`;
-            else if (t === 'bus-zoo') {
-                html += `<span class="icon">${this.icons.bus}</span>`;
-                html += `<span class="text-badge">ZOO</span>`;
-            }
-            else if (t === 'bus-airport') {
-                html += `<span class="icon">${this.icons.bus}</span>`;
-                html += `<span class="icon">${this.icons.plane}</span>`;
+            if (t === 'A' || t === 'B' || t === 'C' || t === 'D') {
+                html += `<span class="icon metro-icon">${this.icons['metro' + t]}</span>`;
             }
         });
         
         html += '</span>';
+        
+        // Pokud nejsou žádné metro ikony, vrátíme prázdný string
+        if (html === '<span class="transfer-inline"></span>') return '';
+        
         return html;
+    }
+
+    // Generování ikon pod linkou (vlak, autobus, letiště, ZOO)
+    generateBelowLineIcons(station) {
+        if (!station.transfer || station.transfer.length === 0) return null;
+        
+        let icons = [];
+        
+        station.transfer.forEach(t => {
+            switch(t) {
+                case 'train':
+                    icons.push(`<span class="below-icon">${this.icons.train}</span>`);
+                    break;
+                case 'bus':
+                    icons.push(`<span class="below-icon">${this.icons.bus}</span>`);
+                    break;
+                case 'bus-airport':
+                    icons.push(`<span class="below-icon airport">${this.icons.busAirport}</span>`);
+                    break;
+                case 'bus-zoo':
+                    icons.push(`<span class="below-icon zoo"><span class="text-badge">ZOO</span></span>`);
+                    break;
+            }
+        });
+        
+        if (icons.length === 0) return null;
+        
+        return `<div class="below-line-icons">${icons.join('')}</div>`;
+    }
+
+    generateInlineIcons(station) {
+        // Tato metoda je nyní nahrazena generateMetroIcons() a generateBelowLineIcons()
+        // Ponecháno pro zpětnou kompatibilitu, ale volá nové metody
+        return this.generateMetroIcons(station);
     }
 
     updateDisplay() {

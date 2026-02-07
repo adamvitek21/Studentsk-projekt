@@ -29,6 +29,11 @@ Informační displej pro pražské metro zobrazující real-time pozice vlaků, 
 - **Vícejazyčná podpora** - Čeština a angličtina
 - **Vlastní konečné stanice** - Podpora obratových stanic pro zkrácené spoje
 - **Přestupní indikátory** - Vizuální značení přestupů na jiné linky a dopravní prostředky
+- **Tabulka odjezdů** - Real-time odjezdy ze zastávek PID
+- **Kombinovaný displej** - Automatické střídání metro mapy a odjezdů
+- **Smooth animace** - Plynulý pohyb vlaku pomocí requestAnimationFrame a lerp interpolace
+- **REST API polling** - Periodické dotazování API pro aktuální data
+- **Fixní rozlišení** - Produkční verze s fixním rozlišením 4096×607px bez deformace
 
 ### Cílové použití
 - Informační panely v soupravě metra
@@ -41,7 +46,10 @@ Informační displej pro pražské metro zobrazující real-time pozice vlaků, 
 | Verze | Soubor | Popis |
 |-------|--------|-------|
 | **Vývojová** | `metro-map.html` | S ovládacím panelem pro testování a vývoj |
-| **Produkční** | `metro-production.html` | Pro reálné nasazení v soupravách metra |
+| **Produkční Metro** | `metro-production.html` | Pro reálné nasazení v soupravách metra (fixní 4096×607px) |
+| **Vývojová Odjezdy** | `departures.html` | Tabulka odjezdů s ovládacím panelem |
+| **Produkční Odjezdy** | `departures-production.html` | Produkční tabulka odjezdů |
+| **Kombinovaný** | `combined-production.html` | Střídání metro mapy (15s) a odjezdů (5s) |
 
 ---
 
@@ -140,7 +148,7 @@ Studentsk-projekt/
 ├── backend/                    # Backend aplikace
 │   ├── app/
 │   │   ├── __init__.py
-│   │   └── main.py            # Hlavní FastAPI aplikace (594 řádků)
+│   │   └── main.py            # Hlavní FastAPI aplikace
 │   ├── data/
 │   │   └── stations.json      # Statická data stanic
 │   ├── scripts/
@@ -156,24 +164,35 @@ Studentsk-projekt/
 │
 ├── frontend/                   # Frontend aplikace
 │   ├── css/
-│   │   ├── metro-map.css      # Hlavní styly (803 řádků)
+│   │   ├── metro-map.css      # Vývojové styly metro mapy
+│   │   ├── metro-production.css # Produkční styly (fixní 4096×607px)
+│   │   ├── departures.css     # Styly tabulky odjezdů
 │   │   └── backup.css         # Záložní styly
 │   ├── js/
-│   │   ├── metro-map.js       # Hlavní logika (1234 řádků)
+│   │   ├── metro-map.js       # Vývojová logika
+│   │   ├── metro-production.js # Produkční logika (smooth animace)
+│   │   ├── departures.js      # Logika odjezdů
+│   │   ├── departures-production.js # Produkční odjezdy
 │   │   └── backup.js          # Záložní verze
 │   ├── src/                   # Legacy frontend
 │   │   ├── index.html
 │   │   ├── css/styles.css
 │   │   └── js/app.js
-│   ├── metro-map.html         # Hlavní HTML soubor
+│   ├── metro-map.html         # Vývojová metro mapa
+│   ├── metro-production.html  # Produkční metro mapa (fixní rozlišení)
+│   ├── departures.html        # Vývojová tabulka odjezdů
+│   ├── departures-production.html # Produkční odjezdy
+│   ├── combined-production.html # Kombinovaný displej (metro + odjezdy)
 │   ├── package.json
 │   └── README.md
 │
 ├── config/
-│   └── lines.json             # Konfigurace linek (prázdné)
+│   └── lines.json             # Konfigurace linek
 │
 ├── docs/
 │   ├── DOKUMENTACE.md         # Tato dokumentace
+│   ├── TECHNICKA_DOKUMENTACE.md # Technická dokumentace
+│   ├── UZIVATELSKA_PRIRUCKA.md # Uživatelská příručka
 │   └── prikazy.txt            # Užitečné příkazy
 │
 ├── scripts/
@@ -398,7 +417,20 @@ http://localhost:5002/metro-production.html?line=B&lang=en
 http://localhost:5002/metro-production.html?line=C&terminal=kacerov
 ```
 
-#### Produkční URL parametry
+**Kombinovaný displej** (střídání metro mapy a odjezdů):
+```
+http://localhost:5002/combined-production.html?line=C
+http://localhost:5002/combined-production.html?line=C&metroTime=15&departuresTime=5
+http://localhost:5002/combined-production.html?line=C&debug=true
+```
+
+**Tabulka odjezdů**:
+```
+http://localhost:5002/departures-production.html?stop=Florenc
+http://localhost:5002/departures-production.html?stop=Muzeum&limit=8
+```
+
+#### Produkční URL parametry - Metro mapa
 
 | Parametr | Hodnoty | Popis |
 |----------|---------|-------|
@@ -408,6 +440,29 @@ http://localhost:5002/metro-production.html?line=C&terminal=kacerov
 | `lang` | cs, en | Jazyk displeje |
 | `direction` | first, last | Počáteční směr jízdy |
 | `simulation` | (přítomnost) | Vynucený simulační režim |
+| `broadcast` | (přítomnost) | Posílání postMessage pro kombinovaný displej |
+
+#### Produkční URL parametry - Kombinovaný displej
+
+| Parametr | Výchozí | Popis |
+|----------|---------|-------|
+| `line` | C | Linka metra |
+| `backend` | localhost:8000 | URL backendu |
+| `metroTime` | 15 | Čas zobrazení metro mapy (sekundy) |
+| `departuresTime` | 5 | Čas zobrazení odjezdů (sekundy) |
+| `terminal` | - | Vlastní konečná stanice |
+| `direction` | last | Počáteční směr jízdy |
+| `limit` | 10 | Počet odjezdů |
+| `debug` | false | Zobrazit debug informace |
+
+#### Produkční URL parametry - Tabulka odjezdů
+
+| Parametr | Výchozí | Popis |
+|----------|---------|-------|
+| `stop` | Florenc | Název zastávky |
+| `backend` | localhost:8000 | URL backendu |
+| `limit` | 10 | Počet zobrazených odjezdů |
+| `refresh` | 30 | Interval obnovení (sekundy) |
 
 ---
 

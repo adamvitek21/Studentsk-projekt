@@ -26,19 +26,75 @@ MetroMap (hlavní třída)
 │   ├── currentStationIndex  # Index aktuální stanice
 │   ├── direction           # Směr jízdy (first/last)
 │   ├── isMoving            # Vlak je v pohybu
+│   ├── isAtStation         # Vlak je ve stanici
 │   ├── customTerminal      # Vlastní konečná stanice
 │   └── delay               # Zpoždění v sekundách
 │
 ├── Backend komunikace
 │   ├── ws                   # WebSocket připojení
 │   ├── useBackend          # Použít API nebo simulaci
-│   └── connectionStatus    # Stav připojení
+│   ├── connectionStatus    # Stav připojení
+│   └── apiPollingActive    # REST API polling aktivní
+│
+├── Smooth animace (NOVÉ)
+│   ├── animationFrame       # requestAnimationFrame ID
+│   ├── lastFrameTime        # Čas posledního frame
+│   ├── smoothProgress       # Plynulý progress (0-1)
+│   └── targetProgress       # Cílový progress
 │
 └── Metody
     ├── Inicializace (init, renderStations)
     ├── Aktualizace (updateDisplay, updatePassedLine)
-    ├── Simulace (startSimulation, moveToNextStation)
+    ├── Simulace (startSimulation, moveToNextStation, animationLoop)
+    ├── API (pollApi, handleApiResponse)
     └── Backend (connectToBackend, handleBackendUpdate)
+```
+
+### MetroMapProduction - Produkční verze (NOVÉ)
+
+```
+MetroMapProduction (rozšíření pro produkci)
+├── Smooth animace
+│   ├── animationLoop()      # requestAnimationFrame loop (60 FPS)
+│   ├── lerp interpolace     # Plynulý přechod hodnot
+│   └── deltaTime            # Čas od posledního frame
+│
+├── REST API Polling
+│   ├── startApiPolling()    # Spuštění pollingu
+│   ├── pollApi()            # Dotaz na API každých 5s
+│   ├── handleApiResponse()  # Zpracování odpovědi
+│   └── trackedTrainDest     # Sledovaný vlak
+│
+├── Iframe komunikace (NOVÉ)
+│   └── broadcastStationUpdate() # postMessage pro combined display
+│
+└── Fixní rozlišení
+    └── 4096×607px           # Bez deformace
+```
+
+### CombinedProductionDisplay - Kombinovaný displej (NOVÉ)
+
+```
+CombinedProductionDisplay
+├── Konfigurace
+│   ├── metroTime: 15        # Čas zobrazení metro mapy (s)
+│   ├── departuresTime: 5    # Čas zobrazení odjezdů (s)
+│   └── debug               # Debug mode
+│
+├── Stav
+│   ├── currentView          # 'metro' nebo 'departures'
+│   ├── currentStation       # Stanice kde vlak stojí
+│   ├── nextStation          # Kam přijíždí
+│   └── lastLoadedStop       # Poslední načtená zastávka
+│
+├── Iframy
+│   ├── metroIframe          # Metro mapa
+│   └── departuresIframe     # Tabulka odjezdů
+│
+└── Metody
+    ├── handleMessage()      # Příjem postMessage
+    ├── switchView()         # Přepnutí zobrazení
+    └── loadDeparturesForStation() # Dynamické načtení odjezdů
 ```
 
 ### Backend architektura
@@ -51,7 +107,8 @@ FastAPI Application
 ├── REST Endpoints
 │   ├── /api/status         # Health check
 │   ├── /api/metro/lines    # Seznam linek
-│   └── /api/metro/line/{id}# Data konkrétní linky
+│   ├── /api/metro/line/{id}# Data konkrétní linky + vlaky
+│   └── /api/departures     # Odjezdy ze zastávky (NOVÉ)
 │
 ├── WebSocket Endpoints
 │   └── /ws/metro/{line_id} # Real-time aktualizace
@@ -189,6 +246,126 @@ connectToBackend() {
         this.connectionStatus = 'disconnected';
         this.scheduleReconnect();
     };
+}
+```
+
+### Smooth animace (NOVÉ)
+
+Produkční verze používá `requestAnimationFrame` pro plynulou animaci 60 FPS:
+
+```javascript
+// Animační loop
+animationLoop(currentTime) {
+    if (!this.isMoving) {
+        this.animationFrame = null;
+        return;
+    }
+    
+    // Výpočet delta času
+    const deltaTime = (currentTime - this.lastFrameTime) / 1000;
+    this.lastFrameTime = currentTime;
+    
+    // Aktualizace countdown
+    if (this.arrivalCountdown > 0) {
+        this.arrivalCountdown -= deltaTime * this.simulationSpeed;
+        
+        if (this.arrivalCountdown <= 0) {
+            this.arrivalCountdown = 0;
+            this.arriveAtStation(nextIndex);
+            return;
+        }
+    }
+    
+    this.updateDisplay();
+    this.animationFrame = requestAnimationFrame((t) => this.animationLoop(t));
+}
+```
+
+### Lerp interpolace pro plynulý progress
+
+```javascript
+updatePassedLine() {
+    // ...
+    if (this.isMoving && this.totalTravelTime > 0) {
+        const rawProgress = 1 - (this.arrivalCountdown / this.totalTravelTime);
+        this.targetProgress = Math.max(0, Math.min(1, rawProgress));
+        
+        // Smooth interpolace (lerp)
+        const lerpFactor = 0.15;
+        this.smoothProgress += (this.targetProgress - this.smoothProgress) * lerpFactor;
+        
+        progressOffset = (this.smoothProgress / totalStations) * lineWidth;
+    }
+    // ...
+}
+```
+
+### REST API Polling (NOVÉ)
+
+```javascript
+async pollApi() {
+    if (!this.apiPollingActive) return;
+    
+    const response = await fetch(`${this.backendUrl}/api/metro/line/${this.currentLine}`);
+    const data = await response.json();
+    this.handleApiResponse(data);
+    
+    // Naplánovat další poll (každých 5s)
+    this.apiPollTimeout = setTimeout(() => this.pollApi(), this.apiPollRate);
+}
+
+handleApiResponse(data) {
+    // Najdi sledovaný vlak nebo vyber první
+    let train = data.trains.find(t => 
+        t.dest === this.trackedTrainDest && 
+        t.direction === this.trackedTrainDirection
+    ) || data.trains[0];
+    
+    // Smooth aktualizace countdown
+    const newArrival = train.arrival_min * 60;
+    const diff = newArrival - this.arrivalCountdown;
+    if (Math.abs(diff) > 30) {
+        this.arrivalCountdown = newArrival;
+    } else {
+        this.arrivalCountdown += diff * 0.2; // Postupná korekce
+    }
+}
+```
+
+### Iframe komunikace pro kombinovaný displej (NOVÉ)
+
+```javascript
+// V metro-production.js
+broadcastStationUpdate() {
+    const message = {
+        type: 'metro-station-update',
+        currentStation: this.stations[this.currentStationIndex].name,
+        nextStation: nextStation ? nextStation.name : null,
+        direction: this.direction,
+        isMoving: this.isMoving,
+        isAtStation: this.isAtStation
+    };
+    
+    if (window.parent && window.parent !== window) {
+        window.parent.postMessage(message, '*');
+    }
+}
+
+// V combined-production.html
+handleMessage(event) {
+    if (event.data.type === 'metro-station-update') {
+        this.currentStation = event.data.currentStation;
+        this.nextStation = event.data.nextStation;
+        
+        // Dynamicky načti odjezdy pro přijíždějící stanici
+        const stopForDepartures = event.data.isAtStation 
+            ? event.data.nextStation 
+            : event.data.nextStation;
+        
+        if (stopForDepartures !== this.lastLoadedStop) {
+            this.loadDeparturesForStation(stopForDepartures);
+        }
+    }
 }
 ```
 

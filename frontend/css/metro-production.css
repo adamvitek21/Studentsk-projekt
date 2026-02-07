@@ -28,17 +28,27 @@
 body {
     font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
     background: var(--background-color);
-    min-height: 100vh;
+    width: 4096px;
+    height: 607px;
+    min-width: 4096px;
+    min-height: 607px;
+    max-width: 4096px;
+    max-height: 607px;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 0;
+    margin: 0;
     overflow: hidden;
 }
 
 .display-container {
     width: 4096px;
     height: 607px;
+    min-width: 4096px;
+    min-height: 607px;
+    max-width: 4096px;
+    max-height: 607px;
     background: var(--background-color);
     padding: 30px 50px;
     display: flex;
@@ -108,34 +118,6 @@ body {
     text-shadow: 0 0 15px rgba(0, 255, 136, 0.5);
 }
 
-/* Badge zpoždění */
-.delay-badge {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 20px;
-    background: rgba(230, 47, 35, 0.2);
-    border: 2px solid #E62F23;
-    border-radius: 8px;
-    color: #E62F23;
-    font-size: 24px;
-    font-weight: 600;
-    animation: delay-pulse 2s infinite;
-}
-
-.delay-badge .delay-icon {
-    font-size: 28px;
-}
-
-@keyframes delay-pulse {
-    0%, 100% { 
-        box-shadow: 0 0 0 0 rgba(230, 47, 35, 0.4);
-    }
-    50% { 
-        box-shadow: 0 0 20px 5px rgba(230, 47, 35, 0.3);
-    }
-}
-
 /* ==================== */
 /* TRASA                */
 /* ==================== */
@@ -169,7 +151,7 @@ body {
     background: var(--passed-color);
     border: 1px solid #000;
     z-index: 2;
-    transition: width 0.5s ease;
+    /* Bez transition - JS zajišťuje smooth animaci */
 }
 
 .route-line-disabled {
@@ -521,4 +503,81 @@ body {
 
 .station.terminal .station-name {
     font-weight: bold;
+}
+
+/* ==================== */
+/* IKONY POD LINKOU     */
+/* ==================== */
+
+.below-line-icons {
+    position: absolute;
+    top: 38px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    background: rgba(38, 38, 37, 0.95);
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid #444;
+    z-index: 10;
+}
+
+.below-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+}
+
+.below-icon svg {
+    width: 20px;
+    height: 20px;
+    fill: #fff;
+}
+
+/* Kombinovaná ikona autobus + letadlo je širší */
+.below-icon.airport {
+    width: 38px;
+}
+
+.below-icon.airport svg {
+    width: 34px;
+    height: 22px;
+}
+
+.below-icon.zoo .text-badge {
+    font-size: 10px;
+    font-weight: bold;
+    padding: 3px 6px;
+    border-radius: 4px;
+    background: #00A651;
+    color: #fff;
+    white-space: nowrap;
+}
+
+/* Projetá stanice - ikony pod linkou zašedlé */
+.station.passed .below-line-icons {
+    opacity: 0.4;
+    border-color: #333;
+}
+
+.station.passed .below-icon svg {
+    fill: #666;
+}
+
+/* Disabled stanice - ikony pod linkou zašedlé */
+.station.disabled .below-line-icons {
+    opacity: 0.3;
+    border-color: #222;
+}
+
+/* Aktuální stanice - ikony pod linkou zvýrazněné */
+.station.current .below-line-icons {
+    border-color: var(--current-station-color);
+    box-shadow: 0 0 12px rgba(0, 255, 136, 0.4);
 }
