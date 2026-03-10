@@ -1,4 +1,3 @@
-version: "3.8"
 services:
   backend:
     build:
@@ -9,12 +8,11 @@ services:
       - /tmp:/tmp
     ports:
       - "8000:8000"
+    env_file:
+      - ./backend/.env
     environment:
       - GTFS_RT_URL=${GTFS_RT_URL:-}
       - GTFS_POLL_INTERVAL=${GTFS_POLL_INTERVAL:-15}
-      - GOLEMIO_API_KEY=${GOLEMIO_API_KEY:-}
-    env_file:
-      - ./backend/.env
     restart: unless-stopped
 
   metro-display:
@@ -23,7 +21,7 @@ services:
     volumes:
       - ./frontend:/app:ro
     ports:
-      - "5000:5000"
+      - "5002:5000"
     command: python3 -m http.server 5000
     depends_on:
       - backend

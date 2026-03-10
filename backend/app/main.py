@@ -61,9 +61,23 @@ elif os.getenv("GTFS_RT_HEADERS"):
     except Exception:
         logging.warning("Invalid GTFS_RT_HEADERS JSON, ignoring")
 
-# Metro line C vehicle positions cache
-METRO_C_VEHICLES = []
+# Metro vehicle positions cache (all lines)
+# Uses JSON API from Golemio which provides trip_id as vehicle identifier
+METRO_VEHICLES = {"A": [], "B": [], "C": []}
 LAST_VEHICLE_UPDATE = None
+
+# Legacy cache for backward compatibility
+METRO_C_VEHICLES = []
+
+# Golemio JSON API URL for vehicle positions
+GOLEMIO_VEHICLE_API = "https://api.golemio.cz/v2/vehiclepositions"
+
+# Metro route ID mapping
+METRO_ROUTE_MAPPING = {
+    "L990": "A",  # Line A (green)
+    "L991": "C",  # Line C (red)  
+    "L992": "B",  # Line B (yellow)
+}
 
 
 @app.get("/api/status")
@@ -166,6 +180,107 @@ METRO_LINE_C_STATE = {
     "delay": 0,     # Global delay in seconds
     "last_update": None
 }
+
+
+async def fetch_golemio_vehicles():
+    """
+    Fetch vehicle positions from Golemio JSON API.
+    This API provides trip_id as the vehicle identifier for metro.
+    """
+    global METRO_VEHICLES, METRO_C_VEHICLES, LAST_VEHICLE_UPDATE
+    
+    if not GOLEMIO_API_KEY:
+        logging.debug("No GOLEMIO_API_KEY set, skipping vehicle fetch")
+        return
+    
+    try:
+        headers = {"X-Access-Token": GOLEMIO_API_KEY}
+        
+        async with httpx.AsyncClient(timeout=30) as client:
+            response = await client.get(f"{GOLEMIO_VEHICLE_API}?limit=5000", headers=headers)
+            
+            if response.status_code != 200:
+                logging.warning(f"Golemio API returned {response.status_code}")
+                return
+            
+            data = response.json()
+            features = data.get("features", [])
+            
+            # Clear previous data
+            metro_vehicles = {"A": [], "B": [], "C": []}
+            
+            for f in features:
+                props = f.get("properties", {})
+                trip = props.get("trip", {})
+                gtfs = trip.get("gtfs", {})
+                last_pos = props.get("last_position", {})
+                
+                route_type = gtfs.get("route_type")
+                route_id = gtfs.get("route_id", "")
+                route_name = gtfs.get("route_short_name", "")
+                
+                # Identify metro vehicles (route_type=1 or known route_ids)
+                line = None
+                if route_type == 1:
+                    line = route_name if route_name in ["A", "B", "C"] else None
+                if not line and route_id:
+                    line = METRO_ROUTE_MAPPING.get(route_id)
+                
+                if line:
+                    trip_id = gtfs.get("trip_id", "")
+                    headsign = gtfs.get("trip_headsign", "")
+                    vehicle_reg = trip.get("vehicle_registration_number")
+                    
+                    # Use trip_id as identifier (vehicle_reg is None for metro)
+                    identifier = str(vehicle_reg) if vehicle_reg else trip_id
+                    
+                    coords = f.get("geometry", {}).get("coordinates", [])
+                    state = last_pos.get("state_position", "unknown")
+                    next_stop = last_pos.get("next_stop", {})
+                    last_stop = last_pos.get("last_stop", {})
+                    delay_info = last_pos.get("delay", {})
+                    
+                    # Get station names from stop_ids
+                    next_stop_id = next_stop.get("id")
+                    last_stop_id = last_stop.get("id")
+                    next_station_name = get_station_name_from_stop_id(next_stop_id, line) if next_stop_id else None
+                    last_station_name = get_station_name_from_stop_id(last_stop_id, line) if last_stop_id else None
+                    
+                    vehicle_info = {
+                        "vehicle_id": identifier,  # trip_id as identifier
+                        "trip_id": trip_id,
+                        "route_id": route_id,
+                        "headsign": headsign,
+                        "state": state,
+                        "next_stop_id": next_stop_id,
+                        "next_station_name": next_station_name,
+                        "last_stop_id": last_stop_id,
+                        "last_station_name": last_station_name,
+                        "delay": delay_info.get("actual", 0) if delay_info else 0,
+                        "latitude": coords[1] if len(coords) > 1 else None,
+                        "longitude": coords[0] if len(coords) > 0 else None,
+                    }
+                    
+                    # Try to find station index from stop_id
+                    stop_id = next_stop_id or last_stop_id
+                    if stop_id:
+                        idx, station = find_station_by_stop_id(line, stop_id)
+                        if idx is not None:
+                            vehicle_info["station_index"] = idx
+                            vehicle_info["station_name"] = station["name"]
+                    
+                    metro_vehicles[line].append(vehicle_info)
+            
+            # Update global cache
+            METRO_VEHICLES = metro_vehicles
+            METRO_C_VEHICLES = metro_vehicles["C"]  # Legacy compatibility
+            LAST_VEHICLE_UPDATE = datetime.datetime.utcnow().isoformat()
+            
+            total = sum(len(v) for v in metro_vehicles.values())
+            logging.info(f"Fetched {total} metro vehicles (A:{len(metro_vehicles['A'])}, B:{len(metro_vehicles['B'])}, C:{len(metro_vehicles['C'])})")
+            
+    except Exception as e:
+        logging.exception(f"Error fetching Golemio vehicles: {e}")
 
 
 def find_station_by_stop_id(line_id: str, stop_id: str):
@@ -282,8 +397,22 @@ async def metro_lines():
 
 
 @app.get("/api/metro/line/{line_id}")
-async def metro_line(line_id: str):
-    """Get current state of any metro line for display"""
+async def metro_line(line_id: str, train: str = None):
+    """
+    Get current state of any metro line for display.
+    
+    Parameters:
+    - line_id: Metro line identifier (A, B, C)
+    - train: Optional trip_id to filter results for specific train (for train-locked displays)
+             Format: "993_3875_251222" (route_tripnum_date from Golemio API)
+    
+    When train parameter is provided, returns data only for that specific vehicle.
+    This is used for displays installed in specific train cars that need to show
+    position data for their own train only.
+    
+    Note: Golemio API doesn't provide vehicle_registration_number for metro,
+    so we use trip_id as the vehicle identifier.
+    """
     line_id = line_id.upper()
     
     if line_id not in METRO_LINES:
@@ -291,41 +420,163 @@ async def metro_line(line_id: str):
     
     line_config = METRO_LINES[line_id]
     
-    # Fallback simulation data
+    # Get cached vehicles from Golemio JSON API
+    vehicles = METRO_VEHICLES.get(line_id, [])
+    
+    # Fallback to legacy cache for line C
+    if not vehicles and line_id == "C" and METRO_C_VEHICLES:
+        vehicles = METRO_C_VEHICLES
+    
+    # Filter by train ID (trip_id) if specified
+    filtered_trains = []
+    source = "simulation"
+    
+    if train and vehicles:
+        # Find specific train by vehicle_id (trip_id) or partial match
+        matching = [v for v in vehicles if v.get("vehicle_id") == train or v.get("trip_id") == train]
+        if matching:
+            source = "golemio-api"
+            v = matching[0]
+            
+            # Determine direction from headsign
+            headsign = v.get("headsign", "")
+            terminals = line_config["terminals"]
+            
+            # Direction based on headsign matching terminal names
+            if terminals["last"].lower() in headsign.lower():
+                direction = "last"
+            elif terminals["first"].lower() in headsign.lower():
+                direction = "first"
+            else:
+                # Fallback: use station position
+                station_idx = v.get("station_index", 0)
+                direction = "last" if station_idx < len(line_config["stations"]) // 2 else "first"
+            
+            filtered_trains.append({
+                "vehicle_id": v.get("vehicle_id"),
+                "trip_id": v.get("trip_id"),
+                "dest": headsign or terminals[direction],
+                "headsign": headsign,
+                "direction": direction,
+                "current_station": v.get("station_name"),
+                "next_station_name": v.get("next_station_name"),
+                "last_station_name": v.get("last_station_name"),
+                "next_stop_id": v.get("next_stop_id"),
+                "station_index": v.get("station_index"),
+                "state": v.get("state"),  # "at_stop" or "on_track"
+                "arrival_min": 0,
+                "delay": v.get("delay", 0)
+            })
+    elif vehicles:
+        # Return all trains if no filter
+        source = "golemio-api"
+        for v in vehicles:
+            headsign = v.get("headsign", "")
+            terminals = line_config["terminals"]
+            
+            if terminals["last"].lower() in headsign.lower():
+                direction = "last"
+            elif terminals["first"].lower() in headsign.lower():
+                direction = "first"
+            else:
+                station_idx = v.get("station_index", 0)
+                direction = "last" if station_idx < len(line_config["stations"]) // 2 else "first"
+            
+            filtered_trains.append({
+                "vehicle_id": v.get("vehicle_id"),
+                "trip_id": v.get("trip_id"),
+                "dest": headsign or terminals[direction],
+                "headsign": headsign,
+                "direction": direction,
+                "current_station": v.get("station_name"),
+                "next_station_name": v.get("next_station_name"),
+                "last_station_name": v.get("last_station_name"),
+                "next_stop_id": v.get("next_stop_id"),
+                "station_index": v.get("station_index"),
+                "state": v.get("state"),
+                "arrival_min": 0,
+                "delay": v.get("delay", 0)
+            })
+    
+    # Fallback simulation data if no real data
+    if not filtered_trains:
+        source = "simulation"
+        if train:
+            # Simulate specific train
+            filtered_trains = [
+                {"vehicle_id": train, "trip_id": train, "dest": line_config["terminals"]["last"], "direction": "last", "state": "at_stop", "arrival_min": 2, "delay": 0}
+            ]
+        else:
+            filtered_trains = [
+                {"vehicle_id": "SIM-001", "dest": line_config["terminals"]["last"], "direction": "last", "state": "at_stop", "arrival_min": 2, "delay": 0},
+                {"vehicle_id": "SIM-002", "dest": line_config["terminals"]["first"], "direction": "first", "state": "on_track", "arrival_min": 4, "delay": 0}
+            ]
+    
     return {
         "ok": True,
-        "source": "simulation",
+        "source": source,
         "line": line_id,
         "color": line_config["color"],
         "terminals": line_config["terminals"],
         "stations": line_config["stations"],
-        "trains": [
-            {"dest": line_config["terminals"]["last"], "direction": "last", "arrival_min": 2, "delay": 0},
-            {"dest": line_config["terminals"]["first"], "direction": "first", "arrival_min": 4, "delay": 0}
-        ],
+        "trains": filtered_trains,
+        "train_filter": train,  # Echo back the filter if used
+        "vehicle_count": len(vehicles),
+        "last_update": LAST_VEHICLE_UPDATE,
         "timestamp": datetime.datetime.utcnow().isoformat()
     }
 
 
 # Pro zpětnou kompatibilitu: /api/metro/line-c
 @app.get("/api/metro/line-c")
-async def metro_line_c():
+async def metro_line_c(train: str = None):
     """Get current state of metro line C for display (legacy endpoint)"""
-    return await metro_line("C")
+    return await metro_line("C", train)
 
 
 # Pro zpětnou kompatibilitu: /api/metro/line-a
 @app.get("/api/metro/line-a")
-async def metro_line_a():
+async def metro_line_a(train: str = None):
     """Get current state of metro line A for display"""
-    return await metro_line("A")
+    return await metro_line("A", train)
 
 
 # Pro zpětnou kompatibilitu: /api/metro/line-b
 @app.get("/api/metro/line-b")
-async def metro_line_b():
+async def metro_line_b(train: str = None):
     """Get current state of metro line B for display"""
-    return await metro_line("B")
+    return await metro_line("B", train)
+
+
+@app.get("/api/metro/vehicles")
+async def metro_vehicles(line: str = None):
+    """
+    Get list of all metro vehicles currently tracked.
+    Useful for debugging and finding vehicle IDs (trip_ids) for train-locked displays.
+    
+    Parameters:
+    - line: Optional filter by line (A, B, C)
+    """
+    if line:
+        line = line.upper()
+        if line not in METRO_VEHICLES:
+            return {"ok": False, "error": f"Line {line} not found"}
+        vehicles = METRO_VEHICLES.get(line, [])
+        return {
+            "ok": True,
+            "line": line,
+            "count": len(vehicles),
+            "vehicles": vehicles,
+            "last_update": LAST_VEHICLE_UPDATE
+        }
+    else:
+        return {
+            "ok": True,
+            "counts": {line: len(veh) for line, veh in METRO_VEHICLES.items()},
+            "total": sum(len(v) for v in METRO_VEHICLES.values()),
+            "vehicles": METRO_VEHICLES,
+            "last_update": LAST_VEHICLE_UPDATE
+        }
 
 
 @app.get("/api/fallback")
@@ -334,6 +585,57 @@ async def fallback():
     if data_file.exists():
         return json.loads(data_file.read_text(encoding="utf-8"))
     return {"departures": []}
+
+
+# Load stop mapping from JSON file
+METRO_STOP_MAPPING = {}
+_stop_mapping_file = ROOT / "data" / "metro_stops.json"
+if _stop_mapping_file.exists():
+    try:
+        _data = json.loads(_stop_mapping_file.read_text(encoding="utf-8"))
+        METRO_STOP_MAPPING = _data.get("stops", {})
+        logging.info(f"Loaded metro stop mapping with {sum(len(v) for v in METRO_STOP_MAPPING.values())} stops")
+    except Exception as e:
+        logging.warning(f"Failed to load metro_stops.json: {e}")
+
+
+def get_station_name_from_stop_id(stop_id: str, line: str = None) -> str:
+    """Convert Golemio stop_id to station name."""
+    if not stop_id:
+        return None
+    
+    # Try specific line first
+    if line and line in METRO_STOP_MAPPING:
+        if stop_id in METRO_STOP_MAPPING[line]:
+            return METRO_STOP_MAPPING[line][stop_id]
+    
+    # Try all lines
+    for line_stops in METRO_STOP_MAPPING.values():
+        if stop_id in line_stops:
+            return line_stops[stop_id]
+    
+    return None
+
+
+@app.get("/api/metro/stops")
+async def metro_stops(line: str = None):
+    """
+    Get stop_id to station name mapping for metro lines.
+    Useful for converting API stop_ids to human-readable names.
+    """
+    if line:
+        line = line.upper()
+        if line not in METRO_STOP_MAPPING:
+            return {"ok": False, "error": f"Line {line} not found"}
+        return {
+            "ok": True,
+            "line": line,
+            "stops": METRO_STOP_MAPPING.get(line, {})
+        }
+    return {
+        "ok": True,
+        "stops": METRO_STOP_MAPPING
+    }
 
 
 @app.get("/api/latest")
@@ -452,16 +754,37 @@ async def gtfs_poller_loop():
         raise
 
 
+async def golemio_vehicle_poller_loop():
+    """Background task to periodically fetch metro vehicle positions from Golemio API"""
+    if not GOLEMIO_API_KEY:
+        logging.info("GOLEMIO_API_KEY not set — vehicle poller disabled")
+        return
+    
+    logging.info(f"Starting Golemio vehicle poller (interval {POLL_INTERVAL}s)")
+    try:
+        while True:
+            await fetch_golemio_vehicles()
+            await asyncio.sleep(POLL_INTERVAL)
+    except asyncio.CancelledError:
+        logging.info("Golemio vehicle poller cancelled")
+        raise
+
+
+GOLEMIO_POLL_TASK = None
+
+
 @app.on_event("startup")
 async def startup_event():
-    global POLL_TASK
+    global POLL_TASK, GOLEMIO_POLL_TASK
     if GTFS_URL:
         POLL_TASK = asyncio.create_task(gtfs_poller_loop())
+    if GOLEMIO_API_KEY:
+        GOLEMIO_POLL_TASK = asyncio.create_task(golemio_vehicle_poller_loop())
 
 
 @app.on_event("shutdown")
 async def shutdown_event():
-    global POLL_TASK
+    global POLL_TASK, GOLEMIO_POLL_TASK
     if POLL_TASK:
         POLL_TASK.cancel()
         try:
@@ -470,6 +793,15 @@ async def shutdown_event():
             logging.debug("POLL_TASK cancelled during shutdown")
         except Exception:
             logging.exception("Error waiting for POLL_TASK")
+    
+    if GOLEMIO_POLL_TASK:
+        GOLEMIO_POLL_TASK.cancel()
+        try:
+            await GOLEMIO_POLL_TASK
+        except asyncio.CancelledError:
+            logging.debug("GOLEMIO_POLL_TASK cancelled during shutdown")
+        except Exception:
+            logging.exception("Error waiting for GOLEMIO_POLL_TASK")
 
 
 @app.websocket("/ws/updates")

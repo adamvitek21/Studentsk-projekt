@@ -5,6 +5,7 @@ FROM python:3.11-slim
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     ca-certificates \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -29,9 +30,9 @@ USER app
 
 EXPOSE 8000
 HEALTHCHECK --interval=15s --timeout=5s --start-period=10s --retries=3 \
-  CMD wget -qO- --timeout=2 http://127.0.0.1:8000/api/status | grep '"ok":' || exit 1
+  CMD curl -sf --max-time 2 http://127.0.0.1:8000/api/status | grep -q '"ok":' || exit 1
 
 # use entrypoint to wait for GTFS resource before starting uvicorn
 ENTRYPOINT ["python", "/app/entrypoint.py"]
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--log-level", "info"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--log-level", "info"]

@@ -53,7 +53,7 @@ def main():
     else:
         print(f"[entrypoint] GTFS resource available: {GTFS_URL}")
     # Exec uvicorn (replace process) so signals propagate
-    os.execvp("uvicorn", ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--log-level", "info"])
+    os.execvp("uvicorn", ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--log-level", "info"])
 
 if __name__ == "__main__":
     main()

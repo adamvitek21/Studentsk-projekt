@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=4096, height=607, initial-scale=1.0, user-scalable=no">
+    <title>Metro Praha - Displej soupravy</title>
+    <link rel="stylesheet" href="css/metro-train-locked.css">
+    <style>
+        /* Produkční režim: bez ovládacích prvků */
+        * { cursor: none !important; }
+        
+        /* Fixní velikost pro produkční displej */
+        html, body {
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            width: 4096px;
+            height: 607px;
+            background: #262625;
+        }
+        
+        .display-container {
+            width: 4096px !important;
+            height: 607px !important;
+            min-width: 4096px !important;
+            min-height: 607px !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="display-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-left">
+                <div class="direction">
+                    <div class="line-badge">C</div>
+                    <div class="direction-text">
+                        <span class="direction-arrow">→</span>
+                        <span id="terminus" class="terminal-name">Háje</span>
+                    </div>
+                </div>
+                <!-- Train ID Badge -->
+                <div class="train-badge">
+                    <span class="train-label">Spoj:</span>
+                    <span class="train-id" id="train-id">DEMO</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <!-- Connection Status -->
+                <div class="connection-status" id="connection-status">
+                    <span class="status-indicator"></span>
+                    <span class="status-text" id="status-text">Offline</span>
+                </div>
+                <div class="time-container">
+                    <div class="time">--:--:--</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trasa -->
+        <div class="route-container">
+            <div class="route-line"></div>
+            <div class="route-line-passed"></div>
+            <div class="route-line-disabled"></div>
+            <div class="stations"></div>
+        </div>
+
+        <!-- Info panel -->
+        <div class="info-panel">
+            <div class="next-station">
+                <span class="next-label">Příští stanice:</span>
+                <span class="next-name">--</span>
+            </div>
+            <div class="arrival-time">
+                <span class="arrival-label">Příjezd za:</span>
+                <span class="arrival-value">--:--</span>
+                <span class="arrival-unit">min</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/metro-train-locked.js"></script>
+</body>
+</html>

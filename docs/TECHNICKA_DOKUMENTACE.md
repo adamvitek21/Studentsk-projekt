@@ -656,6 +656,112 @@ this.translations = {
 
 ---
 
+## Train-Locked Displej (NOVÉ)
+
+### Koncept
+
+Train-locked displej je produkční verze určená pro instalaci přímo do vagónů metra. Každý displej je "zamknutý" na konkrétní soupravu pomocí unikátního `vehicle_id` z GTFS-RT feedu.
+
+### Architektura
+
+```
+MetroTrainLocked
+├── Konfigurace
+│   ├── trainId              # ID soupravy z URL parametru
+│   ├── trainFound           # Byl vlak nalezen v API?
+│   └── lastTrainUpdate      # Čas poslední aktualizace
+│
+├── Connection Status
+│   ├── connected            # Vlak nalezen, data se aktualizují
+│   ├── searching            # Hledá se vlak v API
+│   ├── train-not-found      # Vlak není v aktivních datech
+│   └── simulation           # Fallback simulace
+│
+└── API Filtering
+    └── ?train=VEHICLE_ID    # Backend filtruje data pro konkrétní vlak
+```
+
+### URL Parametry
+
+```
+metro-train-locked.html?train=M1C-001&line=C&backend=http://api.example.com:8000
+
+Parametry:
+  train=VEHICLE_ID    # POVINNÉ - ID soupravy z GTFS-RT
+  line=A|B|C          # Linka (výchozí: C)
+  backend=url         # URL backendu (výchozí: localhost:8000)
+  terminal=station-id # Vlastní konečná stanice
+  lang=cs|en          # Jazyk (výchozí: cs)
+  direction=first|last # Počáteční směr
+  simulation=true     # Vynutit simulaci (ignoruje API)
+  debug=true          # Zapne debug výpisy v konzoli
+```
+
+### Backend API
+
+```python
+# Endpoint s filtrováním podle train ID
+GET /api/metro/line/{line_id}?train={vehicle_id}
+
+# Příklad odpovědi pro konkrétní vlak
+{
+    "ok": true,
+    "source": "gtfs-rt",
+    "line": "C",
+    "trains": [
+        {
+            "vehicle_id": "M1C-001",
+            "dest": "Háje",
+            "direction": "last",
+            "current_station": "Florenc",
+            "station_index": 7,
+            "arrival_min": 0,
+            "delay": 0
+        }
+    ],
+    "train_filter": "M1C-001",
+    "timestamp": "2026-01-06T14:30:00Z"
+}
+```
+
+### Instalace v soupravě
+
+1. **Konfigurace displeje**
+   ```bash
+   # Každý displej má unikátní URL s train ID
+   # Displej 1 v soupravě M1C-001:
+   http://localhost/metro-train-locked.html?train=M1C-001&line=C
+   
+   # Displej 2 v soupravě M1C-002:
+   http://localhost/metro-train-locked.html?train=M1C-002&line=C
+   ```
+
+2. **Způsoby identifikace vlaku**
+   - **Statická konfigurace**: Train ID je natvrdo v URL
+   - **Dynamická konfigurace**: Displej se dotáže na lokální server ve vlaku
+   - **QR kód/NFC**: Během instalace se načte ID soupravy
+
+3. **Fallback chování**
+   - Pokud vlak není nalezen v API (např. mimo provoz), displej přejde do simulačního režimu
+   - Status indikátor ukazuje "Souprava nenalezena" nebo "Simulace"
+   - Při obnovení spojení se automaticky přepne na reálná data
+
+### Soubory
+
+```
+frontend/
+├── metro-train-locked.html     # HTML struktura
+├── css/
+│   └── metro-train-locked.css  # Styly (rozšíření metro-production.css)
+└── js/
+    └── metro-train-locked.js   # JavaScript logika
+
+backend/
+└── app/main.py                 # API endpoint s train filtrováním
+```
+
+---
+
 ## Testování
 
 ### Manuální testování
@@ -672,6 +778,12 @@ this.translations = {
 3. **Vlastní konečná**
    - Vybrat obratovou stanici z dropdownu
    - Ověřit zobrazení šedé části za konečnou
+
+4. **Train-Locked displej** (NOVÉ)
+   - Otevřít `metro-train-locked.html?train=TEST-001&line=C&debug=true`
+   - Ověřit zobrazení Train ID v headeru
+   - Ověřit indikátor stavu připojení
+   - Zkontrolovat konzoli pro debug výpisy
 
 ### Integrační testy
 
@@ -691,9 +803,13 @@ curl http://localhost:8000/api/metro/lines
 
 # Data linky C
 curl http://localhost:8000/api/metro/line/C
+
+# Data pro konkrétní vlak (NOVÉ)
+curl "http://localhost:8000/api/metro/line/C?train=M1C-001"
 ```
 
 ---
 
-*Technická dokumentace - verze 1.0*
+*Technická dokumentace - verze 1.1*
 *Poslední aktualizace: 6. ledna 2026*
+*Přidáno: Train-Locked displej pro instalaci v soupravách*
